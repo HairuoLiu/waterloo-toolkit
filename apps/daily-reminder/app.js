@@ -1,5 +1,7 @@
 // 滑铁卢大学研究生每日提醒 · 网页版逻辑
-// 复刻 daily_reminder.py 的 pick_focus + build_message；新增日历视图
+// 复刻 daily_reminder.py 的 pick_focus + build_message；新增日历视图 + 学年切换
+// 学年定义：Fall(Y) + Winter(Y+1) + Spring(Y+1) 构成 Y–Y+1 学年
+// 每个学年独立：独立的日历、列表、今日提醒；月份导航锁定在该学年内（9月~次年8月）
 (function () {
   'use strict';
 
@@ -41,9 +43,9 @@
     return e._start.getTime() === today.getTime();
   }
 
-  // 某天"活跃"的事件：单日=当天；跨天=落在区间内
+  // 某天"活跃"的事件（在当前学年 ACTIVE 内）：单日=当天；跨天=落在区间内
   function eventsOnDay(dt, cat) {
-    return EVENTS.filter(function (e) {
+    return ACTIVE.filter(function (e) {
       if (cat && cat !== '全部' && e.category !== cat) return false;
       if (e._end) return e._start <= dt && dt <= e._end;
       return e._start.getTime() === dt.getTime();
@@ -66,7 +68,7 @@
     if (hardToday.length) return [hardToday[0], 'today'];
 
     var near7 = upcoming.filter(function (e) { return e.priority === 3 && dayDiff(e._start, today) <= 7; })
-      .sort(function (a, b) { return dayDiff(a._start, today) - dayDiff(b._start, today) || weight(b) - weight(a); });
+      .sort(function (a, b) { return dayDiff(a._start, today) - dayDiff(a._start, today) || weight(b) - weight(a); });
     if (near7.length) return [near7[0], 'deadline'];
 
     var impToday = byW(startsToday.filter(function (e) { return e.priority >= 2 && e.category !== '假期'; }));
@@ -77,7 +79,7 @@
     if (holi.length) return [holi[0], 'holiday'];
 
     var near14 = upcoming.filter(function (e) { return e.priority === 3 && dayDiff(e._start, today) <= 14; })
-      .sort(function (a, b) { return dayDiff(a._start, today) - dayDiff(b._start, today) || weight(b) - weight(a); });
+      .sort(function (a, b) { return dayDiff(a._start, today) - dayDiff(a._start, today) || weight(b) - weight(a); });
     if (near14.length) return [near14[0], 'deadline'];
 
     var per = ongoing.filter(function (e) { return ACTIONABLE_PERIOD[e.category] && dayDiff(e._end, today) <= 14; })
@@ -100,6 +102,7 @@
   function buildMessage(events, today) {
     var lines = [];
     lines.push('📅 ' + md(today) + ' ' + WD[today.getDay()] + ' · 滑铁卢研究生日程提醒');
+    lines.push('（' + currentYear + '–' + (currentYear + 1) + ' 学年）');
     lines.push('');
 
     var pf = pickFocus(events, today);
@@ -107,7 +110,7 @@
 
     lines.push('☀️ 今日一件事');
     if (!focus) {
-      lines.push('今天没有需要特别处理的事项，安心学习、照顾好自己就好～');
+      lines.push('本学年暂时没有临近的硬性节点，安心学习、照顾好自己就好～');
     } else if (kind === 'today' || kind === 'holiday') {
       lines.push(focus.emoji + ' 【' + focus.title_zh + '】');
       lines.push(focus.action);
@@ -170,23 +173,58 @@
 
   // ===== 渲染 =====
   var EVENTS = loadEvents();
+  var ACTIVE = EVENTS;            // 当前学年过滤后的事件集
+  var currentYear = null;         // 当前选中的学年起点（如 2026 表示 2026–2027 学年）
   var currentCat = '全部';
   var curYear, curMonth;
   var todayStr;
+
+  function presentYears() {
+    var ys = [];
+    EVENTS.forEach(function (e) {
+      if (ys.indexOf(e.academicYear) < 0) ys.push(e.academicYear);
+    });
+    ys.sort(function (a, b) { return a - b; });
+    return ys;
+  }
+
+  function refreshActive() {
+    ACTIVE = EVENTS.filter(function (e) { return e.academicYear === currentYear; });
+  }
 
   function fmtDateInput(d) {
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
+  // 默认月份：今天在该学年内则停在今天；否则停在该学年 9 月（学年起点）
+  function setDefaultMonth() {
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    var ty = (now.getMonth() >= 8) ? now.getFullYear() : now.getFullYear() - 1; // 学年按日期
+    if (ty === currentYear) { curYear = now.getFullYear(); curMonth = now.getMonth(); }
+    else { curYear = currentYear; curMonth = 8; } // 9 月
+  }
+
+  function yearBounds() {
+    return { minY: currentYear, minM: 8, maxY: currentYear + 1, maxM: 7 };
+  }
+
+  function updateCalNav() {
+    var b = yearBounds();
+    var atMin = (curYear === b.minY && curMonth === b.minM);
+    var atMax = (curYear === b.maxY && curMonth === b.maxM);
+    document.getElementById('cal-prev').disabled = atMin;
+    document.getElementById('cal-next').disabled = atMax;
+  }
+
   function renderReminder(dateStr) {
     var today = parseISO(dateStr);
-    var msg = buildMessage(EVENTS, today);
+    var msg = buildMessage(ACTIVE, today);
     document.getElementById('reminder-text').textContent = msg;
     return msg;
   }
 
   function renderTable(filterCat) {
-    var rows = EVENTS.slice().sort(function (a, b) { return a._start - b._start; });
+    var rows = ACTIVE.slice().sort(function (a, b) { return a._start - b._start; });
     if (filterCat && filterCat !== '全部') {
       rows = rows.filter(function (e) { return e.category === filterCat; });
     }
@@ -206,17 +244,6 @@
   }
 
   // ---------- 日历 ----------
-  function initMonthBounds() {
-    var times = EVENTS.map(function (e) { return e._start.getTime(); })
-      .concat(EVENTS.filter(function (e) { return e._end; }).map(function (e) { return e._end.getTime(); }));
-    var minT = Math.min.apply(null, times), maxT = Math.max.apply(null, times);
-    var minD = new Date(minT), maxD = new Date(maxT);
-    var now = new Date(); now.setHours(0, 0, 0, 0);
-    curYear = now.getFullYear(); curMonth = now.getMonth();
-    if (now.getTime() < minT) { curYear = minD.getFullYear(); curMonth = minD.getMonth(); }
-    if (now.getTime() > maxT) { curYear = maxD.getFullYear(); curMonth = maxD.getMonth(); }
-  }
-
   function renderCalendar() {
     var year = curYear, month = curMonth;
     document.getElementById('cal-title').textContent = year + '年' + (month + 1) + '月';
@@ -254,7 +281,7 @@
       }
 
       // chip：仅在该事件「起始日」显示，避免重复
-      var starts = EVENTS.filter(function (e) {
+      var starts = ACTIVE.filter(function (e) {
         return e._start.getTime() === dt.getTime() && (currentCat === '全部' || e.category === currentCat);
       }).sort(function (a, b) { return b.priority - a.priority; });
 
@@ -279,6 +306,8 @@
       cell.addEventListener('click', function () { showDetail(ds); });
       calCells.appendChild(cell);
     });
+
+    updateCalNav();
   }
 
   function showDetail(ds) {
@@ -310,7 +339,7 @@
 
   function renderChips() {
     var cats = ['全部'];
-    EVENTS.forEach(function (e) { if (cats.indexOf(e.category) < 0) cats.push(e.category); });
+    ACTIVE.forEach(function (e) { if (cats.indexOf(e.category) < 0) cats.push(e.category); });
     var bar = document.getElementById('cat-bar');
     bar.innerHTML = '';
     cats.forEach(function (c) {
@@ -329,10 +358,43 @@
     });
   }
 
+  function renderYearTabs() {
+    var ys = presentYears();
+    var bar = document.getElementById('year-bar');
+    bar.innerHTML = '';
+    ys.forEach(function (y) {
+      var b = document.createElement('button');
+      b.className = 'year-tab' + (y === currentYear ? ' active' : '');
+      b.textContent = y + '–' + (y + 1) + ' 学年';
+      b.addEventListener('click', function () {
+        currentYear = y;
+        currentCat = '全部';
+        setDefaultMonth();
+        refreshActive();
+        renderYearTabs();
+        renderChips();
+        renderCalendar();
+        renderTable('全部');
+        renderReminder(todayStr);
+        document.getElementById('cal-detail').innerHTML = '';
+      });
+      bar.appendChild(b);
+    });
+  }
+
   function init() {
     var dateInput = document.getElementById('date-pick');
     todayStr = fmtDateInput(new Date());
     dateInput.value = todayStr;
+
+    // 默认学年：包含今天的学年；否则取最早出现的学年
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    var ty = (now.getMonth() >= 8) ? now.getFullYear() : now.getFullYear() - 1;
+    var ys = presentYears();
+    currentYear = (ys.indexOf(ty) >= 0) ? ty : ys[0];
+
+    refreshActive();
+    setDefaultMonth();
     renderReminder(todayStr);
 
     dateInput.addEventListener('change', function () {
@@ -351,8 +413,8 @@
       });
     });
 
+    renderYearTabs();
     renderChips();
-    initMonthBounds();
     renderCalendar();
     renderTable('全部');
 
@@ -370,15 +432,21 @@
       });
     });
 
-    // 月历导航
+    // 月历导航（锁定在当前学年内）
     document.getElementById('cal-prev').addEventListener('click', function () {
-      curMonth--; if (curMonth < 0) { curMonth = 11; curYear--; } renderCalendar();
+      curMonth--; if (curMonth < 0) { curMonth = 11; curYear--; }
+      var b = yearBounds();
+      if (curYear < b.minY || (curYear === b.minY && curMonth < b.minM)) { curYear = b.minY; curMonth = b.minM; }
+      renderCalendar();
     });
     document.getElementById('cal-next').addEventListener('click', function () {
-      curMonth++; if (curMonth > 11) { curMonth = 0; curYear++; } renderCalendar();
+      curMonth++; if (curMonth > 11) { curMonth = 0; curYear++; }
+      var b = yearBounds();
+      if (curYear > b.maxY || (curYear === b.maxY && curMonth > b.maxM)) { curYear = b.maxY; curMonth = b.maxM; }
+      renderCalendar();
     });
     document.getElementById('cal-this').addEventListener('click', function () {
-      initMonthBounds(); renderCalendar();
+      setDefaultMonth(); renderCalendar();
     });
   }
 

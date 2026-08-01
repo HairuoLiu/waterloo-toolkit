@@ -71,6 +71,7 @@ section { margin-top: 26px; }
 .btn.primary { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); font-weight: 600; }
 .btn.ghost:hover { background: #f0f1f6; }
 .btn.primary:hover { filter: brightness(1.05); }
+.btn:disabled { opacity: .4; cursor: not-allowed; }
 
 /* 提醒卡片 */
 .card.reminder {
@@ -91,6 +92,17 @@ section { margin-top: 26px; }
   padding: 5px 13px; border-radius: 999px; cursor: pointer; font-size: 13px;
 }
 .chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+
+/* 学年选择器 */
+.year-label { font-size: 13px; color: var(--muted); font-weight: 600; margin-bottom: 8px; }
+.year-bar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.year-tab {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  padding: 9px 18px; border-radius: 999px; cursor: pointer; font-size: 14px; font-weight: 600;
+  transition: all .12s ease;
+}
+.year-tab:hover { border-color: var(--brand); color: var(--brand); }
+.year-tab.active { background: var(--brand); color: #fff; border-color: var(--brand); }
 .table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
 table { border-collapse: collapse; width: 100%; font-size: 14px; }
 th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
