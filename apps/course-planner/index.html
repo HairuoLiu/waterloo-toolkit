@@ -25,7 +25,20 @@ a{color:inherit;text-decoration:none}
 .brand{font-weight:700;font-size:var(--s3);letter-spacing:.2px}
 .brand b{color:var(--blue)}
 .nav{display:flex;gap:18px;font-size:var(--s2);color:var(--muted)}
+.nav a{padding:2px 0;border-bottom:2px solid transparent;transition:.14s}
 .nav a:hover{color:var(--ink)}
+.nav a.on{color:var(--ink);font-weight:600;border-bottom-color:var(--blue)}
+.nav .mback{display:none}
+/* burger (mobile only) */
+.burger{display:none;width:40px;height:40px;padding:0;flex-direction:column;align-items:center;
+  justify-content:center;gap:4px;border:1px solid var(--line);border-radius:10px;background:var(--card);cursor:pointer}
+.burger i{display:block;width:17px;height:2px;background:var(--ink);border-radius:2px;transition:.2s}
+.burger.on i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.on i:nth-child(2){opacity:0}
+.burger.on i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.navmask{display:none;position:fixed;inset:0;background:rgba(20,24,28,.28);z-index:18}
+.navmask.on{display:block}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 /* hero */
 .hero{padding:46px 0 30px}
 .hero h1{font-size:var(--s5);margin:0 0 10px;letter-spacing:.3px}
@@ -155,6 +168,20 @@ a{color:inherit;text-decoration:none}
 .dw .blk p{margin:0;font-size:var(--s2);line-height:1.65}
 .dw .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 @media(max-width:680px){
+  .top .wrap{height:52px;padding:0 16px}
+  .back{display:none}
+  .brand{font-size:var(--s3)}
+  .burger{display:flex}
+  .nav{position:fixed;top:52px;left:0;right:0;z-index:19;display:none;flex-direction:column;gap:0;
+    padding:4px 0 8px;background:rgba(255,255,255,.92);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,.10);animation:drop .18s ease}
+  .nav.open{display:flex}
+  .nav a{font-size:var(--s3);color:var(--ink);padding:14px 18px;line-height:1.2;
+    border-bottom:1px solid var(--line);border-left:3px solid transparent}
+  .nav a.on{color:var(--blue);font-weight:600;background:var(--blue-bg);
+    border-left-color:var(--blue);border-bottom-color:var(--line)}
+  .nav .mback{display:block;color:var(--muted);font-size:var(--s2);border-bottom:none;padding-top:16px}
   .plans,.three,.keyrow{grid-template-columns:1fr}
   .tlhint{display:block}
   .dw-mask{background:rgba(20,24,28,.30)}
@@ -169,14 +196,17 @@ a{color:inherit;text-decoration:none}
 <body>
 <div class="top"><div class="wrap">
   <div class="lhs"><a class="back" href="../../index.html">← 滑铁卢工具箱</a><span class="brand">ECE MEng <b>选课导航</b></span></div>
-  <nav class="nav">
+  <nav class="nav" id="nav">
     <a href="#/">首页</a>
     <a href="#/courses">课程库</a>
     <a href="#/coop">Co-op 规则</a>
     <a href="#/map">课程地图</a>
     <a href="#/new">今年新课</a>
+    <a class="mback" href="../../index.html">← 返回滑铁卢工具箱</a>
   </nav>
+  <button class="burger" id="burger" aria-label="菜单" aria-expanded="false"><i></i><i></i><i></i></button>
 </div></div>
+<div class="navmask" id="navmask"></div>
 <main class="wrap" id="view"></main>
 <div class="dw" id="dw"><div class="dw-mask" onclick="closeD()"></div>
   <div class="dw-panel"><span class="dw-x" onclick="closeD()">&times;</span><div id="dwc"></div></div>
@@ -1134,6 +1164,24 @@ function renderMap(){
     '<p class="note">方向划分基于 ECE 研究生认证与就业路线；同门课可能跨多条线。标「需教授同意」的 special topics 可由你向教授提议新开。</p>'+
   '</section>';
 }
+/* mobile nav */
+const navEl=document.getElementById('nav'),burgerEl=document.getElementById('burger'),navMaskEl=document.getElementById('navmask');
+function setNav(open){
+  navEl.classList.toggle('open',open);
+  burgerEl.classList.toggle('on',open);
+  navMaskEl.classList.toggle('on',open);
+  burgerEl.setAttribute('aria-expanded',open?'true':'false');
+}
+function closeNav(){ setNav(false); }
+burgerEl.addEventListener('click',()=>setNav(!navEl.classList.contains('open')));
+navMaskEl.addEventListener('click',closeNav);
+navEl.addEventListener('click',e=>{ if(e.target.closest('a')) closeNav(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeNav(); });
+const NAVKEY={'':'#/','courses':'#/courses','coop':'#/coop','map':'#/map','new':'#/new'};
+function markNav(key){
+  const target=NAVKEY[key]||'';
+  navEl.querySelectorAll('a').forEach(a=>a.classList.toggle('on',!!target&&a.getAttribute('href')===target));
+}
 /* router */
 function route(){
   let h=location.hash.slice(1); if(!h||h==='/') h='/';
@@ -1148,6 +1196,8 @@ function route(){
   else if(parts[0]==='map') view.innerHTML=renderMap();
   else view.innerHTML=renderHome();
   if(parts[0]==='courses'&&q) filterCourses(q);
+  markNav(parts[0]||'');
+  closeNav();
   window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route);
