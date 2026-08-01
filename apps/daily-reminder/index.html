@@ -14,7 +14,7 @@
 
   <main class="wrap">
     <section class="hero">
-      <h1>📅 研究生每日提醒</h1>
+      <h1>📅 研究生重要日期 · 日历</h1>
       <p class="sub">每天一件最该做的事 · 数据来源 University of Waterloo 研究生重要日期</p>
     </section>
 
@@ -30,11 +30,38 @@
       <pre id="reminder-text"></pre>
     </section>
 
-    <section class="table-section">
+    <!-- 筛选 + 视图切换（两类视图共用筛选） -->
+    <section class="view-section">
+      <div id="cat-bar" class="chips"></div>
+      <div class="view-tabs">
+        <button class="tab active" data-view="calendar">📅 日历视图</button>
+        <button class="tab" data-view="list">📋 列表视图</button>
+      </div>
+    </section>
+
+    <!-- 日历视图 -->
+    <section id="calendar-view" class="cal-section">
+      <div class="cal-nav">
+        <button id="cal-prev" class="btn ghost">‹ 上月</button>
+        <span id="cal-title" class="cal-title"></span>
+        <button id="cal-next" class="btn ghost">下月 ›</button>
+        <button id="cal-this" class="btn ghost">回到本月</button>
+      </div>
+      <div class="cal-grid">
+        <div class="cal-dow-row">
+          <span>日</span><span>一</span><span>二</span><span>三</span>
+          <span>四</span><span>五</span><span>六</span>
+        </div>
+        <div id="cal-cells" class="cal-cells"></div>
+      </div>
+      <div id="cal-detail" class="cal-detail"></div>
+    </section>
+
+    <!-- 列表视图（全量对照表） -->
+    <section id="list-view" class="table-section" style="display:none">
       <div class="table-head">
         <h2>📚 全量重要日期对照表 <span id="table-count" class="muted"></span></h2>
       </div>
-      <div id="cat-bar" class="chips"></div>
       <div class="table-scroll">
         <table>
           <thead>

@@ -1,5 +1,5 @@
 // 滑铁卢大学研究生每日提醒 · 网页版逻辑
-// 复刻 daily_reminder.py 的 pick_focus + build_message
+// 复刻 daily_reminder.py 的 pick_focus + build_message；新增日历视图
 (function () {
   'use strict';
 
@@ -9,10 +9,24 @@
     '假期': 2, '其他': 1 };
   var ACTIONABLE_PERIOD = { '选课': 1, '退课': 1 };
 
+  // 类别配色（与样式统一，用于日历 chip / 跨天底色 / 详情左边框）
+  var CAT_COLOR = {
+    '缴费': '#c0392b', '退费': '#c0392b', '毕业': '#b9770e', '选课': '#2563eb',
+    '退课': '#2563eb', '考试': '#6b46c1', '假期': '#1f8a4c', '成绩': '#344675',
+    'Co-op': '#b83280', '上课': '#0e7490', '补课': '#7c3aed', '其他': '#6b7280'
+  };
+
   function parseISO(s) { return s ? new Date(s + 'T00:00:00') : null; }
   function md(d) { return (d.getMonth() + 1) + '月' + d.getDate() + '日'; }
   function dayDiff(a, b) { return Math.round((a - b) / 86400000); }
   function weight(e) { return CAT_RANK[e.category] || 1; }
+  function hexToRgba(hex, a) {
+    hex = (hex || '#6b7280').replace('#', '');
+    var r = parseInt(hex.substr(0, 2), 16),
+        g = parseInt(hex.substr(2, 2), 16),
+        b = parseInt(hex.substr(4, 2), 16);
+    return 'rgba(' + r + ',' + g + ',' + b + ',' + a + ')';
+  }
 
   function loadEvents() {
     return (window.UW_EVENTS || []).map(function (e) {
@@ -27,6 +41,15 @@
     return e._start.getTime() === today.getTime();
   }
 
+  // 某天"活跃"的事件：单日=当天；跨天=落在区间内
+  function eventsOnDay(dt, cat) {
+    return EVENTS.filter(function (e) {
+      if (cat && cat !== '全部' && e.category !== cat) return false;
+      if (e._end) return e._start <= dt && dt <= e._end;
+      return e._start.getTime() === dt.getTime();
+    });
+  }
+
   function pickFocus(events, today) {
     var startsToday = events.filter(function (e) { return e._start.getTime() === today.getTime(); });
     var ongoing = events.filter(function (e) { return e._end && e._start < today && today <= e._end; });
@@ -39,48 +62,37 @@
 
     function byW(arr) { return arr.slice().sort(function (a, b) { return weight(b) - weight(a); }); }
 
-    // 1) 今天开始的硬性截止
     var hardToday = byW(startsToday.filter(function (e) { return e.priority === 3; }));
     if (hardToday.length) return [hardToday[0], 'today'];
 
-    // 2) 未来7天硬性截止
     var near7 = upcoming.filter(function (e) { return e.priority === 3 && dayDiff(e._start, today) <= 7; })
       .sort(function (a, b) { return dayDiff(a._start, today) - dayDiff(b._start, today) || weight(b) - weight(a); });
     if (near7.length) return [near7[0], 'deadline'];
 
-    // 3) 今天开始的重要事件(非假期)
     var impToday = byW(startsToday.filter(function (e) { return e.priority >= 2 && e.category !== '假期'; }));
     if (impToday.length) return [impToday[0], 'today'];
 
-    // 4) 假期
     var holi = startsToday.filter(function (e) { return e.category === '假期'; })
       .concat(ongoing.filter(function (e) { return e.category === '假期'; }));
     if (holi.length) return [holi[0], 'holiday'];
 
-    // 5) 未来14天硬性截止
     var near14 = upcoming.filter(function (e) { return e.priority === 3 && dayDiff(e._start, today) <= 14; })
       .sort(function (a, b) { return dayDiff(a._start, today) - dayDiff(b._start, today) || weight(b) - weight(a); });
     if (near14.length) return [near14[0], 'deadline'];
 
-    // 6) 进行中的可处理期间(结束<=14天)
     var per = ongoing.filter(function (e) { return ACTIONABLE_PERIOD[e.category] && dayDiff(e._end, today) <= 14; })
-      .sort(function (a, b) { return dayDiff(a._end, today) - dayDiff(b._end, today) || weight(b) - weight(a); });
+      .sort(function (a, b) { return dayDiff(a._end, today) - dayDiff(a._end, today) || weight(b) - weight(a); });
     if (per.length) return [per[0], 'ongoing'];
 
-    // 7) 今天开始的其他事件
     if (startsToday.length) return [byW(startsToday)[0], 'today'];
 
-    // 8) 最近重要节点
     var impUp = upcoming.filter(function (e) { return e.priority >= 2; });
     if (impUp.length) {
       var e = impUp[0];
       return [e, e.priority === 3 ? 'deadline' : 'upcoming'];
     }
 
-    // 9) 进行中的可处理期间(兜底)
     if (per.length) return [per[0], 'ongoing'];
-
-    // 10) 兜底
     if (upcoming.length) return [upcoming[0], 'upcoming'];
     return [null, 'none'];
   }
@@ -115,7 +127,6 @@
       lines.push(focus.action);
     }
 
-    // 今日节点
     var todays = events.filter(function (e) { return isOngoing(e, today); });
     var seen = {}, todaysU = [];
     todays.sort(function (a, b) { return b.priority - a.priority; });
@@ -132,7 +143,6 @@
       });
     }
 
-    // 临近提醒(未来21天)
     var horizon = new Date(today.getTime() + 21 * 86400000);
     var up = events.filter(function (e) { return today < e._start && e._start <= horizon && e.priority >= 2; });
     up.sort(function (a, b) { return a._start - b._start || b.priority - a.priority; });
@@ -160,6 +170,9 @@
 
   // ===== 渲染 =====
   var EVENTS = loadEvents();
+  var currentCat = '全部';
+  var curYear, curMonth;
+  var todayStr;
 
   function fmtDateInput(d) {
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
@@ -192,12 +205,135 @@
     document.getElementById('table-count').textContent = rows.length;
   }
 
+  // ---------- 日历 ----------
+  function initMonthBounds() {
+    var times = EVENTS.map(function (e) { return e._start.getTime(); })
+      .concat(EVENTS.filter(function (e) { return e._end; }).map(function (e) { return e._end.getTime(); }));
+    var minT = Math.min.apply(null, times), maxT = Math.max.apply(null, times);
+    var minD = new Date(minT), maxD = new Date(maxT);
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    curYear = now.getFullYear(); curMonth = now.getMonth();
+    if (now.getTime() < minT) { curYear = minD.getFullYear(); curMonth = minD.getMonth(); }
+    if (now.getTime() > maxT) { curYear = maxD.getFullYear(); curMonth = maxD.getMonth(); }
+  }
+
+  function renderCalendar() {
+    var year = curYear, month = curMonth;
+    document.getElementById('cal-title').textContent = year + '年' + (month + 1) + '月';
+
+    var first = new Date(year, month, 1);
+    var startDow = first.getDay();            // 0 = 周日
+    var daysInMonth = new Date(year, month + 1, 0).getDate();
+    var cells = [];
+    for (var i = 0; i < startDow; i++) cells.push(null);
+    for (var d = 1; d <= daysInMonth; d++) cells.push(new Date(year, month, d));
+    while (cells.length % 7 !== 0) cells.push(null);
+
+    var calCells = document.getElementById('cal-cells');
+    calCells.innerHTML = '';
+
+    cells.forEach(function (dt) {
+      var cell = document.createElement('div');
+      if (!dt) { cell.className = 'cal-cell empty'; calCells.appendChild(cell); return; }
+      cell.className = 'cal-cell';
+      var ds = fmtDateInput(dt);
+      if (ds === todayStr) cell.className += ' today';
+
+      var num = document.createElement('div');
+      num.className = 'daynum';
+      num.textContent = dt.getDate();
+      cell.appendChild(num);
+
+      // 跨天事件：整段底色延续
+      var inRange = eventsOnDay(dt, currentCat).filter(function (e) { return e._end; });
+      if (inRange.length) {
+        inRange.sort(function (a, b) { return b.priority - a.priority; });
+        var c = CAT_COLOR[inRange[0].category] || '#6b7280';
+        cell.style.background = hexToRgba(c, 0.10);
+        cell.style.borderLeft = '3px solid ' + c;
+      }
+
+      // chip：仅在该事件「起始日」显示，避免重复
+      var starts = EVENTS.filter(function (e) {
+        return e._start.getTime() === dt.getTime() && (currentCat === '全部' || e.category === currentCat);
+      }).sort(function (a, b) { return b.priority - a.priority; });
+
+      var max = 3;
+      starts.slice(0, max).forEach(function (e) {
+        var chip = document.createElement('div');
+        chip.className = 'cal-chip';
+        chip.style.borderLeftColor = CAT_COLOR[e.category] || '#888';
+        chip.textContent = (e.emoji ? e.emoji + ' ' : '') + e.title_zh;
+        chip.title = e.title_en || e.title_zh;
+        chip.addEventListener('click', function (ev) { ev.stopPropagation(); showDetail(ds); });
+        cell.appendChild(chip);
+      });
+      if (starts.length > max) {
+        var more = document.createElement('div');
+        more.className = 'cal-more';
+        more.textContent = '+' + (starts.length - max) + ' 更多';
+        more.addEventListener('click', function (ev) { ev.stopPropagation(); showDetail(ds); });
+        cell.appendChild(more);
+      }
+
+      cell.addEventListener('click', function () { showDetail(ds); });
+      calCells.appendChild(cell);
+    });
+  }
+
+  function showDetail(ds) {
+    var dt = parseISO(ds);
+    var acts = eventsOnDay(dt, currentCat)
+      .sort(function (a, b) { return b.priority - a.priority || a._start - b._start; });
+    var box = document.getElementById('cal-detail');
+    if (!acts.length) {
+      box.innerHTML = '<div class="cal-detail-empty">🗓️ ' + md(dt) + ' ' + WD[dt.getDay()] +
+        ' · 这一天没有记录的重要日期。</div>';
+      return;
+    }
+    var html = '<div class="cal-detail-head">📌 ' + md(dt) + ' ' + WD[dt.getDay()] + ' · 共 ' + acts.length + ' 项</div>';
+    html += '<div class="cal-detail-list">';
+    acts.forEach(function (e) {
+      var rangeEnd = e._end && e._start.getTime() !== e._end.getTime();
+      var daterange = md(e._start) + (rangeEnd ? ' – ' + md(e._end) : '');
+      var en = e.title_en ? '<div class="en">' + e.title_en + '</div>' : '';
+      var act = e.action ? '<div class="act">💡 ' + e.action + '</div>' : '';
+      html += '<div class="cal-detail-item" style="border-left:4px solid ' + (CAT_COLOR[e.category] || '#888') + '">' +
+        '<div class="zh">' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + '</div>' + en +
+        '<div class="meta"><span class="cat cat-' + e.category + '">' + e.category + '</span>' +
+        '<span class="date">' + daterange + '</span>' +
+        '<span class="term">' + (e.term_zh || '') + '</span></div>' + act + '</div>';
+    });
+    html += '</div>';
+    box.innerHTML = html;
+  }
+
+  function renderChips() {
+    var cats = ['全部'];
+    EVENTS.forEach(function (e) { if (cats.indexOf(e.category) < 0) cats.push(e.category); });
+    var bar = document.getElementById('cat-bar');
+    bar.innerHTML = '';
+    cats.forEach(function (c) {
+      var b = document.createElement('button');
+      b.className = 'chip' + (c === currentCat ? ' active' : '');
+      b.textContent = c;
+      b.addEventListener('click', function () {
+        currentCat = c;
+        Array.prototype.forEach.call(bar.children, function (x) { x.classList.remove('active'); });
+        b.classList.add('active');
+        renderTable(currentCat);
+        renderCalendar();
+        document.getElementById('cal-detail').innerHTML = '';
+      });
+      bar.appendChild(b);
+    });
+  }
+
   function init() {
     var dateInput = document.getElementById('date-pick');
-    var todayStr = fmtDateInput(new Date());
+    todayStr = fmtDateInput(new Date());
     dateInput.value = todayStr;
     renderReminder(todayStr);
-    renderTable('全部');
 
     dateInput.addEventListener('change', function () {
       if (this.value) renderReminder(this.value);
@@ -215,20 +351,34 @@
       });
     });
 
-    // 类别筛选
-    var cats = ['全部'];
-    EVENTS.forEach(function (e) { if (cats.indexOf(e.category) < 0) cats.push(e.category); });
-    var bar = document.getElementById('cat-bar');
-    cats.forEach(function (c) {
-      var b = document.createElement('button');
-      b.className = 'chip' + (c === '全部' ? ' active' : '');
-      b.textContent = c;
-      b.addEventListener('click', function () {
-        Array.prototype.forEach.call(bar.children, function (x) { x.classList.remove('active'); });
-        b.classList.add('active');
-        renderTable(c);
+    renderChips();
+    initMonthBounds();
+    renderCalendar();
+    renderTable('全部');
+
+    // 视图切换
+    var tabs = document.querySelectorAll('.tab');
+    var calView = document.getElementById('calendar-view');
+    var listView = document.getElementById('list-view');
+    Array.prototype.forEach.call(tabs, function (btn) {
+      btn.addEventListener('click', function () {
+        Array.prototype.forEach.call(tabs, function (x) { x.classList.remove('active'); });
+        btn.classList.add('active');
+        var v = btn.getAttribute('data-view');
+        calView.style.display = v === 'calendar' ? '' : 'none';
+        listView.style.display = v === 'list' ? '' : 'none';
       });
-      bar.appendChild(b);
+    });
+
+    // 月历导航
+    document.getElementById('cal-prev').addEventListener('click', function () {
+      curMonth--; if (curMonth < 0) { curMonth = 11; curYear--; } renderCalendar();
+    });
+    document.getElementById('cal-next').addEventListener('click', function () {
+      curMonth++; if (curMonth > 11) { curMonth = 0; curYear++; } renderCalendar();
+    });
+    document.getElementById('cal-this').addEventListener('click', function () {
+      initMonthBounds(); renderCalendar();
     });
   }
 

@@ -108,3 +108,51 @@ td.act { color: var(--muted); min-width: 220px; }
 .cat-Co-op { background: #fdf0f6; color: #b83280; }
 
 .foot { margin-top: 30px; color: var(--muted); font-size: 13px; text-align: center; }
+
+/* 视图切换 + 筛选区 */
+.view-section { margin-top: 26px; }
+.view-tabs { display: flex; gap: 8px; margin-top: 14px; }
+.tab {
+  border: 1px solid var(--line); background: var(--card); color: var(--muted);
+  padding: 8px 16px; border-radius: 10px; cursor: pointer; font-size: 14px; font-weight: 600;
+}
+.tab.active { background: var(--brand); color: #fff; border-color: var(--brand); }
+
+/* 月历 */
+.cal-section { margin-top: 18px; }
+.cal-nav { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.cal-title { font-size: 17px; font-weight: 700; min-width: 116px; text-align: center; }
+.cal-grid { background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; }
+.cal-dow-row, .cal-cells { display: grid; grid-template-columns: repeat(7, 1fr); }
+.cal-dow-row span {
+  padding: 10px 0; text-align: center; font-size: 13px; color: var(--muted);
+  font-weight: 600; background: #fafbfe; border-bottom: 1px solid var(--line);
+}
+.cal-cell {
+  min-height: 94px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line);
+  padding: 6px 6px; font-size: 12px; cursor: pointer; transition: background .1s ease;
+}
+.cal-cell:hover { background: #f3f5fb; }
+.cal-cell.empty { background: #fbfbfd; cursor: default; }
+.cal-cell.empty:hover { background: #fbfbfd; }
+.cal-cell.today { box-shadow: inset 0 0 0 2px var(--brand); }
+.daynum { font-weight: 700; font-size: 12px; color: var(--ink); margin-bottom: 4px; }
+.cal-cell.empty .daynum { display: none; }
+.cal-chip {
+  background: #fff; border: 1px solid var(--line); border-left: 3px solid #888;
+  border-radius: 6px; padding: 2px 5px; margin-bottom: 3px; font-size: 11px; line-height: 1.3;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.cal-chip:hover { filter: brightness(0.97); }
+.cal-more { font-size: 11px; color: var(--muted); padding-left: 4px; cursor: pointer; }
+
+/* 详情面板 */
+.cal-detail { margin-top: 16px; background: var(--card); border: 1px solid var(--line); border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow); }
+.cal-detail-empty { color: var(--muted); }
+.cal-detail-head { font-weight: 700; margin-bottom: 10px; }
+.cal-detail-item { background: #fafbfe; border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px; margin-bottom: 10px; }
+.cal-detail-item:last-child { margin-bottom: 0; }
+.cal-detail-item .zh { font-weight: 600; font-size: 15px; }
+.cal-detail-item .en { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.cal-detail-item .meta { margin-top: 6px; display: flex; gap: 8px; align-items: center; flex-wrap: wrap; font-size: 12px; color: var(--muted); }
+.cal-detail-item .act { margin-top: 6px; color: #374151; font-size: 13px; line-height: 1.5; }
