@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>滑铁卢 ECE MEng 选课导航 · 工具箱</title>
+<style>
+:root{
+  --ink:#1b1f24; --muted:#6b7280; --line:#e6e8eb; --bg:#f6f7f9; --card:#fff;
+  --blue:#2563eb; --blue-bg:#eef2ff; --amber:#b45309; --amber-bg:#fef3c7;
+  --s1:12px; --s2:13px; --s3:15px; --s4:19px; --s5:25px; --r:8px;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font:var(--s3)/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"PingFang SC","Microsoft YaHei",sans-serif;
+  -webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:920px;margin:0 auto;padding:0 20px}
+/* top nav */
+.top{border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:20}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.top .lhs{display:flex;align-items:center;gap:14px}
+.back{font-size:var(--s2);color:var(--muted);text-decoration:none;white-space:nowrap}
+.back:hover{color:var(--blue)}
+.brand{font-weight:700;font-size:var(--s3);letter-spacing:.2px}
+.brand b{color:var(--blue)}
+.nav{display:flex;gap:18px;font-size:var(--s2);color:var(--muted)}
+.nav a:hover{color:var(--ink)}
+/* hero */
+.hero{padding:46px 0 30px}
+.hero h1{font-size:var(--s5);margin:0 0 10px;letter-spacing:.3px}
+.lede{font-size:var(--s3);color:var(--muted);margin:0;max-width:560px}
+/* plan cards */
+.plans{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin:8px 0 36px}
+.pcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:18px;transition:.15s;display:block}
+.pcard:hover{border-color:var(--blue);transform:translateY(-2px)}
+.pcard h3{margin:0 0 6px;font-size:var(--s4)}
+.badge{display:inline-block;font-size:var(--s1);color:var(--blue);background:var(--blue-bg);
+  padding:2px 8px;border-radius:999px;margin-bottom:10px}
+.pcard .sub{color:var(--muted);font-size:var(--s2);margin:0 0 10px}
+.pcard .fit{font-size:var(--s2);border-top:1px dashed var(--line);padding-top:10px;margin:0}
+.pcard .fit b{color:var(--ink)}
+/* generic section */
+.sec{margin:0 0 38px}
+.sec h2{font-size:var(--s4);margin:0 0 14px}
+/* lib teaser */
+.lib{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:20px}
+.search{width:100%;border:1px solid var(--line);border-radius:var(--r);padding:11px 13px;
+  font-size:var(--s3);outline:none;background:var(--bg)}
+.search:focus{border-color:var(--blue);background:#fff}
+.hot{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
+.more{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+.more a{font-size:var(--s2);color:var(--blue);border:1px solid var(--line);
+  border-radius:var(--r);padding:9px 14px;background:var(--card)}
+.more a:hover{border-color:var(--blue)}
+/* chips / pills */
+.chip{display:inline-flex;align-items:center;gap:6px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:6px 11px;font-size:var(--s2);cursor:pointer;transition:.12s}
+.chip:hover{border-color:var(--blue);color:var(--blue)}
+.chip b{font-weight:600}
+.chip .d{color:var(--muted);font-size:var(--s1)}
+.pill{display:inline-block;font-size:var(--s1);background:#eef0f2;color:#475569;
+  padding:2px 8px;border-radius:999px;margin:0 4px 4px 0}
+.pill.new{background:var(--blue-bg);color:var(--blue)}
+.pill.warn{background:var(--amber-bg);color:var(--amber)}
+/* breadcrumb */
+.crumb{font-size:var(--s2);color:var(--muted);padding:22px 0 0;margin:0}
+.crumb a:hover{color:var(--blue)}
+.crumb span{color:var(--ink)}
+/* plan detail */
+.plan-h{padding:18px 0 8px}
+.plan-h h1{font-size:var(--s5);margin:0 0 6px}
+.plan-h .sub{color:var(--muted);margin:0 0 12px}
+.stats{display:flex;gap:18px;flex-wrap:wrap;font-size:var(--s2);color:var(--muted)}
+.stats b{color:var(--ink);font-size:var(--s3)}
+.timeline{margin:18px 0;display:flex;flex-direction:column;gap:8px}
+.term{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:13px 15px}
+.term .ph{font-size:var(--s1);color:var(--muted);min-width:74px}
+.term .courses{display:flex;flex-wrap:wrap;gap:7px}
+.term.work{background:var(--amber-bg);border-color:transparent}
+.term.work .ph{color:var(--amber)}
+.three{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px;margin:20px 0}
+.box{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:15px}
+.box h4{margin:0 0 10px;font-size:var(--s2);color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.box ul{margin:0;padding-left:18px;font-size:var(--s2)}
+.box ul li{margin:0 0 7px}
+.fit-note{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:14px 16px;font-size:var(--s2);margin:0 0 30px}
+.fit-note b{color:var(--blue)}
+/* courses group accordion */
+.group{border:1px solid var(--line);border-radius:var(--r);background:var(--card);margin:0 0 12px;overflow:hidden}
+.group>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;
+  padding:13px 16px;font-weight:600;font-size:var(--s3)}
+.group>summary::-webkit-details-marker{display:none}
+.group .cnt{font-size:var(--s1);color:var(--muted);font-weight:400;margin-left:8px}
+.group .arr{color:var(--muted);transition:.15s}
+.group[open] .arr{transform:rotate(90deg)}
+.glist{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 16px}
+/* coop + new */
+.hook{font-size:var(--s5);margin:6px 0 18px}
+.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.rule{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;font-size:var(--s2)}
+.rule b{display:block;margin-bottom:4px;font-size:var(--s3)}
+.tl{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+.tl .seg{font-size:var(--s2);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;background:var(--card)}
+.tl .seg.s{color:var(--blue);border-color:var(--blue)}
+.tl .seg.w{background:var(--amber-bg);border-color:transparent;color:var(--amber)}
+.note{font-size:var(--s2);color:var(--muted);background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:13px 15px;margin:14px 0}
+.note.amber{background:var(--amber-bg);border-color:transparent;color:var(--amber)}
+/* footer */
+.ft{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:22px 0;font-size:var(--s1);color:var(--muted)}
+.ft .wrap{line-height:1.8}
+.ft a{color:var(--blue)}
+/* drawer */
+.mapdir{border:1px solid var(--line);border-radius:var(--r);background:var(--card);margin:0 0 14px;padding:16px 18px}
+.mapdir>h3{margin:0 0 12px;font-size:var(--s4)}
+.mapcl{margin:0 0 12px}
+.mapcl h4{margin:0 0 8px;font-size:var(--s2);color:var(--muted);font-weight:600}
+.dw{position:fixed;inset:0;z-index:50;display:none}
+.dw.show{display:block}
+.dw-mask{position:absolute;inset:0;background:rgba(20,24,28,.42)}
+.dw-panel{position:absolute;top:0;right:0;height:100%;width:min(440px,92vw);background:#fff;
+  box-shadow:-8px 0 30px rgba(0,0,0,.12);overflow-y:auto;padding:24px 22px;animation:slide .18s ease}
+@keyframes slide{from{transform:translateX(24px);opacity:.6}to{transform:translateX(0);opacity:1}}
+.dw-x{position:absolute;top:16px;right:18px;font-size:22px;color:var(--muted);cursor:pointer;line-height:1}
+.dw h2{font-size:var(--s4);margin:0 0 2px}
+.dw .en{color:var(--muted);font-size:var(--s2);margin:0 0 12px}
+.dw .meta{font-size:var(--s2);color:var(--muted);margin:0 0 14px}
+.dw .blk{margin:0 0 15px}
+.dw .blk h5{font-size:var(--s1);text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 5px}
+.dw .blk p{margin:0;font-size:var(--s2);line-height:1.65}
+.dw .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+@media(max-width:680px){
+  .plans,.three,.rules{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+<div class="top"><div class="wrap">
+  <div class="lhs"><a class="back" href="../../index.html">← 滑铁卢工具箱</a><span class="brand">ECE MEng <b>选课导航</b></span></div>
+  <nav class="nav">
+    <a href="#/">首页</a>
+    <a href="#/courses">课程库</a>
+    <a href="#/coop">Co-op 规则</a>
+    <a href="#/map">课程地图</a>
+    <a href="#/new">今年新课</a>
+  </nav>
+</div></div>
+<main class="wrap" id="view"></main>
+<div class="dw" id="dw"><div class="dw-mask" onclick="closeD()"></div>
+  <div class="dw-panel"><span class="dw-x" onclick="closeD()">&times;</span><div id="dwc"></div></div>
+</div>
+<footer class="ft"><div class="wrap">
+  数据来源：ECE 官方 tentative offering 表（2026-07-31 更新）、CS Fall 2026 开课表、Waterloo Academic Calendar。<br>
+  更正：上一版称「ECE 657D W2027 不开」有误——<b>657D 在 W2027 / W2028 均开，Elliot Creager 教</b>。<br>
+  本页为开源静态文件，最后整理 2026-08-01。课程容量为官方历史数据推断，注册前请以 Quest 实时为准。<br>
+  课程库经 ECE 选课顾问复核补全至 107 门：补齐控制 / 自主 / 机器人线、强化学习（CS 885）、special topics 与跨院系研究生课；标「需教授同意」的可由你向教授提议新开，OVGS 为安省校际互修通道。
+</div></footer>
+<script>
+
+const C = {
+"ECE 650":{n:"Methods and Tools for Software Engineering",zh:"软件工程方法与工具",g:"ece-sw",d:3,t:"F2026 (Crowley) · F2027 (Ward)",tag:["swe"],
+ desc:"整个 MEng 里最像「转码训练营」的一门。四条线并行：系统编程（C/C++/Python、fork、pipe、进程间通信、并发与锁）、数理逻辑（命题逻辑、谓词逻辑、SAT 可满足性）、操作系统原理、以及数据结构与算法复杂度。",
+ proj:"有一个贯穿学期的大 project：用 SAT 求解器解最小顶点覆盖问题，需要写多进程 C++ 程序、接 MiniSat、做性能对比分析。这个 project 拿出来讲面试完全够格。另有 A0–A4 五次编程作业 + 期末考。",
+ pre:"会一门编程语言即可，但没写过 C/C++ 会很吃力。建议开学前把 pointer、Makefile、CMake 过一遍。",
+ why:"几乎所有 ECE 软件方向的后续课都拿它当先修（ECE 653 明确写 prereq: ECE 650）。而且它教的东西——多进程、并发、Unix 系统调用——正好是大厂面试里最常被追问的部分。这门课在四套方案里出现三次，不是偶然。",
+ alt:"若时间冲突：F2027 还会再开一次（Ward 教）。但越晚修越会卡住 653 等后续课，不建议推迟。"},
+
+"ECE 651":{n:"Foundations of Software Engineering",zh:"软件工程基础",g:"ece-sw",d:3,t:"W2027 (Czarnecki) · W2028 (Rayside)",tag:["swe"],
+ desc:"偏工程实践与设计：需求分析、UML 建模（类图/时序图/状态图）、模块化、内聚与耦合、面向对象设计原则、软件架构风格、同步与异步通信、验证与确认、配置管理、软件度量、成本估算模型，以及敏捷开发。",
+ proj:"<b>核心是一个学期长的团队项目</b>，选题自由度高，需要走完完整的敏捷流程：需求文档 → 架构设计 → 迭代开发 → 测试 → 演示。Czarnecki 教授是模型驱动开发领域的知名学者。",
+ pre:"写过一定规模的项目即可。团队协作能力比编程能力更重要。",
+ why:"<b>这是所有课里唯一能同时喂饱「技术项目」和「行为面试」两张嘴的课。</b>建议直接把团队项目做成跟你兴趣绑定的真实产品——比如「用视觉语言模型自动给素材库打标签、按情绪挑片段的剪辑助手」。一箭三雕：拿学分、进 GitHub 作品集、面试讲团队协作和技术选型时有真实故事可讲。",
+ alt:"只在 Winter 开。如果你的 Winter 学期是 work term，这门课就得等到下一个 Winter——这是方案 3 的真实代价之一。"},
+
+"ECE 653":{n:"Software Testing, Quality Assurance and Maintenance",zh:"软件测试与质量保证",g:"ece-sw",d:4,t:"S2027 (Dietl)",tag:["swe","hard"],
+ desc:"名字听起来像「写测试用例」，实际内容硬得多：覆盖率准则（图覆盖、数据流覆盖、逻辑覆盖）、符号执行（静态/动态/concolic）、SMT 约束求解（Z3）、归纳不变式、自动演绎验证、Dafny 形式化验证语言、软件模型检查、自动漏洞利用生成。",
+ proj:"Java/C/Python 编程作业为主，需要动手实现符号执行引擎、用 Z3 求解约束、用 Dafny 写带契约的可验证程序。两次 quiz + 期末。",
+ pre:"<b>硬性先修 ECE 650</b>（或 750 Tpc 26，或 instructor consent）。编译原理和数理逻辑基础有帮助但非必需。",
+ why:"Software 方向认证的第三门必修课。对求职的价值取决于你的目标——如果投的是需要严谨性的岗位（金融、基础设施、安全），这门课含金量很高；如果投的是常规产品线 SWE，性价比不如 ECE 751 或 656。",
+ alt:"只在 Spring 开。若 S2027 是 work term，可考虑 <b>ECE 654 Software Reliability Engineering</b>（同学期，Ward 教，难度稍低）或 <b>CS 846 软件测试与调试专题</b>。"},
+
+"ECE 654":{n:"Software Reliability Engineering",zh:"软件可靠性工程",g:"ece-sw",d:3,t:"S2027 (Ward)",tag:["swe"],
+ desc:"两部分：前半讲可靠软件的工程方法——可靠性建模、容错设计模式、故障恢复机制；后半讲安全软件开发——主要安全漏洞类型与利用方式、安全开发流程、威胁建模。",
+ proj:"以分析和设计为主，编程负担比 ECE 653 轻。Paul Ward 教授上课口碑不错。",
+ pre:"有软件开发经验即可，无硬性先修。",
+ why:"在 S2027 那个学期，它是 ECE 653 的低负担替代品。内容上「可靠性 + 安全」这个组合在后端/基础设施岗面试里很好用。",
+ alt:"同学期的 ECE 653（更难更硬）、ECE 652（嵌入式安全关键软件）。"},
+
+"ECE 655":{n:"Protocols, Software and Issues in Mobile Systems",zh:"移动系统协议与软件",g:"ece-sw",d:2,t:"F2026 (Naik)",tag:["easy"],
+ desc:"移动通信与计算系统的架构、协议与软件层面：ad hoc 网络、移动网络层与传输层、无线应用协议、移动性支持、服务发现、环境感知软件、低功耗协议。",
+ proj:"以概念和协议分析为主，编程量小。<b>公认的开卷考、给分友好</b>。",
+ pre:"无。有计算机网络基础更轻松。",
+ why:"整个 ECE 研究生软件类课程里 workload 最低的一门。它的价值不在内容本身，而在于<b>给你腾出时间</b>——当你需要一个学期专心刷题、投简历或者做自己的项目时，用它来凑满 full-time 学分是最经济的选择。",
+ alt:"F2026 同期的低负担选项还有 ECE 750 T45 Responsible AI（seminar 型）。"},
+
+"ECE 656":{n:"Database Systems",zh:"数据库系统",g:"ece-sw",d:3,t:"W2027 (Zhang J) · W2028 (Golab)",tag:["swe"],
+ desc:"数据模型、文件组织与索引结构、数据库系统架构、查询语言与查询优化、事务与并发控制、完整性与安全、数据库设计范式。",
+ proj:"有 SQL 与数据库设计的实践作业，部分学期有较大的期末 project。",
+ pre:"无硬性先修，会写 SQL 会更从容。",
+ why:"数据库是后端 SWE 面试的常规考区（索引原理、事务隔离级别、查询优化、分库分表）。这门课把这些从「背八股」变成「真的懂」。",
+ alt:"跨系可换 <b>CS 848 SEM 002 Modern Database Systems</b>（seminar 型，F2026 开）或 <b>CS 848 SEM 001 向量与混合索引</b>（更贴 AI 基础设施）。"},
+
+"ECE 751":{n:"Distributed and Network-Centric Computing",zh:"分布式与网络中心计算",g:"ece-sys",d:4,t:"S2027 (Golab)",tag:["swe","hard"],
+ desc:"分布式系统的核心理论与实践：一致性模型、共识算法、复制与容错、分区容忍、分布式事务、网络中心化的系统架构。Wojciech Golab 是分布式计算领域的活跃研究者。",
+ proj:"有系统实现类作业，需要动手写分布式组件。",
+ pre:"操作系统、网络、并发编程基础。修过 ECE 650 会顺很多。",
+ why:"<b>大厂 system design 面试的正面战场。</b>CAP、Raft/Paxos、最终一致性这些概念，从课上学和从面经上背，面试官三个追问就能分辨出来。",
+ alt:"外系可换 <b>CS 654 Distributed Systems</b>（F2026 开，占外系名额）；同系可换 <b>ECE 750 T39 Scalable Computing System Design</b>（F 开，偏大规模并行系统设计）。"},
+
+"ECE 606":{n:"Algorithm Design and Analysis",zh:"算法设计与分析",g:"ece-sys",d:5,t:"F2026 · F2027 (Tripunitara)",tag:["hard","ai"],
+ desc:"标准的研究生算法课，基本按 CLRS 走：分治、贪心、动态规划、图算法、摊还分析、NP 完全性证明、近似算法、随机化算法。Mahesh Tripunitara 教授以严格著称。",
+ proj:"<b>没有大 project</b>，形式是密集的周作业 + 期中 + 期末。作业里的证明题占比高，不是写代码就能过。",
+ pre:"扎实的离散数学和数据结构底子。这门课是四套方案里唯一被标为难度 5 的。",
+ why:"两个理由：<b>一是它在 AI &amp; ML 方向认证的选修清单里</b>，能一门课办两件事；<b>二是它跟 LeetCode 刷题是同一套底层肌肉</b>——DP、图、贪心的直觉练出来之后，面试当场推导比背题稳得多。代价是它会实打实吃掉你第一学期的大量时间。",
+ alt:"如果第一学期不想这么硬：换 <b>ECE 750 T39 Scalable Computing System Design</b> 或 <b>ECE 750 T41 LLM×软件工程</b>，把 606 推到 F2027（还会再开）。但 F2027 在多套方案里是 work term，要提前想清楚。"},
+
+"ECE 621":{n:"Computer Architecture",zh:"计算机体系结构",g:"ece-sys",d:4,t:"F2026 (Patel) · F2027 (Zahedi)",tag:[],
+ desc:"处理器微架构、指令级并行、流水线与乱序执行、缓存与存储层次、多核与一致性协议、性能建模。",
+ proj:"通常有模拟器实验（如 gem5 类工具）。",
+ pre:"本科计算机组成原理。",
+ why:"对做系统底层、编译器、性能优化或 AI 推理加速方向的岗位有直接帮助。对普通应用层 SWE 优先级不高。",
+ alt:"ECE 750 T39（系统设计视角）或 ECE 720 T10 AI/ML Hardware（S2027，AI 硬件）。"},
+
+"ECE 750 T39":{n:"Scalable Computing System Design",zh:"可扩展计算系统设计",g:"ece-sys",d:4,t:"F2026 · F2027 (Reza, Tahsin)",tag:["swe"],
+ desc:"面向大规模数据与计算的系统设计：并行与分布式计算模型、可扩展性瓶颈分析、大规模图/数据处理系统、高性能计算与云环境下的系统权衡。",
+ proj:"Topics 类课程通常以论文研读 + 学期 project 为主，project 占比高。",
+ pre:"有系统编程和并发基础。",
+ why:"F2026 第一学期就能上的、对 SWE 最实用的系统课之一。跟 ECE 650 搭配（一个教你怎么写、一个教你怎么让它扛住规模）在第一学期形成很好的组合。",
+ alt:"W2027 同类可选 ECE 750 T29（程序验证）；S2027 有 ECE 751（分布式）。",
+ warn:"Topics 课的具体大纲每年由教授决定，选课前务必去 outline.uwaterloo.ca 或直接邮件确认当年内容与评分构成。"},
+
+"ECE 750 T41":{n:"Software Analysis and Engineering with LLMs",zh:"用大模型做软件分析与工程",g:"ece-ai",d:3,t:"F2026 (Zhang J)",tag:["ai","new","swe"],
+ desc:"2026 秋新开。把大语言模型用到软件工程全流程：代码生成与补全、缺陷检测、程序理解与摘要、自动修复、测试生成，以及如何评估这些 LLM 系统的可靠性。",
+ proj:"seminar 型课程，通常是论文研读 + 课堂展示 + 一个占比很高的学期 project。",
+ pre:"有软件工程基础和 Python 能力即可，不需要深度学习理论背景。",
+ why:"<b>三个优势叠在一起：最新、最对口 SWE、而且是本系课不占那 3 个外系名额。</b>2026 年的招聘市场上，「用 LLM 改造开发流程」是几乎每家公司都在做的事，这门课的 project 直接就是简历上的加分项。",
+ alt:"跨系同类：CS 846 SEM 002 LLM for Software Engineering（Winter 开）、CS 886 SEM 001 Transformers &amp; LLMs（F2026）。",
+ warn:"首次开设的课程没有历史口碑数据，教学质量和评分尺度都未知。"},
+
+"ECE 750 T42":{n:"Mining and Analysis of Software Engineering Data",zh:"软件工程数据挖掘",g:"ece-ai",d:2.5,t:"W2027 (Shang W)",tag:["ai","easy"],
+ desc:"从软件仓库中挖掘信息：代码演化分析、缺陷预测、日志分析、开发者行为建模、大规模代码库的实证研究方法。",
+ proj:"研讨型 + 数据分析 project，编程负担中等。",
+ pre:"Python + 基本统计。",
+ why:"负担相对轻，但产出的是「数据驱动的软件工程」这种有实感的项目经验。适合放在需要腾时间的学期。",
+ alt:"CS 846 SEM 002 Empirical Software Engineering（F2026，内容高度重合，但占外系名额）。"},
+
+"ECE 750 T29":{n:"Automated Program Verification",zh:"自动程序验证",g:"ece-sw",d:4.5,t:"W2027 · W2028 (Gurfinkel)",tag:["hard"],
+ desc:"程序正确性的自动化证明：抽象解释、模型检查、SMT 求解、不变式生成、软件模型检查器的实现原理。Arie Gurfinkel 是形式化验证领域的知名学者（SeaHorn 作者之一）。",
+ proj:"理论密度高，有工具实现类作业。",
+ pre:"数理逻辑基础，最好修过 ECE 650。",
+ why:"学术分量最重的软件课之一。对求职的直接帮助有限，但如果你想进的是编译器、基础设施、安全或者做 AI 代码生成的验证方向，这门课的深度别处买不到。",
+ alt:"ECE 653（同领域，难度略低，S 开）。"},
+
+"ECE 750 T45":{n:"Responsible AI",zh:"负责任的人工智能",g:"ece-ai",d:2.5,t:"F2026 (Creager)",tag:["ai","easy","new"],
+ desc:"AI 系统的公平性、可解释性、隐私、鲁棒性与治理。Elliot Creager 同时也是 ECE 657D 深度学习的授课教授。",
+ proj:"seminar 型，论文研读 + 展示 + 学期 project。",
+ pre:"有机器学习基础更好，但门槛不高。",
+ why:"F2026 学期里少见的「AI 相关 + 负担轻」组合。另一个隐藏好处：<b>提前跟 Creager 教授混个脸熟</b>，W2027/W2028 你大概率还要上他的 657D，也可能找他做 ECE 699 项目。",
+ alt:"F2026 同期轻负担选项：ECE 655（移动系统，开卷）。"},
+
+"ECE 750 T37":{n:"Engineering Self-Adaptive Software Systems",zh:"自适应软件系统工程",g:"ece-sw",d:3,t:"F2027 (Tahvildari)",tag:["swe"],
+ desc:"能在运行时自我监控、自我调整的软件系统：MAPE-K 控制回路、运行时模型、自愈与自优化架构。",
+ proj:"研讨 + project。",pre:"软件架构基础。",
+ why:"和云原生、自动扩缩容、SRE 这些工业界实践的思想同源。",
+ alt:"ECE 750 T39（F2027 同期）。"},
+
+"ECE 752":{n:"Foundations of Multiagent Systems",zh:"多智能体系统基础",g:"ece-ai",d:3.5,t:"W2027 · W2028 (Zahedi)",tag:["ai"],
+ desc:"多个自主智能体的交互与协调：博弈论基础、机制设计、拍卖理论、社会选择、分布式资源分配、多智能体学习。",
+ proj:"理论为主，有建模与仿真作业。",
+ pre:"概率论、线性代数。",
+ why:"<b>它在 AI &amp; ML 方向认证的选修清单里</b>，同时「多智能体」正好是 2026 年 LLM Agent 热潮的理论底座。想做 agent 系统的话，这门课给的是别人没有的理论视角。",
+ alt:"ECE 657D（深度学习）、ECE 757A Embodied Intelligence（W2028）。"},
+
+"ECE 657":{n:"Introduction to Machine Learning",zh:"机器学习导论",g:"ece-ai",d:3,t:"S2026 · S2027 (Karimi)",tag:["ai"],
+ desc:"机器学习的系统性入门：监督学习（回归、分类、SVM、树模型、集成）、无监督学习（聚类、降维）、模型评估与调优、过拟合与正则化。Amir-Hossein Karimi 教授的研究方向是因果与可解释 AI。",
+ proj:"作业 + project 组合，Python/sklearn 实操。",
+ pre:"线性代数、概率统计、Python。",
+ why:"<b>AI &amp; Machine Learning 方向认证的两门必修之一</b>，不修就拿不到认证。而且它<b>只在 Spring 开</b>——这一条是四套方案排布差异的最大来源：谁把 Spring 用来实习，谁就拿不到这个认证。",
+ alt:"没有真正的替代品（认证硬性要求）。若只是想学 ML 不要认证：CS 680 / CS 685（F2026，占外系名额）。"},
+
+"ECE 657A":{n:"Introduction to Artificial Intelligence",zh:"人工智能导论",g:"ece-ai",d:3.5,t:"W2027 · W2028 (Crowley)",tag:["ai"],
+ desc:"注意：<b>这门课已改名</b>，网上流传的「Data and Knowledge Modeling and Analysis」是旧名。现在内容覆盖数据预处理与特征工程、分类与聚类、降维、模型选择与评估，以及 AI 方法的整体图景。Mark Crowley 教授同时也教 ECE 650。",
+ proj:"<b>约 30% 是小组 project</b>，其余是密集的作业和偏重的期末考。作业量在 AI 类课程里偏大。",
+ pre:"概率统计、线性代数、Python。",
+ why:"<b>AI &amp; ML 方向认证的第二门必修</b>。和 ECE 657 一起构成认证的地基，两门都得修。",
+ alt:"没有替代品（认证硬性要求）。W2027 修不到还有 W2028。"},
+
+"ECE 657D":{n:"Deep Learning (Neural Networks and Deep Learning)",zh:"深度学习",g:"ece-ai",d:4,t:"W2027 · W2028 (Creager)",tag:["ai","new"],
+ desc:"从感知机和反向传播一路讲到当代：CNN、RNN/LSTM、注意力机制与 Transformer、生成模型与扩散模型、图神经网络、大规模训练的工程实践。<b>W2026 首次开设，W2027 和 W2028 都会开</b>。",
+ proj:"深度学习课通常有较重的编程作业和一个开放式期末 project，可自选题目。",
+ pre:"机器学习基础（657 或 657A 之一）、Python + PyTorch。",
+ why:"<b>ECE 系目前最新、最对口现代 AI 的一门课</b>，而且在 AI &amp; ML 认证的选修清单里。对你来说还有一层：扩散模型和生成式视频正是摄影/影像兴趣与 AI 的交汇处，期末 project 可以往这个方向做。",
+ alt:"CS 886 SEM 003 Generative Models 或 CS 679 Neural Networks（都占外系名额）。",
+ warn:"上一版规划书误称这门课 W2027 不开。已按 ECE 官方最新开课表更正：<b>W2027 开，Creager 授课</b>。"},
+
+"ECE 613":{n:"Image Processing and Visual Communication",zh:"图像处理与视觉通信",g:"ece-cam",d:3.5,t:"W2027 (Wang Z) · W2028 (Wang Z)",tag:["cam"],
+ desc:"数字图像的表示与采样、颜色空间、图像变换（DCT/小波）、增强与复原、压缩编码（JPEG/视频编码）、以及<b>图像质量评价</b>。",
+ proj:"有图像处理实现类作业（通常 MATLAB/Python），部分学期有期末 project。",
+ pre:"信号与系统、线性代数基础。有摄影经验反而会让很多概念更直观。",
+ why:"<b>这是全校离「摄影」最近、又能计入 MEng 学位、还是本系课不占外系名额的唯一一门课。</b>更妙的是授课教授 <b>Zhou Wang 就是 SSIM（结构相似性图像质量指标）的作者</b>——全世界做图像质量评价绕不开的人。跟他学「怎么科学地衡量一张照片好不好看」，对一个摄影师来说是降维打击。四套方案里它都在。",
+ alt:"若某学期选不上：SYDE 671 高级图像处理 / SYDE 672 统计图像处理（Fall 开，占外系名额）、CS 684 Computational Vision（F2026）。"},
+
+"ECE 602":{n:"Introduction to Optimization",zh:"优化导论",g:"ece-ai",d:4,t:"W2027 (Michailovich)",tag:["ai","hard"],
+ desc:"凸集与凸函数、凸优化问题的建模与求解、对偶理论、KKT 条件、梯度与内点方法、在工程与机器学习中的应用。",
+ proj:"数学推导密集，有编程实现作业（CVX/Python）。",
+ pre:"线性代数、多元微积分。",
+ why:"在 AI &amp; ML 认证的选修清单里。凸优化是所有机器学习算法的数学地基，学透了看论文会顺很多。但对面试的直接帮助有限。",
+ alt:"ECE 606（同为认证选修，更贴面试）、ECE 613（同为认证选修，更贴兴趣）。"},
+
+"ECE 659":{n:"Intelligent Sensors and Wireless Sensor Networks",zh:"智能传感器与无线传感网络",g:"ece-ai",d:3,t:"W2027 (Basir)",tag:["ai"],
+ desc:"传感器原理、数据融合、无线传感网络的组网与路由、能量管理、边缘智能。",
+ proj:"有设计与仿真类作业。",pre:"无严格先修。",
+ why:"在 AI &amp; ML 认证选修清单里，是 W2027 学期里凑认证的一个备选。对纯软件 SWE 求职帮助不大。",
+ alt:"ECE 613、ECE 752（同学期，同在认证清单）。"},
+
+"ECE 720 T10":{n:"AI/ML Hardware",zh:"AI/ML 硬件",g:"ece-ai",d:4,t:"S2026 · S2027 (Boutros)",tag:["ai"],
+ desc:"面向机器学习的硬件加速：GPU/TPU/FPGA 架构、算子映射与调度、量化与稀疏化、推理加速器设计。",
+ proj:"有硬件设计或性能建模类作业。",pre:"计算机体系结构基础。",
+ why:"如果你想做 ML 系统或推理优化（这是目前市场最缺人的方向之一），这门课的视角很稀缺。纯应用层 SWE 可跳过。",
+ alt:"ECE 621 Computer Architecture、CS 854 Model Serving Systems for GenAI。"},
+
+"ECE 699A":{n:"Master of Engineering Project",zh:"MEng 项目课",g:"ece-proj",d:3,t:"每学期都开 (Xie LL 协调)",tag:["swe","mile"],
+ desc:"在一位 ECE 教授一对一指导下，用一个学期完成一个研究/工程项目，学期末提交 Project Report 由导师评分。抵 1 门课学分。",
+ proj:"就是 project 本身。近期出现过「Scalable Deep Learning」（数据并行/模型并行、CUDA、DeepSpeed）这类系统向题目，简历价值很高。",
+ pre:"<b>硬门槛：已修满 3 门课且均分 ≥80%。</b>所以前两学期成绩直接决定你有没有资格。",
+ why:"官方认证的「带学分的 side project」，而且是一对一带。如果你能找到跟 AI/系统相关的题目，产出物比一般课程 project 更完整。",
+ alt:"不做 699 就多修一门常规课，风险更低、时间更可控。",
+ warn:"<b>必须做教授命题的项目，不能把你自己的个人项目直接换学分。</b>流程是自己发邮件联系 ECE 教授谈题目，拿到 permission number 后在 Quest 注册——这一步没人替你做，越早联系机会越多。"},
+
+"WIL 601":{n:"Career Foundations for Work-Integrated Learning",zh:"职业基础（Co-op 必修）",g:"ece-proj",d:1,t:"第一个 work term 的前一学期",tag:["mile"],
+ desc:"Co-op 学生的职业准备课程：简历与求职信、面试技巧、职场沟通、工作场所的专业规范与安全。",
+ proj:"以在线模块和作业为主，负担很轻。",
+ pre:"MEng Co-op 项目学生。",
+ why:"<b>不是可选项，是 Co-op 项目的硬性 milestone。</b>官方要求必须在第一个 work term 的前一学期（work-search term）完成。它<b>不占那 8 门课的额度</b>，但会占用你一点时间——排课时记得留出来。",
+ alt:"没有替代品。",
+ warn:"四套方案里 WIL 601 的位置都不一样，因为它必须跟着 work term 走。这是最容易被忽略、也最容易导致 co-op 资格出问题的一环。落地前发邮件跟 ece.masterscoop@uwaterloo.ca 确认注册方式。"},
+
+"ECE 652":{n:"Methods and Principles of Safety-critical Embedded Software",zh:"安全关键嵌入式软件",g:"ece-sw",d:3.5,t:"S2026 · S2027 (Fischmeister)",tag:["swe"],
+ desc:"安全关键系统的软件工程：形式化测试方法、单元/集成/系统级测试的结构与行为准则、实时约束下的软件设计。",
+ proj:"有嵌入式实践成分。",pre:"编程语言、编译器、操作系统的基本成熟度。",
+ why:"如果目标是汽车、航空、医疗设备这类行业的软件岗，这门课非常对口。常规互联网 SWE 优先级中等。",
+ alt:"ECE 653 / ECE 654（同学期同领域）。"},
+
+"ECE 750 T27":{n:"Computer Security",zh:"计算机安全",g:"ece-sw",d:3,t:"S2026 · S2027 (Gong / Vaniea)",tag:[],
+ desc:"系统安全的核心议题：认证与访问控制、密码学应用、常见攻击与防御、安全协议。",
+ proj:"研讨 + 实践作业。",pre:"操作系统与网络基础。",
+ why:"安全是 SWE 面试里的常见追问区，也是很多岗位的加分项。",
+ alt:"ECE 628 Computer Network Security（W2027）、CS 653 Software and Systems Security（F2026）。"},
+
+"ECE 628":{n:"Computer Network Security",zh:"计算机网络安全",g:"ece-sw",d:3,t:"W2027 (Gong) · W2028",tag:[],
+ desc:"网络层面的安全机制：密码学基础、认证协议、PKI、防火墙与入侵检测、无线与移动网络安全。Guang Gong 是密码学领域资深教授。",
+ proj:"理论 + 协议分析。",pre:"计算机网络基础。",
+ why:"Computer Networking and Security 方向认证的核心课之一。",
+ alt:"ECE 750 T27 / T38（S2027）。"},
+
+/* ===== CS 外系 ===== */
+"CS 651":{n:"Data-Intensive Distributed Computing",zh:"数据密集型分布式计算",g:"cs",d:3.5,t:"F2026 · W2026 (每学期都有)",tag:["swe","ext"],
+ desc:"大数据处理的编程模型与系统：MapReduce 思想、Spark、分布式数据处理管道、大规模文本与图数据分析、流处理。",
+ proj:"<b>有分量很足的编程 project</b>，真的要在集群上跑 Spark 作业。",
+ pre:"Java/Scala 或 Python，有分布式概念基础更好。",
+ why:"外系课里对 SWE 求职性价比最高的之一——大数据处理是数据工程和后端岗位的硬技能，project 拿出来讲很有说服力。",
+ alt:"ECE 751（本系，不占外系名额）、CS 654 Distributed Systems。"},
+
+"CS 654":{n:"Distributed Systems",zh:"分布式系统",g:"cs",d:4,t:"F2026 · W2026",tag:["swe","ext","hard"],
+ desc:"分布式系统原理：进程通信、命名、同步、一致性与复制、容错、分布式文件系统。<b>注意：CS 653 是「软件与系统安全」，不是分布式，这是网上常见的混淆。</b>",
+ proj:"有系统实现作业。",pre:"操作系统、网络。",
+ why:"system design 面试的正统教材内容。",
+ alt:"ECE 751（本系，S2027 开，不占外系名额）。"},
+
+"CS 684":{n:"Computational Vision",zh:"计算视觉",g:"cs",d:3.5,t:"F2026 · W2026",tag:["cam","ai","ext"],
+ desc:"计算机视觉基础：图像形成与相机模型、滤波与特征检测、立体视觉与深度估计、运动与光流、物体识别。",
+ proj:"有视觉算法实现作业。",pre:"线性代数、概率、编程。",
+ why:"和你的摄影兴趣直接相关的一门——相机模型、成像几何这些内容学完，你看镜头和构图的方式会变。",
+ alt:"ECE 613（本系，不占外系名额，更偏图像处理与质量）、SYDE 671。"},
+
+"CS 688":{n:"Introduction to Computer Graphics",zh:"计算机图形学导论",g:"cs",d:4,t:"Winter 学期（W2026 已开，W2027 待发布）",tag:["cam","ext","hard"],
+ desc:"三维图形学基础：几何变换、光照与着色模型、光线追踪、纹理映射、几何建模、渲染管线。",
+ proj:"<b>核心是用 C++ 从零写一个完整的光线追踪渲染器</b>，成品是能直接放进作品集的视觉作品。",
+ pre:"C++ 能力、线性代数（矩阵变换）。",
+ why:"如果你对影像的兴趣不止于「拍」，还想理解「光是怎么被计算出来的」，这门课是最直接的入口。渲染器成品也是少见的、既有技术含量又有视觉冲击力的项目。",
+ alt:"CS 888 Advanced Topics in Light Transport（更深，seminar 型）。",
+ warn:"W2027 的 CS 开课表尚未发布，这门课按 Winter 惯例推断。选课前需确认。"},
+
+"CS 886 SEM 002":{n:"Vision-Language Models: Architectures, Training, and Frontiers",zh:"视觉语言模型",g:"cs",d:3.5,t:"F2026",tag:["ai","cam","new","ext"],
+ desc:"视觉与语言的多模态模型：CLIP 类对比学习、图文生成架构、多模态预训练与微调、当前前沿问题。",
+ proj:"seminar 型：论文研读 + 展示 + <b>占比 40–50% 的学期 project</b>，通常没有期末考。",
+ pre:"深度学习基础，需 instructor consent。",
+ why:"<b>这是你摄影兴趣和 AI 兴趣的正交叉点。</b>用 VLM 做素材自动标注、按语义检索镜头、根据情绪挑片段——这些都是能真做出来的 project，而且非常适合当作 ECE 651 团队项目的技术底座。",
+ alt:"CS 886 SEM 003 Generative Models、ECE 657D（本系）。",
+ warn:"需要 instructor consent，位置有限。<b>现在就该发邮件。</b>"},
+
+"CS 886 SEM 003":{n:"Theory and Applications of Generative Models",zh:"生成模型的理论与应用",g:"cs",d:4,t:"F2026",tag:["ai","cam","new","ext"],
+ desc:"生成模型的系统梳理：VAE、GAN、自回归模型、扩散模型的原理与训练，以及在图像/视频/音频生成上的应用。",
+ proj:"seminar + 大 project。",pre:"深度学习与概率基础，需 consent。",
+ why:"生成式图像和视频是当下最热的方向，也和你的影像创作直接相关。",
+ alt:"CS 886 SEM 002、ECE 657D。",warn:"需 instructor consent。"},
+
+"CS 886 SEM 001":{n:"Learning Theory for Modern AI: Transformers and LLMs",zh:"Transformer 与大模型的学习理论",g:"cs",d:4,t:"F2026",tag:["ai","new","ext"],
+ desc:"从理论视角理解 Transformer 与大语言模型：表达能力、训练动力学、涌现能力、scaling law。",
+ proj:"seminar + project。",pre:"机器学习理论基础，需 consent。",
+ why:"理论深度最高的 LLM 课。如果目标是 research-oriented 的岗位或者读博，这门课分量足。",
+ alt:"CS 886 SEM 004 Topics in Language Modelling（更偏应用）、ECE 750 T41（本系，偏软件工程应用）。",warn:"需 instructor consent。"},
+
+"CS 854":{n:"Model Serving Systems for GenAI",zh:"生成式 AI 的模型服务系统",g:"cs",d:4,t:"F2026",tag:["ai","swe","new","ext"],
+ desc:"大模型推理与服务的系统工程：批处理与调度、KV cache 管理、量化与并行推理、延迟与吞吐权衡、服务化架构。",
+ proj:"seminar + 系统实现 project。",pre:"系统与深度学习基础，需 consent。",
+ why:"<b>这门课站在 AI 和系统工程的交汇点，也正是目前市场上最缺人、薪资最高的方向之一。</b>会训练模型的人很多，会把模型高效部署上线的人少得多。",
+ alt:"ECE 750 T39（本系，可扩展系统设计）、ECE 720 T10 AI/ML Hardware。",
+ warn:"需 instructor consent，且系统类 seminar 通常要求较强的工程基础。"},
+
+"CS 848 SEM 001":{n:"Indexing for Modern Data Processing: Relational, Vector, and Hybrid",zh:"现代数据处理的索引：关系型、向量与混合",g:"cs",d:3.5,t:"F2026",tag:["ai","swe","new","ext"],
+ desc:"索引结构的现代演进：传统关系型索引、向量索引（HNSW、IVF 等近似最近邻）、以及关系与向量混合查询的系统设计。",
+ proj:"seminar + project。",pre:"数据库基础，需 consent。",
+ why:"<b>这就是 RAG 系统底下那一层。</b>所有做 AI 应用的公司都在建向量检索，但真懂索引结构权衡的人很少。是个差异化很强的技能点。",
+ alt:"ECE 656 Database Systems（本系，更基础全面）、CS 848 SEM 002 Modern Database Systems。",warn:"需 instructor consent。"},
+
+"CS 846 SEM 003":{n:"Formal Methods Meets Artificial Intelligence",zh:"形式化方法与人工智能的结合",g:"cs",d:3.5,t:"F2026",tag:["ai","ext"],
+ desc:"用形式化方法验证 AI 系统，以及用 AI 辅助形式化验证。两个方向的交叉。",
+ proj:"seminar + project。",pre:"逻辑与 ML 基础，需 consent。",
+ why:"新兴交叉方向，对做 AI 可靠性、代码生成验证有价值。",
+ alt:"ECE 750 T29 Automated Program Verification（本系）。",warn:"需 instructor consent。"},
+
+"CS 846 SEM 002":{n:"Empirical Software Engineering",zh:"实证软件工程",g:"cs",d:2.5,t:"F2026",tag:["easy","ext"],
+ desc:"用数据和实验方法研究软件工程实践：实验设计、开发者行为研究、代码库实证分析。",
+ proj:"seminar + 数据分析 project，负担相对轻。",pre:"需 consent。",
+ why:"F2026 外系课里负担较轻的选项。",
+ alt:"ECE 750 T42（本系，W2027，内容高度重合，不占外系名额）。"},
+
+"CS 680":{n:"Introduction to Machine Learning",zh:"机器学习导论",g:"cs",d:3.5,t:"F2026 · W2026",tag:["ai","ext"],
+ desc:"CS 系的机器学习入门课，理论密度比 ECE 657 略高：监督/无监督学习、核方法、神经网络基础、泛化理论。",
+ proj:"作业 + project。",pre:"线代、概率、Python。",
+ why:"如果 ECE 657 因为学期冲突修不了，这是最接近的替代——但注意<b>它不能替代 AI &amp; ML 方向认证里的 ECE 657</b>，认证只认本系课。",
+ alt:"CS 685 Machine Learning（更偏统计）、ECE 657（本系）。"},
+
+"CS 685":{n:"Machine Learning: Statistical and Computational Foundations",zh:"机器学习的统计与计算基础",g:"cs",d:4,t:"F2026",tag:["ai","ext","hard"],
+ desc:"机器学习的数学地基：统计学习理论、泛化界、优化视角下的学习算法。",
+ proj:"理论作业为主。",pre:"较强的数学基础。",
+ why:"理论最扎实的一门 ML 课。适合想深挖的人，对面试帮助间接。",
+ alt:"CS 680、ECE 657。"},
+
+"CS 679":{n:"Neural Networks",zh:"神经网络",g:"cs",d:3.5,t:"F2026 · W2026",tag:["ai","ext"],
+ desc:"神经网络的原理与实践：前馈网络、卷积、循环结构、训练技巧、现代架构。",
+ proj:"编程作业 + project。",pre:"ML 基础。",
+ why:"ECE 657D 的外系替代品。若 Winter 学期是 work term 上不了 657D，可以在 Fall 用它顶上。",
+ alt:"ECE 657D（本系，不占外系名额，内容更新）。"},
+
+"CS 649":{n:"Human-Computer Interaction",zh:"人机交互",g:"cs",d:2.5,t:"F2026",tag:["easy","ext"],
+ desc:"交互设计原理、可用性评估方法、用户研究、界面设计与原型。",
+ proj:"设计 + 用户研究 project，编程负担小。",pre:"无。",
+ why:"负担轻，而且如果你想做面向创作者的工具产品（剪辑助手、素材管理器），HCI 的方法论会让产品真的好用而不只是能用。",
+ alt:"CS 889 Research Methods in HCI（seminar 型）。"},
+
+"CS 656":{n:"Computer Networks",zh:"计算机网络",g:"cs",d:3,t:"F2026 · W2026",tag:["ext"],
+ desc:"网络协议栈、路由与拥塞控制、传输层、应用层协议、网络性能。",
+ proj:"有实验作业。",pre:"无。",
+ why:"网络是后端面试的固定考区。但 ECE 系也有类似课，优先用本系名额。",
+ alt:"ECE 655（本系，更轻）、ECE 628（本系，偏安全）。"},
+
+/* ===== SYDE / MSCI 外系 ===== */
+"SYDE 671":{n:"Advanced Image Processing",zh:"高级图像处理",g:"syde",d:3.5,t:"Fall (Gharaee)",tag:["cam","ext"],
+ desc:"图像处理的进阶主题：多尺度分析、图像分割、特征表示、基于学习的图像处理方法。",
+ proj:"有实现类作业与 project。",pre:"信号处理或图像基础。",
+ why:"ECE 613 只在 Winter 开，而 SYDE 671 在 Fall 开——<b>这两门正好错开，构成「任何学期都能上一门视觉课」的组合。</b>",
+ alt:"SYDE 672 Statistical Image Processing（同学期）、ECE 613（本系，Winter）。"},
+
+"SYDE 672":{n:"Statistical Image Processing",zh:"统计图像处理",g:"syde",d:4,t:"Fall (Nazemi)",tag:["cam","ext"],
+ desc:"从统计推断视角处理图像：贝叶斯图像恢复、马尔可夫随机场、统计建模与估计。",
+ proj:"数学密度较高。",pre:"概率统计基础扎实。",
+ why:"比 SYDE 671 更偏理论。适合想深入图像建模的人。",
+ alt:"SYDE 671（同学期，更实用）。"},
+
+"SYDE 675":{n:"Pattern Recognition",zh:"模式识别",g:"syde",d:3.5,t:"Winter（需确认）",tag:["ai","ext"],
+ desc:"模式识别的经典框架：贝叶斯决策、参数与非参数估计、特征选择与降维、聚类、分类器设计与评估。",
+ proj:"有实现类作业。",pre:"概率统计、线代。",
+ why:"经典 ML 的另一种讲法，SYDE 的教学风格偏工程实践。",
+ alt:"ECE 657 / ECE 657A（本系，且是认证必修）。",
+ warn:"SYDE 的 Fall 开课表里没有这门课，推测在 Winter 开，需向 SYDE 研究生办确认。"},
+
+"SYDE 631":{n:"Time Series Modelling",zh:"时间序列建模",g:"syde",d:3,t:"Fall",tag:["ai","ext"],
+ desc:"时间序列的统计建模：ARIMA 类模型、平稳性、预测与诊断。",
+ proj:"数据分析作业。",pre:"统计基础。",
+ why:"如果做量化、监控、预测类系统会用得上。对通用 SWE 帮助有限。",
+ alt:"ECE 657（本系 ML）。"},
+
+"MSCI 641":{n:"Text Analytics",zh:"文本分析",g:"syde",d:3,t:"待确认",tag:["ai","ext"],
+ desc:"自然语言处理的实用方法：文本预处理、向量表示、分类与情感分析、主题模型、现代神经方法。",
+ proj:"以 Python 实操为主，有 project。",pre:"Python + 基本 ML。",
+ why:"NLP 的实操入门，负担相对温和。",
+ alt:"CS 886 SEM 004 Topics in Language Modelling、ECE 750 T41。",
+ warn:"MSCI 的 2026–2027 开课表未在本次调研中核实到，选课前必须去 Management Science &amp; Engineering 系官网确认是否开设。"},
+
+/* ===== BE 商学院 ===== */
+"BE 645":{n:"AI Business Applications",zh:"AI 的商业应用",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
+ desc:"从商业视角理解 AI：AI 能解决什么商业问题、如何评估投入产出、落地路径与组织变革。",
+ proj:"案例分析 + 小组作业为主。",pre:"无技术门槛。",
+ why:"如果你真的想把 CNC 造物或影像工具做成产品，这类课教的是「怎么判断这东西值不值得做」——这是纯工科课程完全不教的部分。",
+ alt:"BE 650 Digital Transformations。",
+ warn:"BE 课对全校研究生开放，但<b>是否在 ECE 的 approved 名单上必须先向 ECE Graduate Office 确认</b>。"},
+
+"BE 605":{n:"Project Management",zh:"项目管理",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
+ desc:"项目管理的完整方法论：范围与进度管理、资源与风险、敏捷与传统方法的取舍、干系人沟通。",
+ proj:"案例 + 团队作业。",pre:"无。",
+ why:"负担轻、实用。而且和 ECE 651 的团队项目形成互补——一门教你怎么写，一门教你怎么管。",
+ alt:"BE 680 Consulting。",warn:"需确认是否在 ECE approved 名单上。"},
+
+"BE 650":{n:"Digital Transformations",zh:"数字化转型",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
+ desc:"技术驱动的组织变革：数字化战略、平台商业模式、技术采纳与扩散。",
+ proj:"案例分析。",pre:"无。",why:"Business Leadership 方向的常见组成课。",
+ alt:"BE 645。",warn:"需确认是否在 ECE approved 名单上。"},
+
+"BE 680":{n:"Consulting",zh:"咨询",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
+ desc:"管理咨询的方法与实践：问题定义、结构化分析、方案设计与呈现。",
+ proj:"实战案例项目。",pre:"无。",
+ why:"结构化表达和问题拆解能力，在技术面试和产品讨论里都用得上。",
+ alt:"BE 660 Negotiations、BE 630 Sales。",warn:"需确认是否在 ECE approved 名单上。"},
+"ECE 757A":{n:"Embodied Intelligence",zh:"具身智能",g:"ece-ai",d:3.5,t:"W2028 (Dautenhahn)",tag:["ai","new"],
+ desc:"智能体通过身体与环境的互动来学习：感知-动作闭环、机器人认知、模仿学习。Kerstin Dautenhahn 是社交机器人领域权威。",
+ proj:"研讨 + 学期 project，通常结合机器人平台。",pre:"机器学习基础。",
+ why:"AI 从「只看数据」走向「在物理世界里行动」的前沿，正是 2026 年 agent / 机器人热潮的理论底座。",
+ alt:"ECE 752 多智能体系统、ECE 657D 深度学习。",
+ warn:"W2028 才开，属较新 topics 课，大纲每年由教授定，选前务必确认 outline。"},
+"CS 886 SEM 004":{n:"Topics in Language Modelling",zh:"语言建模专题",g:"cs",d:4,t:"F2026",tag:["ai","new","ext"],
+ desc:"大语言模型的专题研讨：语言建模前沿方法、训练与推理的最新进展。需 instructor consent。",
+ proj:"seminar + 学期 project，通常无期末考。",pre:"深度学习与 NLP 基础，需 consent。",
+ why:"最贴 LLM 应用的一门，和你的文本 / 影像创作兴趣直接相关。",
+ alt:"CS 886 SEM 001（理论向）、ECE 750 T41（本系，偏软件工程应用）。",warn:"需 instructor consent，位置有限，建议尽早发邮件。"},
+"CS 848 SEM 002":{n:"Modern Database Systems",zh:"现代数据库系统",g:"cs",d:3.5,t:"F2026",tag:["swe","new","ext"],
+ desc:"现代数据库系统的演进：NewSQL、云原生数据库、HTAP、以及向量与 AI 负载。需 consent。",
+ proj:"seminar + project。",pre:"数据库基础，需 consent。",
+ why:"比 ECE 656 更贴当前工业界数据库形态，也是 AI 应用的后端底座。",
+ alt:"ECE 656 Database Systems（本系）、CS 848 SEM 001 向量索引。",warn:"需 instructor consent。"},
+"CS 698":{n:"AI Transformation in Organizations",zh:"组织的 AI 转型",g:"cs",d:2,t:"F2026",tag:["biz","new","ext","easy"],
+ desc:"组织如何采用 AI：战略、流程重构、人员与治理。需 consent。",
+ proj:"研讨 + 案例分析，负担轻。",pre:"无技术门槛，需 consent。",
+ why:"唯一把「AI 怎么落地到公司」讲清楚的课，对你做产品 / 创业线有用。",
+ alt:"BE 645 AI Business Applications（外系商科）。",warn:"需 instructor consent；偏管理，技术含量低。"},
+
+"ECE 603":{n:"Statistical Signal Processing",zh:"统计信号处理",g:"ece-cam",d:4,t:"W2027 (Michailovich)",tag:["ai"],
+ desc:"Wiener 滤波、谱估计、ML/MAP/MMSE 参数估计、LMS/RLS 自适应滤波、离散 Kalman 滤波。",
+ proj:"理论作业为主，含估计与滤波推导。",pre:"随机过程或等价概率基础。",
+ why:"视觉 / 影像方向的数学底座，也在 AI&ML 认证选修清单里；做传感器融合、时序估计的人必看。",
+ builds:"通往 ECE 686 随机滤波、ECE 613 的统计部分、时序估计类工作。",
+ needs:"ECE 604 随机过程或等价概率基础。",
+ for:"视觉 / 传感 / 机器人状态估计；想凑认证的低知名度选项。"},
+"ECE 604":{n:"Stochastic Processes",zh:"随机过程",g:"ece-cam",d:4,t:"F2026 (Damen) · F2027 (Yang E-H)",tag:[],
+ desc:"随机变量与随机过程理论、Markov 链、Poisson 过程、更新过程、平稳过程与功率谱。",
+ proj:"作业 + 期中 / 期末，偏理论。",pre:"概率论与随机信号基础。",
+ why:"所有概率类课程（612 / 686 / 657 理论部分）的上游；想读博或做量化 / 通信的人要打牢。",
+ builds:"为 ECE 603、ECE 612、ECE 686、CS 885 的概率部分打底。",
+ needs:"扎实的概率与线性代数。",
+ for:"研究向 ML、通信、量化、机器人状态估计。"},
+"ECE 608":{n:"Quantitative Methods in Biomedical Engineering",zh:"生物医学工程定量方法",g:"ece-sys",d:2,t:"S2026 · S2027 (Xie LL)",tag:["easy"],
+ desc:"用 R 做生物工程数据的统计建模与分析。",
+ proj:"数据建模作业，编程负担轻。",pre:"无。",
+ why:"学生口碑里的低负担凑学分课；Spring 学期需要腾时间刷题 / 投简历时的选项。",
+ for:"需要腾出时间冲实习 / 求职的学期。"},
+"ECE 610":{n:"Broadband Communication Networks",zh:"宽带通信网络",g:"ece-sys",d:3,t:"W2026 (Wasef)",tag:[],
+ desc:"网络架构、交换结构、流量管理、CAC/UPC、拥塞控制、排队分析。",
+ proj:"作业 + 期末。",pre:"计算机网络基础。",
+ why:"Computer Networking & Security 认证的三门必修之一——想拿网络认证必须盯住它的开课窗口。",
+ alt:"W2027/W2028 未列，错过要等下一轮。"},
+"ECE 612":{n:"Information Theory",zh:"信息论",g:"ece-cam",d:4,t:"S2026 · W2027 (Mitran)",tag:["ai"],
+ desc:"熵、互信息、信息散度、无噪编码定理、信道容量、噪声编码定理、误码率指数。",
+ proj:"推导型作业 + 期末。",pre:"概率论。",
+ why:"压缩 / 编码的理论根，对做视频编码、模型压缩、以及理解 LLM 里 perplexity 一类指标有真实帮助。",
+ builds:"通往模型压缩、视频编码、生成式影像里的率失真权衡思考。"},
+"ECE 614":{n:"Communications over Fading Dispersive Channels",zh:"衰落色散信道通信",g:"ece-cam",d:4,t:"S2026 (Gong) · S2027 (Damen)",tag:[],
+ desc:"移动通信信道建模、衰落、分集技术。",proj:"作业 + 期末。",pre:"随机过程、通信原理。",
+ why:"通信方向专业课，对 SWE/ML 路线基本无用，列出仅为完整性。"},
+"ECE 627":{n:"Register-transfer-level Digital Systems",zh:"RTL 数字系统",g:"ece-sys",d:3.5,t:"W2027 · W2028 (Kapre)",tag:[],
+ desc:"Verilog/SystemVerilog RTL 设计、综合、FPGA 实现流程。",proj:"RTL 设计 lab + 综合实验。",pre:"数字逻辑基础。",
+ why:"想做硬件加速、FPGA、AI 推理芯片的人；纯软件路线可跳过。",
+ for:"对 CNC / 自己做硬件产品的动手派有帮助。"},
+"ECE 642":{n:"Radio Frequency Integrated Circuit Design",zh:"射频集成电路设计",g:"ece-sys",d:4,t:"S2027 (Long JR)",tag:[],
+ desc:"RF 收发机电路设计。",proj:"设计作业。",pre:"电路基础。",why:"模拟 / 射频硬件路线专用。"},
+"ECE 663":{n:"Energy Processing (Power Electronics)",zh:"能量变换 / 电力电子",g:"ece-sys",d:3.5,t:"S2026 · S2027 (Kazerani)",tag:[],
+ desc:"变换器拓扑、调制与控制。",proj:"仿真 + 设计作业。",pre:"电路基础。",why:"Sustainable Energy 认证方向；动手做电源 / 能源产品有用。"},
+"ECE 669":{n:"Dielectric Materials",zh:"电介质材料",g:"ece-sys",d:3,t:"S2026 · S2028 (Jayaram)",tag:[],
+ desc:"电介质与绝缘材料特性。",proj:"实验 / 报告。",pre:"材料或物理基础。",why:"高压 / 能源方向。"},
+"ECE 672":{n:"Optoelectronic Devices",zh:"光电器件",g:"ece-cam",d:3.5,t:"W2027 · W2028 (Ban)",tag:["cam"],
+ desc:"光电探测器、LED、激光器原理。",proj:"器件作业。",pre:"半导体物理。",why:"对「成像传感器怎么工作」有好奇心的摄影玩家，可当兴趣课。"},
+"ECE 676":{n:"Quantum Info Processing Devices",zh:"量子信息器件",g:"ece-sys",d:4,t:"W2027 · W2028",tag:[],
+ desc:"量子器件实现（实验向）。",proj:"实验 / 报告。",pre:"量子力学基础。",why:"Quantum Engineering 认证方向。"},
+"ECE 688":{n:"Nonlinear Systems",zh:"非线性系统",g:"ece-sys",d:4.5,t:"待核实（W2027?）",tag:["hard"],
+ desc:"Lyapunov 稳定性、非线性控制设计。",proj:"推导型作业 + 期末。",pre:"控制理论基础。",why:"控制方向进阶；开课年份待核实。"},
+"ECE 601":{n:"Foundations of Biology in Engineering",zh:"工程生物学基础",g:"ece-sys",d:3,t:"F2027 (Xie LL)",tag:[],
+ desc:"工程视角的生物学基础。",proj:"作业。",pre:"无。",why:"Biomedical Engineering 认证必修之一。"},
+"ECE 609":{n:"Engineering Analysis of Living Cells",zh:"活细胞工程分析",g:"ece-sys",d:3,t:"F2026 · F2027 (Xie LL)",tag:[],
+ desc:"活细胞的工程分析方法。",proj:"作业。",pre:"无。",why:"Biomedical Engineering 认证必修之一。"},
+"ECE 682":{n:"Multivariable Control Systems",zh:"多变量控制系统",g:"ece-sys",d:3.5,t:"F2026 (Nielsen) · F2027 (Nielsen)",tag:["ctrl"],
+ desc:"状态空间、可控可观、多输入多输出系统设计。",proj:"作业 + 期末。",pre:"控制理论基础。",
+ why:"Control and Autonomy 认证核心；做机器人 / 自动驾驶的地基。",
+ builds:"通往 ECE 686 随机滤波、ECE 687 机器人动力学。",
+ needs:"线性代数 + 基础控制。",for:"机器人 / 自动驾驶 / 无人系统。"},
+"ECE 686":{n:"Filtering and Control of Stochastic Linear Systems",zh:"随机系统滤波与控制",g:"ece-sys",d:4,t:"W2027 (Smith SL)",tag:["ctrl"],
+ desc:"Kalman 滤波、LQG、随机最优控制。",proj:"作业 + project。",pre:"ECE 682 或等价控制基础 + 概率。",
+ why:"机器人状态估计、SLAM、传感器融合的正统来源。",
+ builds:"通往 SLAM、传感器融合、ECE 787 社交机器人。",
+ needs:"ECE 682 + 随机过程。",for:"机器人 / 自动驾驶状态估计。"},
+"ECE 687":{n:"Robot Dynamics and Control",zh:"机器人动力学与控制",g:"ece-sys",d:4,t:"S2026 · S2027 (Notomista)",tag:["ctrl"],
+ desc:"机械臂运动学 / 动力学、轨迹规划、控制律设计。",proj:"动手机器人项目。",pre:"ECE 682 或等价。",
+ why:"具身智能 / 机器人路线的硬底子，比 ECE 757A 更「能动手」。",
+ builds:"通往 ECE 780 T13 机器人学习、ECE 757A 具身智能。",
+ needs:"ECE 682 或动力学基础。",for:"机器人 / 具身智能；想做硬件 + AI 的人。",
+ warn:"S2026/S2027 由 Notomista 开，具体学期以 Quest 为准。"},
+"ECE 780 T13":{n:"Robot Learning",zh:"机器人学习",g:"ece-sys",d:4,t:"F2026 · F2027 (Firoozi)",tag:["ai","ctrl"],consent:true,
+ desc:"把强化学习 / 模仿学习 / 基础模型用到机器人策略上，含 3D 场景表征、视觉-语言场。",
+ proj:"动手 project，偏机器人策略。",pre:"ML 基础 + PyTorch；有 ECE 687 或 682 更好。",
+ why:"ECE 系目前最接近「具身 AI + LLM Agent」的动手课，且是本系课不占外系名额；也是找 Firoozi 做 ECE 699 的天然入口。",
+ builds:"与 ECE 699（Firoozi 有 robot planning 题目）直接衔接；通往具身智能岗位。",
+ needs:"ECE 657 或等价 ML 基础 + PyTorch。",for:"机器人 / 具身智能 / 空间 AI；想进教授组做项目的人。",
+ warn:"special topics，具体 T13 编号以 Quest 当年为准；建议早发邮件确认。"},
+"ECE 750 T-CX":{n:"Causality and Explainable AI",zh:"因果与可解释 AI",g:"ece-ai",d:3.5,t:"F2027 (Karimi)",tag:["ai","new"],consent:true,
+ desc:"因果推断、反事实解释、可解释性方法。Karimi 就是 ECE 657 的授课教授。",
+ proj:"研讨 + 学期 project。",pre:"ECE 657 或等价 ML 基础（先修他的课再上这门最顺）。",
+ why:"Responsible AI / 模型审计能力；与 ECE 750 T45 形成一条完整「可信 AI」链，也是找 Karimi 做 ECE 699 的最佳铺路课。",
+ builds:"通往医疗 / 金融 / 合规向 ML 岗。",needs:"ECE 657 或等价 ML 基础。",for:"想做可信 / 可解释 ML、模型审计的人。",
+ warn:"F2027 新开，大纲待发布；topic 编号以 Quest 为准。"},
+"ECE 733":{n:"Quantum Machine Learning",zh:"量子机器学习",g:"ece-ai",d:4,t:"W2027 (Kim NY)",tag:["ai","new"],
+ desc:"量子计算与机器学习的交叉：变分量子电路、量子核方法。",proj:"作业 + project。",pre:"ML 基础 + 线性代数。",
+ why:"差异化极强的简历标签；但就业面窄，适合已有 ML 底子想找区隔点的人。"},
+"ECE 750 T32":{n:"Biology and Computation",zh:"生物与计算",g:"ece-ai",d:3,t:"S2026 · S2027 (Nehaniv)",tag:["ai"],
+ desc:"生物系统的计算模型、人工生命、演化计算。",proj:"研讨 + project。",pre:"无硬门槛。",
+ why:"在 AI&ML 认证选修清单里（历史版本）；Spring 凑认证的备选。"},
+"ECE 750 T38":{n:"Usable Security and Privacy",zh:"可用安全与隐私",g:"ece-sw",d:2.5,t:"S2027 (Vaniea)",tag:["swe"],
+ desc:"从人的行为角度研究安全：为什么用户会点钓鱼链接、如何设计不被绕过的安全机制。",proj:"研讨 + 案例分析。",pre:"无。",
+ why:"安全 × HCI 交叉，负担偏轻，做面向用户的产品有用。"},
+"ECE 716":{n:"Communication Security",zh:"通信安全",g:"ece-sys",d:3.5,t:"S2027 (Gong)",tag:[],
+ desc:"密码学在通信系统中的应用、认证与密钥管理。",proj:"作业。",pre:"网络 / 安全基础。",why:"Computer Networking & Security 认证选修。"},
+"ECE 720 T08":{n:"Machine Learning for Chip Design",zh:"芯片设计中的机器学习",g:"ece-sys",d:4,t:"W2027 (Kapre)",tag:["ai","new"],consent:true,
+ desc:"用 ML 做布局布线、时序预测、EDA 流程优化。",proj:"project。",pre:"ML 基础 + 数字系统基础。",
+ why:"AI for EDA 是目前芯片行业最缺人的岗位之一；本系课不占外系名额。"},
+"ECE 700 T10":{n:"Distributed Optimization",zh:"分布式优化",g:"ece-ai",d:4,t:"W2026 (Fisher) · 待核实",tag:["ai"],
+ desc:"一致性优化、分布式梯度、联邦场景下的优化。",proj:"作业。",pre:"优化 + 概率。",why:"联邦学习、多机训练的理论底座。"},
+"ECE 700 T11":{n:"Principles of Biomedical Imaging",zh:"生物医学成像原理",g:"ece-cam",d:3.5,t:"S2027 (Michailovich)",tag:["cam"],
+ desc:"MRI/CT/超声的成像物理与重建算法。",proj:"作业 + project。",pre:"信号与系统。",why:"医学影像方向；对图像重建有兴趣的视觉玩家可当 613 的延伸。"},
+"ECE 750 T-MENG":{n:"Special Topics (Program Analysis / Fuzzing)",zh:"专题：程序分析 / 模糊测试",g:"ece-sw",d:3,t:"S2027 (Meng R)",tag:["swe","new"],consent:true,
+ desc:"Meng Ruijie 的新专题，方向为模糊测试与程序分析（主题待官方公布）。",proj:"待定。",pre:"软件工程基础。",
+ why:"新教授开的第一门课通常人少、给分友好、且教授愿意带 project——值得盯。",
+ warn:"主题待定，选前务必发邮件问清大纲与编号。"},
+"CS 885":{n:"Reinforcement Learning",zh:"强化学习",g:"cs",d:4,t:"Winter（Poupart）· 2026-27 待核实",tag:["ai","rl","ext"],consent:true,
+ desc:"MDP、值 / 策略迭代、DQN、策略梯度、深度 RL、多智能体 RL。Pascal Poupart 教，是 CS 系招牌课。",
+ proj:"作业 + 学期 project（常含论文复现）。",pre:"ML 基础 + 概率 + 一定数学耐受度。",
+ why:"ECE 系没有任何 RL 课，而 RL 是 LLM 后训练（RLHF/GRPO）与 Agent 决策的核心——想做 Agent / 对齐岗必修。",
+ builds:"与 ECE 752 多智能体形成完整 Agent 理论栈；通往 LLM 后训练 / 对齐 / 机器人策略。",
+ needs:"ECE 657 或等价 ML 基础。",for:"LLM 后训练、对齐、机器人策略；占一个外系名额。",
+ warn:"跨系课，需 instructor consent，位置有限；先修 ML 基础。"},
+"CS 666":{n:"Algorithm Design and Analysis",zh:"算法设计与分析",g:"cs",d:4.5,t:"F2026",tag:["hard","ext"],
+ desc:"CS 版研究生算法课，与 ECE 606 高度重合。",proj:"周作业 + 期末。",pre:"离散数学 + 数据结构。",
+ why:"若 ECE 606 那学期太重或选不上，这是唯一等价替代；但占外系名额且不算 AI&ML 认证。"},
+"CS 645":{n:"Software Requirements Specification and Analysis",zh:"软件需求规格与分析",g:"cs",d:3,t:"F2026",tag:["swe","ext"],
+ desc:"需求获取、形式化规格、一致性检查。",proj:"作业 + 小组项目。",pre:"软件工程基础。",why:"ECE 651 的上游互补课；做产品向工程师有用。"},
+"CS 646":{n:"Software Design and Architectures",zh:"软件设计与架构",g:"cs",d:3.5,t:"W2026",tag:["swe","ext"],
+ desc:"设计模式、架构风格、架构评估。",proj:"作业 + 项目。",pre:"软件设计基础。",why:"system design 面试的软件侧，和 ECE 751 的分布式侧互补。"},
+"CS 644":{n:"Compiler Construction",zh:"编译器构造",g:"cs",d:4.5,t:"W2026",tag:["hard","ext"],
+ desc:"词法 / 语法分析、IR、优化、代码生成，动手写完整编译器。",proj:"大型编译器项目。",pre:"系统编程 + 算法。",
+ why:"硬核项目课，作品集杀伤力大；想做语言 / 运行时 / 性能优化的人。"},
+"CS 653":{n:"Software and Systems Security",zh:"软件与系统安全",g:"cs",d:3.5,t:"F2026",tag:["swe","ext"],
+ desc:"内存安全漏洞、利用与防御、系统级安全机制。",proj:"作业 + project。",pre:"系统编程。",why:"安全岗的硬底子。"},
+"CS 659":{n:"Privacy, Cryptography, Data Security",zh:"隐私、密码学与数据安全",g:"cs",d:3.5,t:"F2026",tag:["swe","ext"],
+ desc:"隐私增强技术、差分隐私、加密数据处理。",proj:"作业 + project。",pre:"算法 + 概率。",why:"AI 时代的合规刚需（差分隐私、联邦）。"},
+"CS 686":{n:"Introduction to Artificial Intelligence",zh:"人工智能导论",g:"cs",d:3,t:"F2026 · W2026",tag:["ai","ext"],
+ desc:"搜索、约束满足、概率推理、规划。",proj:"作业 + project。",pre:"Python + 离散数学。",why:"ECE 657A 的外系对应课，内容更偏经典 AI。"},
+"CS 794":{n:"Optimization for Data Science",zh:"数据科学优化",g:"math",d:4,t:"Fall（Vavasis / Yu）· 2026 待核实",tag:["ai","ext"],
+ desc:"一阶方法：梯度下降、proximal 梯度、Nesterov、Frank-Wolfe、ADMM、SGD。",proj:"作业。",pre:"线代、微积分、Python。",
+ why:"比 ECE 602 更贴现代 ML 训练；看懂 Adam/AdamW/LoRA 一类论文的正确入口。"},
+"CS 858":{n:"Trustworthy Machine Learning",zh:"可信机器学习",g:"cs",d:4,t:"F2026",tag:["ai","ext"],consent:true,
+ desc:"对抗样本、模型窃取、投毒、ML 系统的安全边界。",proj:"研讨 + project。",pre:"ML 基础。",why:"AI 安全是 2026 年新增最快的岗位类别之一。",
+ warn:"跨系 + instructor consent。"},
+"CS 798":{n:"Multicore Programming",zh:"多核编程",g:"cs",d:4,t:"W2026",tag:["hard","ext"],consent:true,
+ desc:"无锁数据结构、内存模型、并发算法。",proj:"并发项目。",pre:"系统编程。",why:"ECE 650 并发部分的深水区；高频交易、数据库内核、运行时方向。"},
+"CS 856":{n:"Network Transport Protocols",zh:"网络传输协议",g:"cs",d:4,t:"W2026",tag:["ext"],consent:true,
+ desc:"拥塞控制算法建模与性能分析。",proj:"作业 + 仿真。",pre:"网络基础。",why:"做网络基础设施 / CDN / 传输优化。"},
+"STAT 841":{n:"Statistical Learning: Classification",zh:"统计学习：分类",g:"math",d:4,t:"待核实",tag:["ai","ext"],
+ desc:"判别分析、核方法、boosting、分类理论。",proj:"作业 + 项目。",pre:"统计基础。",why:"数学系视角的 ML；理论扎实度高于 ECE 657。"},
+"STAT 940":{n:"Deep Learning",zh:"深度学习",g:"math",d:4,t:"待核实（近年 Winter）",tag:["ai","ext"],
+ desc:"数学系版深度学习，含论文展示环节。",proj:"论文展示 + 项目。",pre:"ML 基础。",why:"ECE 657D 的外系替代；两者只需修一门。"},
+"STAT 946":{n:"Topics in Probability and Statistics (LLMs)",zh:"概率统计专题：LLM 与生成模型",g:"math",d:4,t:"待核实",tag:["ai","ext"],consent:true,
+ desc:"大模型与生成模型的统计视角（主题每年变）。",proj:"研讨 + 展示。",pre:"统计 + ML。",why:"主题每年变，选前必须确认当年 topic。",warn:"跨系 + instructor consent；主题逐年变。"},
+"SYDE 674":{n:"3D Computer Vision",zh:"三维计算机视觉",g:"syde",d:4,t:"Spring",tag:["cam","ext"],
+ desc:"多视图几何、SfM、点云与三维重建。",proj:"视觉项目。",pre:"线代 + 图像基础（613 或 SYDE 671 之后最顺）。",
+ why:"对摄影 / 影像兴趣线最直接的一门——从拍照片到从照片重建空间；开在 Spring，正好补 613(W) 和 SYDE 671(F) 的空档，三者构成全年视觉课链。"},
+"SYDE 677":{n:"Medical Imaging",zh:"医学成像",g:"syde",d:3.5,t:"Fall",tag:["cam","ext"],
+ desc:"医学成像模态与重建。",proj:"作业。",pre:"信号与系统。",why:"医学影像方向。"},
+"SYDE 621":{n:"Mathematics of Computation",zh:"计算数学",g:"syde",d:3.5,t:"Fall (Scott)",tag:["ext"],
+ desc:"数值方法与计算数学基础。",proj:"作业。",pre:"数学基础。",why:"补数学短板。"},
+"SYDE 770":{n:"Probabilistic Machine Learning",zh:"概率机器学习",g:"syde",d:4,t:"Spring (Zelek)",tag:["ai","ext"],
+ desc:"贝叶斯方法、图模型、概率视角的深度学习。",proj:"研讨 + project。",pre:"概率 + ML。",why:"Spring 学期的 ML 选项（ECE 657 之外）。"},
+"MSCI 718":{n:"Statistical Methods for Data Analytics",zh:"数据分析统计方法",g:"msci",d:3,t:"待核实",tag:["ai","ext"],
+ desc:"实用统计建模与假设检验。",proj:"作业。",pre:"无。",why:"唯一明确出现在 ECE AI&ML 认证选修清单里的外系课——想凑认证又不想啃硬课时的隐藏解法。",warn:"认证资格需向 ECE Grad Office 书面确认。"},
+"MSCI 630":{n:"Human Computer Interaction",zh:"人机交互",g:"msci",d:2.5,t:"待核实",tag:["biz","ext"],
+ desc:"交互设计与信息系统方法论。",proj:"设计项目。",pre:"无。",why:"产品向；比 CS 649 更偏管理科学视角。"},
+"OVGS":{n:"Ontario Visiting Graduate Student",zh:"安省校际互修",g:"apply",d:1,t:"每学期申请",tag:["ext"],consent:true,
+ desc:"到多伦多大学、McMaster、Queen's、Guelph 等安省高校修一门研究生课并计入 Waterloo 学位。",
+ proj:"按对方课要求。",pre:"≥75% 均分；需对方学校接收。",
+ why:"当 Waterloo 某学期开不出你要的课（典型：ECE 657 只在 Spring、657A 只在 Winter 撞 work term），OVGS 是唯一的结构性解法。",
+ builds:"解锁被学期冲突卡死的认证课。",needs:"均分 ≥75%；最后一学期不得注册 OVGS，且第 2 周之后不再批准。",
+ for:"排课被学期窗口卡死、又必须上某门课的人。",
+ warn:"ECE 硬规则：最后一学期不得注册 OVGS，且第 2 周之后不再批准；需提前申请。"}
+};
+const PLANS=[
+{
+ id:"A",tag:"方案 1",name:"AI 认证线",sub:"8 门全 ECE · 5 学期 20 个月 · 1 个 co-op",
+ badge:["AI&ML 认证","全 ECE","稳"],
+ lead:"用 AI &amp; Machine Learning 方向认证当骨架反向倒推选课，毕业时成绩单上多一行方向认证。8 门课全在 ECE 系内，一个外系名额都不用，选课风险最低。",
+ stats:[["8","课程总数"],["0","外系课"],["20","月"],["1","Co-op"]],
+ terms:[
+  {t:"F2026 秋",k:"study",info:"2 门 · 网申高峰期",c:["ECE 650","ECE 606"]},
+  {t:"W2027 冬",k:"study",info:"3 门 · 火力全开",c:["ECE 651","ECE 657A","ECE 613"]},
+  {t:"S2027 春",k:"study",info:"2 门 + WIL 601 · 求职学期",c:["ECE 657","ECE 654","WIL 601"]},
+  {t:"F2027 秋",k:"work",info:"Co-op 4 个月",note:"秋季 term 的 co-op 岗位常带 return offer 通道。求职在 S2027 进行，所以 WIL 601 排在春季。"},
+  {t:"W2028 冬",k:"study",info:"1 门 · 收尾学期",c:["ECE 657D"]}
+ ],
+ win:["<b>AI &amp; ML 方向认证稳拿</b>：必修 ECE 657 + 657A 全在，选修 606 / 613 / 657D 正好凑满 3 门。",
+      "<b>零外系课</b>——不用求任何教授签字、不用抢 permission number，全部能在 Quest 直接注册。",
+      "ECE 613 排在 W2027，正好是 Zhou Wang 教授授课的学期。",
+      "最后一门 ECE 657D 单独放在 W2028，压力小，还能一边写毕业材料一边投全职。",
+      "Co-op 放在 F2027：这时你已修完 7 门，技术面试的知识储备最完整。"],
+ risk:["<b>ECE 606 是全表最难的课，还排在第一学期。</b>它没有 project，全靠周作业和考试，会实打实吃掉 8–10 月网申的时间。",
+       "W2027 三门课密度高，其中 657A 作业量偏大。",
+       "F2027 找不到 co-op 会被转回 regular MEng——虽然那时你已修 7 门，影响可控，但 co-op 身份会丢。",
+       "整体 20 个月，比最快方案多 4 个月的学费和生活成本。"],
+ swap:[["ECE 606 顶不住","换 <b>ECE 750 T39</b>（可扩展系统设计）或 <b>ECE 750 T41</b>（LLM×软件工程）。但认证选修会少一门，需从 ECE 602 / 659 / 752 里补一门。"],
+       ["ECE 613 选不上","换 <b>ECE 602</b>（优化，同在认证选修清单，同学期）或 <b>ECE 752</b>（多智能体，同学期同清单）。"],
+       ["ECE 654 选不上","同学期换 <b>ECE 653</b>（更硬）或 <b>ECE 652</b>（嵌入式）。"],
+       ["W2028 不想只修 1 门","把 ECE 654 从 S2027 挪到 W2028，S2027 只修 ECE 657 + WIL 601。"]],
+ fit:"想要成绩单上有明确方向认证、讨厌抢课和求人签字、能扛住第一学期硬课的人。"
+},
+{
+ id:"B",tag:"方案 2",name:"LLM 前沿快线",sub:"8 门 · 4 学期 16 个月 · co-op 在 W2027",
+ badge:["最快毕业","最新 AI","高风险"],
+ lead:"把 co-op 提到最前面，16 个月毕业，是四套里唯一的四学期方案。课程全押在最新的 LLM / 生成式 AI 上，代价是放弃方向认证，而且第一学期就要一边修 3 门一边找 co-op。",
+ stats:[["8","课程总数"],["1","外系课"],["16","月"],["1","Co-op"]],
+ terms:[
+  {t:"F2026 秋",k:"study",info:"3 门 + WIL 601 · 最忙",c:["ECE 650","ECE 750 T41","ECE 655","WIL 601"]},
+  {t:"W2027 冬",k:"work",info:"Co-op 4 个月",note:"入学后第二个学期就去实习。求职必须在 F2026 的 9–11 月完成，WIL 601 也排在那一学期。"},
+  {t:"S2027 春",k:"study",info:"3 门",c:["ECE 657","ECE 653","ECE 751"]},
+  {t:"F2027 秋",k:"study",info:"2 门 · 收尾 + 全职网申",c:["ECE 606","CS 854"]}
+ ],
+ win:["<b>16 个月毕业，四套里最快</b>，学费和生活成本最低。",
+      "F2026 就吃到 ECE 750 T41 这门 2026 新开的 LLM×软件工程课，本系课不占外系名额。",
+      "第一学期用 ECE 655（开卷、给分友好）来平衡 ECE 650 的重量，三门课的实际负担没看上去那么吓人。",
+      "S2027 的 653 + 751 是软件工程 + 分布式的硬核组合，回来之后正好把 co-op 的工程经验和课程理论对上。",
+      "最后一学期的 CS 854（GenAI 模型服务系统）是市场最缺人的方向，收尾时拿它讲面试很有杀伤力。"],
+ risk:["<b>最大的风险：W2027 的 co-op 要在 F2026 的 9–11 月找。</b>那时你刚落地、刚开学、还在修 3 门课，同时要投递、刷题、面试。<b>官方规则是找不到 placement 就转回 regular MEng。</b>",
+       "拿不到任何方向认证——AI &amp; ML 需要 657 + 657A，而 657A 只在 Winter 开，那个学期你在实习。",
+       "没有 ECE 651（Winter 课），少了最好的团队项目课。",
+       "CS 854 需要 instructor consent，且要求较强的系统基础，不一定选得上。",
+       "四学期修满 8 门，没有任何缓冲，一门课出问题就要延期。"],
+ swap:[["W2027 co-op 没找到","自动转 regular MEng。此时可退回方案 1 的节奏：W2027 补修 ECE 651 + 657A + 613，走认证路线。<b>这是必须提前想好的 Plan B。</b>"],
+       ["CS 854 拿不到 consent","换 <b>ECE 750 T39</b>（本系，F2027 开，可扩展系统设计）或 <b>ECE 750 T37</b>（自适应软件系统）。"],
+       ["ECE 653 太硬","同学期换 <b>ECE 654</b>（软件可靠性）或 <b>ECE 652</b>。"],
+       ["想保留认证可能性","把 F2027 的 CS 854 换成 ECE 657A？<b>不行</b>——657A 只在 Winter 开。这是本方案无法弥补的结构性缺口。"]],
+ fit:"预算紧、想尽快毕业进职场、对最新 AI 技术兴趣大于对成绩单认证的兴趣、并且有信心在落地两个月内拿下 co-op 的人。"
+},
+{
+ id:"C",tag:"方案 3",name:"系统硬核 · 双 Co-op",
+ sub:"8 门 · 5 学期 20 个月 · 8 个月连续实习",
+ badge:["8个月实习","Return Offer","无认证"],
+ lead:"唯一用满两个连续 work term 的方案。S2027 + F2027 在同一家公司连做 8 个月——这是北美转 return offer 概率最高的形态。课程全部押在系统、分布式、数据库这条大厂 system design 主线上。",
+ stats:[["8","课程总数"],["0","外系课"],["20","月"],["2","Co-op"]],
+ terms:[
+  {t:"F2026 秋",k:"study",info:"2 门 · 打地基",c:["ECE 650","ECE 750 T39"]},
+  {t:"W2027 冬",k:"study",info:"3 门 + WIL 601 · 求职学期",c:["ECE 651","ECE 656","ECE 750 T29","WIL 601"]},
+  {t:"S2027 春",k:"work",info:"Co-op 第 1 段",note:"WaterlooWorks 的 Spring 招聘在 W2027 进行，所以 WIL 601 排在冬季。"},
+  {t:"F2027 秋",k:"work",info:"Co-op 第 2 段",note:"必须与第 1 段连续且同一雇主。8 个月足够独立负责一个完整模块，是 return offer 的最佳窗口。"},
+  {t:"W2028 冬",k:"study",info:"3 门 · 收尾",c:["ECE 657D","ECE 657A","ECE 613"]}
+ ],
+ win:["<b>8 个月连续实习</b>——四个月的实习往往刚上手就结束，八个月才够独立交付一个完整模块，这是 return offer 的决定性差别。",
+      "F2026 的 650 + 750 T39 组合很扎实：一门教你怎么写系统，一门教你怎么让系统扛住规模。",
+      "W2027 的 651 + 656 + 750 T29 是软件工程三件套（设计 / 数据 / 验证），在实习前把工程能力拉满。",
+      "W2028 收尾三门全是 AI 课（657D 深度学习 + 657A + 613 图像处理），实习回来后集中补 AI，节奏清晰。",
+      "全 ECE 课，零外系名额消耗，选课零阻力。"],
+ risk:["<b>拿不到 AI &amp; ML 认证</b>——必修的 ECE 657 只在 Spring 开，而你的 Spring 是 work term。<b>也拿不到 Software 认证</b>——必修的 ECE 653 同样只在 Spring 开。这是双 co-op 的直接代价。",
+       "W2028 最后一学期修 3 门，同时还要投全职、准备毕业，压力集中在最后。",
+       "两个 work term 必须<b>同一雇主且连续</b>，如果第一段实习体验不好，你没有中途换公司的选项。",
+       "ECE 750 T29（自动程序验证，Gurfinkel）难度很高，和 651 + 656 同学期修需要评估。"],
+ swap:[["ECE 750 T29 太难","换 <b>ECE 628</b>（网络安全）或 <b>ECE 602</b>（优化）；想更轻就换 <b>ECE 750 T42</b>（软件数据挖掘，同学期，负担低）。"],
+       ["只拿到 1 个 work term","变成 4 学期：F2026(2) → W2027(3) → S2027 work → F2027(3)。此时 F2027 可修 ECE 606 + 750 T39 + 750 T37。"],
+       ["想抢救 AI 认证","把 W2027 的 ECE 656 换成 <b>ECE 657A</b>，W2028 修 657D + 613 + 一门认证选修。但 <b>ECE 657 仍然无解</b>（只在 Spring 开），认证依然拿不到。"],
+       ["W2028 三门太重","把 ECE 613 挪出去，改修 2 门；613 的替代是 <b>SYDE 671</b>（Fall 开，但你 Fall 在实习）——实际无解，只能接受三门或放弃 613。"]],
+ fit:"把「拿到北美大厂 return offer」排在第一位、愿意用成绩单认证换 8 个月真实工作经验的人。<b>如果找工作是你的首要目标，这套方案的期望值最高。</b>"
+},
+{
+ id:"D",tag:"方案 4",name:"产品创业双认证",
+ sub:"9 门 · 5 学期 20 个月 · 5 ECE + 4 BE",
+ badge:["双认证","做产品","需确认"],
+ lead:"利用 Business Leadership 方向的特殊条款——它允许外系课从 3 门放宽到 4 门，总课数从 8 增到 9，并且可以和另一个 ECE 方向<b>双认证</b>。对你「自己做 product、CNC 造物」这条兴趣线，这是唯一能变成学分的路径。",
+ stats:[["9","课程总数"],["4","外系课"],["20","月"],["1","Co-op"]],
+ terms:[
+  {t:"F2026 秋",k:"study",info:"2 门",c:["ECE 650","BE 645"]},
+  {t:"W2027 冬",k:"study",info:"3 门",c:["ECE 657A","ECE 613","BE 650"]},
+  {t:"S2027 春",k:"study",info:"2 门 + WIL 601 · 求职学期",c:["ECE 657","BE 605","WIL 601"]},
+  {t:"F2027 秋",k:"work",info:"Co-op 4 个月",note:"技术 + 商业双背景在产品向岗位（TPM、Solutions Engineer、创业公司早期工程师）上是差异化优势。"},
+  {t:"W2028 冬",k:"study",info:"2 门 · 收尾",c:["ECE 657D","BE 680"]}
+ ],
+ win:["<b>双认证</b>：5 门 ECE（650 / 657A / 657 / 613 / 657D）+ 4 门 BE，Business Leadership 认证到手，同时向 AI &amp; ML 认证靠拢。",
+      "BE 课普遍是案例和小组作业，<b>负担明显低于 ECE 硬课</b>——这等于用 4 门轻课换一个认证，同时腾出大量时间给你的摄影、片子和 CNC 项目。",
+      "商业课教的是「这东西值不值得做、怎么定价、怎么讲给别人听」，这是纯工科课程完全不覆盖、但做自己产品时天天要用的部分。",
+      "ECE 613 + ECE 657D 依然保留，视觉和 AI 这两条兴趣线没有牺牲。",
+      "如果 CNC 或影像工具真做出了东西，这套课程背景直接对接 Velocity Graduate Startup Fund（$20,000 + 孵化位）。"],
+ risk:["<b>最大不确定性：BET 课明确不对 MBET 项目外的学生开放</b>，只有 BE 开头的课对全校研究生开放。而 ECE 官方措辞是「up to 4 approved BE/BET courses」——<b>这份 approved 名单必须先向 ECE Graduate Office 书面确认，否则整套方案落空。</b>",
+       "9 门课 = 比标准多一门的学费。",
+       "<b>AI &amp; ML 认证差一门</b>：657 ✅ 657A ✅ 到位，但选修只有 613 和 657D 两门，还差 1 门。要凑齐必须把 ECE 650 换成 ECE 606（606 在认证选修清单里）——代价是失去 650 这门转码基石课。这个取舍要自己权衡。",
+       "BE 课的开课学期本次未能核实，Conrad School 的排课可能和 ECE 冲突。",
+       "商业课对纯技术岗面试的直接帮助有限，简历上的技术项目会比方案 1/3 少。"],
+ swap:[["approved 名单里没有这些 BE 课","整套退回方案 1，或只用标准的 3 门外系名额修 CS / SYDE 课。"],
+       ["想凑齐 AI&ML 双认证","F2026 的 ECE 650 换成 <b>ECE 606</b>，则 606 + 613 + 657D 凑满 3 门选修，双认证达成。但会丢掉 650。"],
+       ["BE 课学期冲突","BE 课池还有 BE 602（数据分析）、BE 630（销售）、BE 660（谈判）、BE 603（运营供应链）可替换。"],
+       ["觉得 9 门太多","放弃 Business Leadership 认证，只修 2–3 门 BE 课当普通外系选修，回到 8 门。"]],
+ fit:"真的打算把 CNC 造物或影像工具做成产品、或者想走技术 + 商业复合路线（产品经理、创业、Solutions Engineering）的人。<b>纯粹想拿大厂 SWE offer 的话，方案 3 更直接。</b>"
+}
+];
+const FRONTIER=[
+ {c:"ECE 657D",it:["ai","cam"],hot:"ECE 目前最新、最对口现代 AI 的课；期末 project 可往生成式视频做"},
+ {c:"CS 854",it:["ai","swe"],hot:"把大模型部署上线（系统视角）——目前市场最缺人、薪资最高的方向之一"},
+ {c:"CS 886 SEM 001",it:["ai"],hot:"Transformer 与 LLM 的学习理论，理论深度最高"},
+ {c:"CS 886 SEM 002",it:["ai","cam"],hot:"视觉语言模型——你的摄影兴趣 × AI 的正交叉点"},
+ {c:"CS 886 SEM 003",it:["ai","cam"],hot:"生成模型（扩散 / GAN / 自回归），最贴影像创作"},
+ {c:"ECE 757A",it:["ai"],hot:"具身智能——机器人 + AI 的交叉前沿（Dautenhahn）"},
+ {c:"ECE 752",it:["ai"],hot:"多智能体系统——2026 LLM Agent 热潮的理论底座"},
+ {c:"ECE 613",it:["cam"],hot:"全校离摄影最近、本系不计外系名额的课；SSIM 作者 Zhou Wang 教"}
+];
+const NEWCOURSES=[
+ {c:"CS 886 SEM 001",n:"Transformers & LLMs 学习理论",t:"F2026 全新专题"},
+ {c:"CS 886 SEM 002",n:"Vision-Language Models",t:"F2026 全新专题"},
+ {c:"CS 886 SEM 003",n:"Theory & Applications of Generative Models",t:"F2026 全新专题"},
+ {c:"CS 886 SEM 004",n:"Topics in Language Modelling",t:"F2026 全新专题"},
+ {c:"CS 848 SEM 001",n:"向量 + 混合索引（RAG 底层）",t:"F2026 新专题"},
+ {c:"CS 848 SEM 002",n:"Modern Database Systems",t:"F2026 新专题"},
+ {c:"CS 698",n:"AI Transformation in Organizations",t:"F2026 新专题"},
+ {c:"ECE 657D",n:"深度学习（Neural Networks & DL）",t:"ECE 较新 · W2026 首开"},
+ {c:"ECE 757A",n:"Embodied Intelligence 具身智能",t:"ECE 较新方向"},
+ {c:"ECE 752",n:"Foundations of Multi-Agent Systems",t:"ECE 较新方向"}
+];
+
+/* ===== 选课导航 · 路由与渲染 ===== */
+const HOT=['ECE 657D','CS 854','ECE 613','CS 885','ECE 687','SYDE 674'];
+const GROUP_ORDER=['ece-ai','ece-sw','ece-sys','ece-cam','ece-proj','cs','syde','be','math','msci','apply'];
+const GL={
+  'ece-ai':'ECE · AI / ML','ece-sw':'ECE · 软件工程','ece-sys':'ECE · 系统',
+  'ece-cam':'ECE · 视觉 / 信号','ece-proj':'ECE · 项目 (MEng Project)',
+  'cs':'CS · 计算机','syde':'SYDE · 系统设计','be':'BE · 商科',
+  'math':'Math · 统计 / 优化','msci':'MSCI · 管理科学','apply':'申请制通道'
+};
+const TAGT={ai:'AI',swe:'软件',cam:'视觉·摄影',easy:'轻松',hard:'硬核',new:'新课',ext:'外系课',biz:'商科',mile:'里程',ctrl:'控制·机器人',rl:'强化学习'};
+const DL={1:'易',2:'较易',3:'中',4:'偏难',5:'难'};
+const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+const diffLabel=d=>DL[d]||'';
+const groupLabel=g=>GL[g]||g;
+const tagText=t=>TAGT[t]||t;
+function chip(code){
+  const v=C[code];
+  if(!v) return '<span class="chip" data-c="'+esc(code)+'"><b>'+esc(code)+'</b></span>';
+  return '<span class="chip" data-c="'+esc(code)+'"><b>'+esc(code)+'</b><span class="d">'+diffLabel(v.d)+'</span></span>';
+}
+/* course map: high-level 方向 -> low-level 单门课 */
+const MAP=[
+ {dir:"AI & Machine Learning · 人工智能与机器学习",cl:[
+   {n:"基础 · 数学与工具",c:["ECE 604","ECE 602","CS 794","ECE 606"]},
+   {n:"核心 · 认证基本盘",c:["ECE 657","ECE 657A","CS 686","MSCI 718"]},
+   {n:"进阶 · 深度学习与生成",c:["ECE 657D","CS 886 SEM 004","STAT 940","ECE 750 T-CX","ECE 733"]},
+   {n:"进阶 · Agent 与决策",c:["ECE 752","CS 885","ECE 757A","ECE 780 T13"]},
+   {n:"进阶 · 可信与因果",c:["ECE 750 T-CX","ECE 750 T45","CS 858"]}
+ ]},
+ {dir:"Software Engineering · 软件工程",cl:[
+   {n:"基础 · 转码地基",c:["ECE 650"]},
+   {n:"核心 · 工程三件套",c:["ECE 651","ECE 656","ECE 653"]},
+   {n:"进阶 · 形式化",c:["ECE 750 T29"]},
+   {n:"进阶 · 数据驱动 / LLM×SE",c:["ECE 750 T42","ECE 750 T-MENG"]},
+   {n:"外系补位",c:["CS 645","CS 646","CS 644"]}
+ ]},
+ {dir:"系统 · 网络 · 分布式",cl:[
+   {n:"基础",c:["ECE 650","ECE 621"]},
+   {n:"核心",c:["ECE 751","ECE 750 T39","ECE 656"]},
+   {n:"进阶",c:["CS 798","CS 856","CS 854"]},
+   {n:"安全支线",c:["ECE 628","ECE 716","CS 653","CS 659"]}
+ ]},
+ {dir:"控制 · 自主 · 机器人",cl:[
+   {n:"基础",c:["ECE 604","ECE 602","ECE 682"]},
+   {n:"核心",c:["ECE 686","ECE 687"]},
+   {n:"进阶",c:["ECE 780 T13","ECE 757A"]}
+ ]},
+ {dir:"视觉 · 信号 · 影像",cl:[
+   {n:"基础",c:["ECE 603","ECE 604"]},
+   {n:"核心",c:["ECE 613","SYDE 671","SYDE 674"]},
+   {n:"进阶",c:["ECE 612","ECE 700 T11","SYDE 677"]}
+ ]},
+ {dir:"产品 · 创业 · 组织",cl:[
+   {n:"基础",c:["BE 605","BE 645"]},
+   {n:"核心",c:["BE 650","BE 680","CS 698"]},
+   {n:"交叉",c:["CS 649","MSCI 630"]}
+ ]}
+];
+/* drawer */
+function openD(code){
+  const v=C[code], dw=document.getElementById('dw'), dwc=document.getElementById('dwc');
+  if(!v){dwc.innerHTML='<p>该课程信息待补充。</p>'; dw.classList.add('show'); return;}
+  const rel=Object.keys(C).filter(c=>C[c].g===v.g&&c!==code).slice(0,3)
+    .map(c=>'<span class="chip" data-c="'+esc(c)+'">'+esc(c)+'</span>').join('');
+  let pills=(v.tag||[]).map(t=>{
+    const cls=(t==='new'?'new':(t==='ext'?'warn':''));
+    return '<span class="pill '+cls+'">'+tagText(t)+'</span>';
+  }).join('');
+  if(v.ext) pills+='<span class="pill warn">占外系额度</span>';
+  if(v.consent) pills+='<span class="pill warn">需教授同意</span>';
+  if(v.status==='dormant') pills+='<span class="pill warn">近年未排课</span>';
+  dwc.innerHTML=
+    '<h2>'+esc(code)+'</h2>'+
+    '<p class="en">'+esc(v.n||'')+'</p>'+
+    '<p class="meta">'+groupLabel(v.g)+' · 难度 '+diffLabel(v.d)+' · '+(v.t||'')+'</p>'+
+    (pills?'<div style="margin-bottom:14px">'+pills+'</div>':'')+
+    '<div class="blk"><h5>课程内容</h5><p>'+esc(v.desc||'')+'</p></div>'+
+    (v.proj?'<div class="blk"><h5>项目 / 考核</h5><p>'+esc(v.proj)+'</p></div>':'')+
+    (v.pre?'<div class="blk"><h5>先修</h5><p>'+esc(v.pre)+'</p></div>':'')+
+    (v.why?'<div class="blk"><h5>为什么值得上</h5><p>'+esc(v.why)+'</p></div>':'')+
+    (v.builds?'<div class="blk"><h5>铺垫了什么 / 通往</h5><p>'+esc(v.builds)+'</p></div>':'')+
+    (v.needs?'<div class="blk"><h5>需要什么铺垫</h5><p>'+esc(v.needs)+'</p></div>':'')+
+    (v.for?'<div class="blk"><h5>最适合谁</h5><p>'+esc(v.for)+'</p></div>':'')+
+    (v.alt?'<div class="blk"><h5>替代课</h5><p>'+esc(v.alt)+'</p></div>':'')+
+    (v.warn?'<div class="blk"><h5 style="color:var(--amber)">注意</h5><p style="color:var(--amber)">'+esc(v.warn)+'</p></div>':'')+
+    (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'');
+  dw.classList.add('show');
+}
+function closeD(){document.getElementById('dw').classList.remove('show');}
+document.addEventListener('click',e=>{
+  const c=e.target.closest&&e.target.closest('.chip');
+  if(c&&c.dataset.c){e.preventDefault();openD(c.dataset.c);}
+});
+/* views */
+function renderHome(){
+  return ''+
+  '<section class="hero"><h1>先选路线，再选课</h1>'+
+  '<p class="lede">滑铁卢 ECE MEng（含 Co-op）选课导航。4 套方案，点进去看排课、难度与备选；课程库可按兴趣搜索。</p></section>'+
+  '<section class="sec"><div class="plans">'+
+    PLANS.map(p=>'<a class="pcard" href="#/plan/'+p.id+'">'+
+      '<span class="badge">'+p.stats.map(s=>s.v).join(' · ')+'</span>'+
+      '<h3>'+esc(p.name)+'</h3>'+
+      '<p class="sub">'+esc(p.sub)+'</p>'+
+      '<p class="fit"><b>适合：</b>'+esc(p.fit||'')+'</p></a>').join('')+
+  '</div></section>'+
+  '<section class="sec"><h2>课程库</h2><div class="lib">'+
+    '<input class="search" placeholder="搜课号 / 关键词，如 657D、摄影、LLM" onkeydown="if(event.key===\'Enter\')location.hash=\'#/courses?q=\'+encodeURIComponent(this.value)">'+
+    '<div class="hot">'+HOT.map(chip).join('')+'</div>'+
+    '<div class="more"><a href="#/courses">看全部 '+Object.keys(C).length+' 门 →</a></div>'+
+  '</div></section>'+
+  '<section class="sec"><div class="more">'+
+    '<a href="#/new">今年新课 / 最前沿 →</a>'+
+    '<a href="#/map">课程地图（方向 → 单门课）→</a>'+
+    '<a href="#/coop">Co-op 排法规则 →</a>'+
+  '</div></section>';
+}
+function renderPlan(id){
+  const p=PLANS.find(x=>x.id===id); if(!p) return renderHome();
+  return ''+
+  '<nav class="crumb"><a href="#/">首页</a> › <span>方案 '+p.id+' · '+esc(p.name)+'</span></nav>'+
+  '<div class="plan-h"><h1>'+esc(p.name)+'</h1><p class="sub">'+esc(p.sub)+'</p>'+
+    '<div class="stats">'+p.stats.map(s=>'<span><b>'+esc(s.v)+'</b><br>'+esc(s.k)+'</span>').join('')+'</div></div>'+
+  '<div class="timeline">'+p.terms.map(t=>{
+    if(t.k==='work') return '<div class="term work"><div class="ph">'+(t.t||'工作学期')+'</div><div class="courses"><span>'+(t.note||'Co-op 工作学期')+'</span></div></div>';
+    return '<div class="term"><div class="ph">'+(t.t||'')+'</div><div class="courses">'+(t.c||[]).map(chip).join('')+'</div></div>';
+  }).join('')+'</div>'+
+  '<div class="three">'+
+    '<div class="box"><h4>强在哪</h4><ul>'+(p.win||[]).map(w=>'<li>'+esc(w)+'</li>').join('')+'</ul></div>'+
+    '<div class="box"><h4>代价 / 风险</h4><ul>'+(p.risk||[]).map(r=>'<li>'+esc(r)+'</li>').join('')+'</ul></div>'+
+    '<div class="box"><h4>选不上怎么办</h4><ul>'+(p.swap||[]).map(s=>'<li>'+esc(s)+'</li>').join('')+'</ul></div>'+
+  '</div>'+
+  '<p class="fit-note"><b>适合谁：</b>'+esc(p.fit||'')+'</p>';
+}
+function renderCourses(){
+  const body=GROUP_ORDER.map(g=>{
+    const list=Object.keys(C).filter(c=>C[c].g===g);
+    if(!list.length) return '';
+    return '<details class="group" open><summary>'+groupLabel(g)+
+      '<span class="cnt">'+list.length+' 门</span><span class="arr">›</span></summary>'+
+      '<div class="glist">'+list.map(chip).join('')+'</div></details>';
+  }).join('');
+  return ''+
+  '<nav class="crumb"><a href="#/">首页</a> › <span>课程库</span></nav>'+
+  '<section class="sec" style="margin-top:18px"><input class="search" id="csSearch" '+
+    'placeholder="搜课号 / 关键词，如 657D、摄影、LLM" oninput="filterCourses(this.value)"></section>'+
+  '<div id="csList">'+body+'</div>';
+}
+function filterCourses(q){
+  q=(q||'').trim().toLowerCase();
+  document.querySelectorAll('#csList .group').forEach(grp=>{
+    let vis=0;
+    grp.querySelectorAll('.chip').forEach(ch=>{
+      const code=(ch.dataset.c||'').toLowerCase(), v=C[ch.dataset.c]||{};
+      const hay=(code+' '+(v.zh||'')+' '+(v.n||'')+' '+(v.desc||'')).toLowerCase();
+      const ok=!q||hay.indexOf(q)>=0;
+      ch.style.display=ok?'':'none'; if(ok)vis++;
+    });
+    grp.style.display=vis?'':'none';
+    if(q&&vis) grp.open=true;
+  });
+}
+function renderCoop(){
+  return ''+
+  '<nav class="crumb"><a href="#/">首页</a> › <span>Co-op 规则</span></nav>'+
+  '<section class="sec" style="margin-top:18px">'+
+    '<h2 class="hook">为什么最后一学期不能实习？</h2>'+
+    '<p class="lede" style="margin-bottom:18px">Co-op 把时间线锁成「上课 → 实习 → 回来再上一学期」：毕业前最后一个学期必须是 study term。排课前先记住下面 4 条硬约束。</p>'+
+    '<div class="rules">'+
+      '<div class="rule"><b>最后一学期必须上课</b>毕业前的最后一段必须是 study term，不能停在工作学期。</div>'+
+      '<div class="rule"><b>两段实习要连续同雇主</b>第二个 work term 必须与第一个连续、且同一雇主，才算完成 Co-op。</div>'+
+      '<div class="rule"><b>WIL 601 必修，不计 8 门</b>首个 work term 前须完成 WIL 601，但它不计入毕业所需的 8 门课。</div>'+
+      '<div class="rule"><b>学位规则：8 门、≥5 门 ECE</b>毕业需 8 门课、其中 ≥5 门 ECE；外系（工/数/理）最多 3 门，不能选本科(400/500)课。</div>'+
+    '</div>'+
+    '<h2 style="margin-top:28px">两种时间线（示意）</h2>'+
+    '<p class="note">1 个实习 · 5 学期</p>'+
+    '<div class="tl"><span class="seg s">上课</span><span class="seg s">上课</span><span class="seg w">实习</span><span class="seg s">上课</span><span class="seg s">上课 · 毕业</span></div>'+
+    '<p class="note">2 个连续实习 · 5 学期</p>'+
+    '<div class="tl"><span class="seg s">上课</span><span class="seg w">实习</span><span class="seg w">实习</span><span class="seg s">上课</span><span class="seg s">上课 · 毕业</span></div>'+
+    '<p class="note amber">以上为示意结构；实际学期取决于你拿到的 Co-op offer 与轮次，注册前以官方安排为准。</p>'+
+  '</section>';
+}
+function renderNew(){
+  return ''+
+  '<nav class="crumb"><a href="#/">首页</a> › <span>今年新课 / 最前沿</span></nav>'+
+  '<section class="sec" style="margin-top:18px">'+
+    '<h2>最前沿的课</h2>'+
+    '<div class="glist" style="margin-bottom:26px">'+FRONTIER.map(o=>chip(o.c)).join('')+'</div>'+
+    '<h2>今年课表新动向</h2>'+
+    '<div class="glist">'+NEWCOURSES.map(o=>chip(o.c)).join('')+'</div>'+
+    '<p class="note">传统核心课（ECE 657 / 657A / 650 等）常年开设，不在此列。CS 886 今年新开 4 个 LLM / 视觉语言 / 生成模型研讨班。</p>'+
+  '</section>';
+}
+function renderMap(){
+  const body=MAP.map(m=>{
+    const cl=m.cl.map(g=>'<div class="mapcl"><h4>'+esc(g.n)+'</h4><div class="glist">'+g.c.map(chip).join('')+'</div></div>').join('');
+    return '<div class="mapdir"><h3>'+esc(m.dir)+'</h3>'+cl+'</div>';
+  }).join('');
+  return ''+
+  '<nav class="crumb"><a href="#/">首页</a> › <span>课程地图</span></nav>'+
+  '<section class="sec" style="margin-top:18px">'+
+    '<h2 class="hook">从大方向，拆到单门课</h2>'+
+    '<p class="lede" style="margin-bottom:18px">先看你想走哪条线（high level），再顺着「基础 → 核心 → 进阶」往下点（low level）。点任意课号看详情与先后关系。</p>'+
+    body+
+    '<p class="note">方向划分基于 ECE 研究生认证与就业路线；同门课可能跨多条线。标「需教授同意」的 special topics 可由你向教授提议新开。</p>'+
+  '</section>';
+}
+/* router */
+function route(){
+  let h=location.hash.slice(1); if(!h||h==='/') h='/';
+  let q='';
+  const qi=h.indexOf('?'); if(qi>=0){ q=decodeURIComponent(h.slice(qi+1).replace(/^q=/,'')); h=h.slice(0,qi); }
+  const parts=h.replace(/^\//,'').split('/').filter(Boolean);
+  const view=document.getElementById('view');
+  if(parts[0]==='plan') view.innerHTML=renderPlan(parts[1]);
+  else if(parts[0]==='courses') view.innerHTML=renderCourses();
+  else if(parts[0]==='coop') view.innerHTML=renderCoop();
+  else if(parts[0]==='new') view.innerHTML=renderNew();
+  else if(parts[0]==='map') view.innerHTML=renderMap();
+  else view.innerHTML=renderHome();
+  if(parts[0]==='courses'&&q) filterCourses(q);
+  window.scrollTo(0,0);
+}
+window.addEventListener('hashchange',route);
+window.addEventListener('DOMContentLoaded',route);
+
+</script>
+</body>
+</html>

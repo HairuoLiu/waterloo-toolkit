@@ -9,5 +9,16 @@
     "category": "日程提醒",
     "path": "apps/daily-reminder/",
     "cover": "apps/daily-reminder/cover.svg"
+  },
+  {
+    "id": "course-planner",
+    "title_zh": "ECE 选课导航",
+    "title_en": "ECE Course Navigator",
+    "desc_zh": "ECE MEng 选课规划：4 套方案、107 门课与课程地图",
+    "desc_en": "Plan ECE MEng courses & co-op: 4 tracks, 107 courses, a course map.",
+    "icon": "📚",
+    "category": "选课",
+    "path": "apps/course-planner/",
+    "cover": "apps/course-planner/cover.svg"
   }
 ]
