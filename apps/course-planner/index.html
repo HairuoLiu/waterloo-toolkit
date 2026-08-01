@@ -111,13 +111,31 @@ a{color:inherit;text-decoration:none}
 .glist{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 16px}
 /* coop + new */
 .hook{font-size:var(--s5);margin:6px 0 18px}
-.rules{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-.rule{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;font-size:var(--s2)}
-.rule b{display:block;margin-bottom:4px;font-size:var(--s3)}
-.tl{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
-.tl .seg{font-size:var(--s2);border:1px solid var(--line);border-radius:var(--r);padding:8px 12px;background:var(--card)}
-.tl .seg.s{color:var(--blue);border-color:var(--blue)}
-.tl .seg.w{background:var(--amber-bg);border-color:transparent;color:var(--amber)}
+/* coop: 重点速览（紧贴标题） */
+.keyrow{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:0 0 24px}
+.keyrow div{background:var(--blue-bg);border-radius:var(--r);padding:14px 16px;font-size:var(--s2);line-height:1.6}
+.keyrow b{display:block;font-size:var(--s3);color:var(--blue);margin-bottom:4px}
+/* coop: 特例（置顶） */
+.excep{background:var(--amber-bg);border-radius:var(--r);padding:16px 18px;margin:0 0 30px;
+  font-size:var(--s2);color:var(--amber);line-height:1.75}
+.excep h3{margin:0 0 9px;font-size:var(--s3);color:var(--amber)}
+.excep ul{margin:0;padding-left:18px}
+.excep li{margin:0 0 7px}
+.excep li:last-child{margin:0}
+/* coop: 步骤 list */
+.steps{counter-reset:st;list-style:none;padding:0;margin:0}
+.steps li{position:relative;padding:2px 0 20px 46px;margin-left:14px;font-size:var(--s2);
+  color:var(--muted);line-height:1.75;border-left:2px solid var(--line)}
+.steps li:last-child{border-left-color:transparent;padding-bottom:0}
+.steps li::before{counter-increment:st;content:counter(st);position:absolute;left:-15px;top:0;
+  width:28px;height:28px;border-radius:50%;background:var(--blue);color:#fff;
+  font-size:var(--s2);font-weight:700;display:flex;align-items:center;justify-content:center}
+.steps li b{display:block;color:var(--ink);font-size:var(--s3);margin-bottom:3px}
+/* coop: 图形时间线 */
+.tlfig{background:var(--card);border:1px solid var(--line);border-radius:var(--r);
+  padding:16px 14px;margin:0 0 14px;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tlfig svg{min-width:720px}
+.tlhint{display:none;font-size:var(--s1);color:var(--muted);margin:0 0 10px}
 .note{font-size:var(--s2);color:var(--muted);background:var(--card);border:1px solid var(--line);
   border-radius:var(--r);padding:13px 15px;margin:14px 0}
 .note.amber{background:var(--amber-bg);border-color:transparent;color:var(--amber)}
@@ -147,7 +165,8 @@ a{color:inherit;text-decoration:none}
 .dw .blk p{margin:0;font-size:var(--s2);line-height:1.65}
 .dw .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 @media(max-width:680px){
-  .plans,.three,.rules{grid-template-columns:1fr}
+  .plans,.three,.keyrow{grid-template-columns:1fr}
+  .tlhint{display:block}
   .dw-mask{background:rgba(20,24,28,.30)}
   .dw-panel{top:auto;bottom:0;left:0;right:0;width:100%;height:50vh;
     border-radius:18px 18px 0 0;animation:rise .22s ease;
@@ -184,9 +203,8 @@ a{color:inherit;text-decoration:none}
 </div>
 <footer class="ft"><div class="wrap">
   数据来源与完整引用：<a href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/course-planner#%E4%B8%89%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E4%B8%8E%E6%9D%A5%E6%BA%90references" style="color:var(--ink);text-decoration:underline">GitHub 仓库 README（参考资料与来源）</a>。<br>
-  更正：上一版称「ECE 657D W2027 不开」有误——<b>657D 在 W2027 / W2028 均开，Elliot Creager 教</b>。<br>
-  本页为开源静态文件，最后整理 2026-08-01。课程容量为官方历史数据推断，注册前请以 Quest 实时为准。<br>
-  课程库经 ECE 选课顾问复核补全至 111 门：补齐控制 / 自主 / 机器人线、强化学习（CS 885）、special topics 与跨院系研究生课；标「需教授同意」的可由你向教授提议新开，OVGS 为安省校际互修通道。
+  收录 111 门研究生课，覆盖 ECE 各方向与控制 / 自主 / 机器人线、强化学习、special topics 及跨院系课。标「需教授同意」的需向授课教授单独申请；OVGS 为安省校际互修通道。<br>
+  开源静态页面，数据整理于 2026-08-01。开课学期与课程容量为历史数据推断，注册前请以 Quest 实时信息为准。
 </div></footer>
 <script>
 
@@ -323,8 +341,7 @@ const C = {
  proj:"深度学习课通常有较重的编程作业和一个开放式期末 project，可自选题目。",
  pre:"机器学习基础（657 或 657A 之一）、Python + PyTorch。",
  why:"<b>ECE 系目前最对口现代 AI 的深度学习课（W2026 首开）</b>，而且在 AI &amp; ML 认证的选修清单里。对你来说还有一层：扩散模型和生成式视频正是摄影/影像兴趣与 AI 的交汇处，期末 project 可以往这个方向做。",
- alt:"CS 886 SEM 003 Generative Models 或 CS 679 Neural Networks（都占外系名额）。",
- warn:"上一版规划书误称这门课 W2027 不开。已按 ECE 官方最新开课表更正：<b>W2027 开，Creager 授课</b>。"},
+ alt:"CS 886 SEM 003 Generative Models 或 CS 679 Neural Networks（都占外系名额）。"},
 
 "ECE 613":{n:"Image Processing and Visual Communication",zh:"图像处理与视觉通信",g:"ece-cam",d:3.5,t:"W2027 (Wang Z) · W2028 (Wang Z)",tag:["cam"],
  desc:"数字图像的表示与采样、颜色空间、图像变换（DCT/小波）、增强与复原、压缩编码（JPEG/视频编码）、以及<b>图像质量评价</b>。",
@@ -1037,25 +1054,79 @@ function filterCourses(q){
     if(q&&vis) grp.open=true;
   });
 }
+/* 图形时间线：滑铁卢黑金视觉，甘特式 5 学期 */
+const TL_FONT='-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,PingFang SC,Microsoft YaHei,sans-serif';
+const TL_TERMS=[['F2026','Sep–Dec 2026'],['W2027','Jan–Apr 2027'],['S2027','May–Aug 2027'],['F2027','Sep–Dec 2027'],['W2028','Jan–Apr 2028']];
+function tlSvg(title,segs,marks,join){
+  const X=i=>8+i*174, W=168, CX=i=>X(i)+W/2;
+  let s='<svg viewBox="0 0 880 190" width="100%" preserveAspectRatio="xMidYMid meet" style="height:auto;display:block" role="img" aria-label="'+esc(title)+'">'+
+    '<g font-family="'+TL_FONT+'">'+
+    '<text x="0" y="16" font-size="15" font-weight="700" fill="#1b1f24">'+esc(title)+'</text>'+
+    '<rect x="596" y="5" width="13" height="13" rx="2" fill="#FED34C" stroke="#EAAB00" stroke-width="1.5"/>'+
+    '<text x="615" y="16" font-size="11.5" fill="#6b7280">实习</text>'+
+    '<rect x="660" y="5" width="13" height="13" rx="2" fill="#ffffff" stroke="#d4d7db" stroke-width="1.5"/>'+
+    '<text x="679" y="16" font-size="11.5" fill="#6b7280">上课</text>'+
+    '<polygon points="730,5 737,11.5 730,18 723,11.5" fill="#1b1f24"/>'+
+    '<text x="744" y="16" font-size="11.5" fill="#6b7280">里程碑</text>';
+  if(join!=null) s+='<rect x="'+(X(join)+W)+'" y="76" width="6" height="58" fill="#FED34C"/>';
+  segs.forEach((g,i)=>{
+    const w=g.k==='w';
+    s+='<rect x="'+X(i)+'" y="76" width="'+W+'" height="58" rx="6" fill="'+(w?'#FED34C':'#ffffff')+'" stroke="'+(w?'#EAAB00':'#d4d7db')+'" stroke-width="1.5"/>'+
+       '<text x="'+CX(i)+'" y="'+(g.s?104:112)+'" font-size="14" font-weight="700" fill="#1b1f24" text-anchor="middle">'+g.t+'</text>';
+    if(g.s) s+='<text x="'+CX(i)+'" y="122" font-size="11.5" fill="'+(w?'#7a5c00':'#6b7280')+'" text-anchor="middle">'+g.s+'</text>';
+  });
+  marks.forEach(m=>{
+    s+='<text x="'+m.x+'" y="44" font-size="12" font-weight="600" fill="#1b1f24" text-anchor="middle">'+m.t+'</text>'+
+       '<polygon points="'+m.x+',50 '+(m.x+6)+',56 '+m.x+',62 '+(m.x-6)+',56" fill="#1b1f24"/>'+
+       '<line x1="'+m.x+'" y1="62" x2="'+m.x+'" y2="76" stroke="#1b1f24" stroke-width="1.5"/>';
+  });
+  s+='<line x1="8" y1="146" x2="872" y2="146" stroke="#e6e8eb" stroke-width="1.5"/>'+
+     '<line x1="872" y1="146" x2="872" y2="152" stroke="#c9ccd1" stroke-width="1"/>';
+  TL_TERMS.forEach((t,i)=>{
+    s+='<line x1="'+X(i)+'" y1="146" x2="'+X(i)+'" y2="152" stroke="#c9ccd1" stroke-width="1"/>'+
+       '<text x="'+CX(i)+'" y="165" font-size="12" font-weight="600" fill="#1b1f24" text-anchor="middle">'+t[0]+'</text>'+
+       '<text x="'+CX(i)+'" y="179" font-size="11" fill="#6b7280" text-anchor="middle">'+t[1]+'</text>';
+  });
+  return s+'</g></svg>';
+}
 function renderCoop(){
+  const tlA=tlSvg('1 段实习 · 5 学期 · 20 个月',
+    [{k:'s',t:'上课'},{k:'s',t:'上课'},{k:'s',t:'上课',s:'求职学期'},{k:'w',t:'实习',s:'4 个月'},{k:'s',t:'上课',s:'毕业学期'}],
+    [{x:400,t:'WIL 601'},{x:482,t:'求职'},{x:845,t:'毕业'}]);
+  const tlB=tlSvg('2 段连续实习 · 5 学期 · 20 个月',
+    [{k:'s',t:'上课'},{k:'s',t:'上课',s:'求职学期'},{k:'w',t:'实习',s:'第 1 段'},{k:'w',t:'实习',s:'第 2 段 · 同雇主'},{k:'s',t:'上课',s:'毕业学期'}],
+    [{x:226,t:'WIL 601'},{x:308,t:'求职'},{x:845,t:'毕业'}],2);
   return ''+
   '<nav class="crumb"><a href="#/">首页</a> › <span>Co-op 规则</span></nav>'+
   '<section class="sec" style="margin-top:18px">'+
-    '<h2 class="hook">为什么最后一学期不能实习？</h2>'+
-    '<p class="lede" style="margin-bottom:18px">Co-op 把时间线锁成「上课 → 实习 → 回来再上一学期」：毕业前最后一个学期必须是 study term。排课前先记住下面 4 条硬约束。</p>'+
-    '<div class="rules">'+
-      '<div class="rule"><b>最后一学期必须上课</b>毕业前的最后一段必须是 study term，不能停在工作学期。</div>'+
-      '<div class="rule"><b>两段实习要连续同雇主</b>第二个 work term 必须与第一个连续、且同一雇主，才算完成 Co-op。</div>'+
-      '<div class="rule"><b>WIL 601 必修，不计 8 门</b>首个 work term 前须完成 WIL 601，但它不计入毕业所需的 8 门课。</div>'+
-      '<div class="rule"><b>学位规则：8 门、≥5 门 ECE</b>毕业需 8 门课、其中 ≥5 门 ECE；外系（工/数/理）最多 3 门，不能选本科(400/500)课。</div>'+
-      '<p class="note amber">特例：Business Leadership 方向允许外系课放宽到 4 门（方案 4 用到），需 ECE Graduate Office 书面确认 approved 名单。</p>'+
+    '<h2 class="hook">Co-op 怎么排课？</h2>'+
+    '<div class="keyrow">'+
+      '<div><b>最后必须是上课学期</b>不能实习完就毕业，时间线的结尾只能是「实习 → 回来再上一学期 → 毕业」。</div>'+
+      '<div><b>WIL 601 得先修完</b>第一个 work term 之前必须修完，不计入毕业的 8 门课，但不修就没有 co-op 资格。</div>'+
+      '<div><b>两段实习必须连着</b>要做两个 work term，必须连续、且同一雇主，中间不能插上课学期。</div>'+
     '</div>'+
-    '<h2 style="margin-top:28px">两种时间线（示意）</h2>'+
-    '<p class="note">1 个实习 · 5 学期</p>'+
-    '<div class="tl"><span class="seg s">上课</span><span class="seg s">上课</span><span class="seg w">实习</span><span class="seg s">上课</span><span class="seg s">上课 · 毕业</span></div>'+
-    '<p class="note">2 个连续实习 · 5 学期</p>'+
-    '<div class="tl"><span class="seg s">上课</span><span class="seg w">实习</span><span class="seg w">实习</span><span class="seg s">上课</span><span class="seg s">上课 · 毕业</span></div>'+
-    '<p class="note amber">以上为示意结构；实际学期取决于你拿到的 Co-op offer 与轮次，注册前以官方安排为准。</p>'+
+    '<div class="excep">'+
+      '<h3>先看这三个例外</h3>'+
+      '<ul>'+
+        '<li><b>外系可以放宽到 4 门</b>：Business Leadership 方向的特殊条款（方案 4 用到），需 ECE Graduate Office 书面确认 approved 名单，否则按标准的 3 门算。</li>'+
+        '<li><b>本校排不开可以跨校修</b>：OVGS 是安省校际互修通道，能解决「认证必修课正好撞 work term」的死结。但最后一学期不得注册，且开学第 2 周之后不再批准。</li>'+
+        '<li><b>找不到实习不会退学</b>：官方规则是转回 regular MEng，已修学分不丢，但 co-op 身份会没有。排课时就要想好这个 Plan B。</li>'+
+      '</ul>'+
+    '</div>'+
+    '<h2>标准排法：为什么只能这么排</h2>'+
+    '<ol class="steps">'+
+      '<li><b>先算毕业底线</b>8 门课，其中 ≥5 门 ECE；外系（工 / 数 / 理研究生课）最多 3 门，不能选本科 400 / 500 级课。这一步决定了你至少需要几个上课学期。</li>'+
+      '<li><b>再把最后一个学期钉死</b>毕业前的最后一段必须是 study term。所以不管你实习几段，结尾都得留一个上课学期——这条直接决定了整条时间线的长度。</li>'+
+      '<li><b>往前放 work term</b>一段 4 个月。如果要做两段，必须连续排、同一雇主，中间不能插上课学期，否则不算完成 Co-op。</li>'+
+      '<li><b>work term 前面那个学期＝求职学期</b>WaterlooWorks 提前一个学期招聘，所以实习前的那个上课学期会同时是投递、刷题、面试的高峰。别在这个学期堆满硬课。</li>'+
+      '<li><b>把 WIL 601 放进求职学期</b>它必须在第一个 work term 之前完成，不计入 8 门课。四套方案里它的位置都不一样，因为它得跟着 work term 走——这是最容易被忽略、也最容易导致 co-op 资格出问题的一环。</li>'+
+      '<li><b>最后回填课程</b>剩下的上课学期按每学期 2–3 门分配。注意开课学期约束：ECE 657 只在 Spring、657A 只在 Winter、ECE 653 只在 Spring。如果这些正好撞上你的 work term，认证就会缺课，要么换方案，要么走 OVGS。</li>'+
+    '</ol>'+
+    '<h2 style="margin-top:30px">两种时间线</h2>'+
+    '<p class="tlhint">← 左右滑动查看完整时间线</p>'+
+    '<div class="tlfig">'+tlA+'</div>'+
+    '<div class="tlfig">'+tlB+'</div>'+
+    '<p class="note amber">学期名按 2026 秋入学举例，用于说明结构。实际学期取决于你拿到的 Co-op offer 与招聘轮次，注册前以 ECE Graduate Office 与 Quest 的官方安排为准。</p>'+
   '</section>';
 }
 function renderNew(){
