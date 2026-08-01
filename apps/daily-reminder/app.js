@@ -178,6 +178,7 @@
   var currentCat = '全部';
   var curYear, curMonth;
   var todayStr;
+  var hubRange = 'week';           // 顶部提醒中心当前选中的范围
 
   function presentYears() {
     var ys = [];
@@ -292,18 +293,18 @@
         chip.style.borderLeftColor = CAT_COLOR[e.category] || '#888';
         chip.textContent = (e.emoji ? e.emoji + ' ' : '') + e.title_zh;
         chip.title = e.title_en || e.title_zh;
-        chip.addEventListener('click', function (ev) { ev.stopPropagation(); showDetail(ds); });
+        chip.addEventListener('click', function (ev) { ev.stopPropagation(); openDetail(ds); });
         cell.appendChild(chip);
       });
       if (starts.length > max) {
         var more = document.createElement('div');
         more.className = 'cal-more';
         more.textContent = '+' + (starts.length - max) + ' 更多';
-        more.addEventListener('click', function (ev) { ev.stopPropagation(); showDetail(ds); });
+        more.addEventListener('click', function (ev) { ev.stopPropagation(); openDetail(ds); });
         cell.appendChild(more);
       }
 
-      cell.addEventListener('click', function () { showDetail(ds); });
+      cell.addEventListener('click', function () { openDetail(ds); });
       calCells.appendChild(cell);
     });
 
@@ -323,36 +324,106 @@
     var html = '<div class="cal-detail-head">📌 ' + md(dt) + ' ' + WD[dt.getDay()] + ' · 共 ' + acts.length + ' 项</div>';
     html += '<div class="cal-detail-list">';
     acts.forEach(function (e) {
+      var c = CAT_COLOR[e.category] || '#888';
       var rangeEnd = e._end && e._start.getTime() !== e._end.getTime();
       var daterange = md(e._start) + (rangeEnd ? ' – ' + md(e._end) : '');
       var en = e.title_en ? '<div class="en">' + e.title_en + '</div>' : '';
       var act = e.action ? '<div class="act">💡 ' + e.action + '</div>' : '';
-      html += '<div class="cal-detail-item" style="border-left:4px solid ' + (CAT_COLOR[e.category] || '#888') + '">' +
+      html += '<div class="cal-detail-item" style="border-left:4px solid ' + c + '; background:' + hexToRgba(c, 0.06) + '">' +
         '<div class="zh">' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + '</div>' + en +
         '<div class="meta"><span class="cat cat-' + e.category + '">' + e.category + '</span>' +
         '<span class="date">' + daterange + '</span>' +
-        '<span class="term">' + (e.term_zh || '') + '</span></div>' + act + '</div>';
+        (e.term_zh ? '<span class="term">' + e.term_zh + '</span>' : '') + '</div>' + act + '</div>';
     });
     html += '</div>';
     box.innerHTML = html;
   }
 
-  function renderChips() {
+  function openDetail(ds) {
+    showDetail(ds);
+    document.getElementById('detail-backdrop').classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeDetail() {
+    document.getElementById('detail-backdrop').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  // ---------- 顶部提醒中心：今日 / 本周 / 本月 ----------
+  function rangeWindow(range) {
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    if (range === 'today') return [now, now];
+    if (range === 'week') {
+      var dow = now.getDay();                       // 0 = 周日
+      var mondayOffset = (dow === 0) ? 6 : dow - 1; // 周一为一周起点
+      var start = new Date(now); start.setDate(now.getDate() - mondayOffset);
+      var end = new Date(start); end.setDate(start.getDate() + 6);
+      return [start, end];
+    }
+    if (range === 'month') {
+      var s = new Date(now.getFullYear(), now.getMonth(), 1);
+      var e = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+      return [s, e];
+    }
+    return [now, now];
+  }
+
+  function eventsInRange(start, end, cat) {
+    return ACTIVE.filter(function (e) {
+      if (cat && cat !== '全部' && e.category !== cat) return false;
+      var es = e._start, ee = e._end || e._start;
+      return es <= end && ee >= start;
+    }).sort(function (a, b) { return a._start - b._start; });
+  }
+
+  function renderRemindHub(range) {
+    hubRange = range;
+    var w = rangeWindow(range);
+    var items = eventsInRange(w[0], w[1], currentCat);
+    var body = document.getElementById('remind-body');
+    if (!items.length) {
+      body.innerHTML = '<div class="remind-empty">✨ 这个范围内暂时没有重要日期，好好享受吧～</div>';
+      return;
+    }
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    var html = '<div class="remind-list">';
+    items.forEach(function (e) {
+      var past = e._start < now && !(e._end && e._end >= now);
+      var dateTxt = md(e._start) + (e._end ? ' – ' + md(e._end) : '');
+      var c = CAT_COLOR[e.category] || '#6b7280';
+      html += '<div class="remind-item' + (past ? ' past' : '') + '">' +
+        '<div class="ri-accent" style="background:' + c + '"></div>' +
+        '<div class="ri-main">' +
+          '<div class="ri-title">' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + '</div>' +
+          '<div class="ri-meta"><span class="cat cat-' + e.category + '">' + e.category + '</span>' +
+          '<span class="ri-date">' + dateTxt + '</span></div>' +
+        '</div>' +
+        (past ? '<span class="ri-past">已过</span>' : '') +
+        '</div>';
+    });
+    html += '</div>';
+    body.innerHTML = html;
+  }
+
+  // ---------- 类别筛选（侧栏） ----------
+  function renderCatSidebar() {
     var cats = ['全部'];
     ACTIVE.forEach(function (e) { if (cats.indexOf(e.category) < 0) cats.push(e.category); });
-    var bar = document.getElementById('cat-bar');
-    bar.innerHTML = '';
+    var bar = document.getElementById('cat-sidebar');
+    bar.innerHTML = '<div class="cat-side-title">类别筛选</div>';
     cats.forEach(function (c) {
       var b = document.createElement('button');
-      b.className = 'chip' + (c === currentCat ? ' active' : '');
-      b.textContent = c;
+      b.className = 'cat-item' + (c === currentCat ? ' active' : '');
+      var dot = '<span class="dot" style="background:' + (CAT_COLOR[c] || '#888') + '"></span>';
+      b.innerHTML = dot + '<span>' + c + '</span>';
       b.addEventListener('click', function () {
         currentCat = c;
-        Array.prototype.forEach.call(bar.children, function (x) { x.classList.remove('active'); });
+        Array.prototype.forEach.call(bar.querySelectorAll('.cat-item'), function (x) { x.classList.remove('active'); });
         b.classList.add('active');
         renderTable(currentCat);
         renderCalendar();
-        document.getElementById('cal-detail').innerHTML = '';
+        closeDetail();
+        if (hubRange !== 'today') renderRemindHub(hubRange);
       });
       bar.appendChild(b);
     });
@@ -372,11 +443,12 @@
         setDefaultMonth();
         refreshActive();
         renderYearTabs();
-        renderChips();
+        renderCatSidebar();
         renderCalendar();
         renderTable('全部');
         renderReminder(todayStr);
-        document.getElementById('cal-detail').innerHTML = '';
+        closeDetail();
+        if (hubRange !== 'today') renderRemindHub(hubRange);
       });
       bar.appendChild(b);
     });
@@ -393,15 +465,22 @@
     var ys = presentYears();
     currentYear = (ys.indexOf(ty) >= 0) ? ty : ys[0];
 
+    // 仅一个学年时，隐藏学年选择器（导航无意义，页面上移）
+    if (ys.length <= 1) {
+      var ysEl = document.getElementById('year-section');
+      if (ysEl) ysEl.style.display = 'none';
+    }
+
     refreshActive();
     setDefaultMonth();
     renderReminder(todayStr);
 
     dateInput.addEventListener('change', function () {
-      if (this.value) renderReminder(this.value);
+      if (this.value) openDetail(this.value);
     });
     document.getElementById('btn-today').addEventListener('click', function () {
       dateInput.value = todayStr;
+      closeDetail();
       renderReminder(todayStr);
     });
     document.getElementById('btn-copy').addEventListener('click', function () {
@@ -413,10 +492,28 @@
       });
     });
 
+    // 顶部提醒中心 tab 切换
+    var rtabs = document.querySelectorAll('.rtab');
+    Array.prototype.forEach.call(rtabs, function (btn) {
+      btn.addEventListener('click', function () {
+        Array.prototype.forEach.call(rtabs, function (x) { x.classList.remove('active'); });
+        btn.classList.add('active');
+        renderRemindHub(btn.getAttribute('data-range'));
+      });
+    });
+
+    // 详情模态关闭
+    document.getElementById('detail-close').addEventListener('click', closeDetail);
+    document.getElementById('detail-backdrop').addEventListener('click', function (e) {
+      if (e.target === this) closeDetail();
+    });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
+
     renderYearTabs();
-    renderChips();
+    renderCatSidebar();
     renderCalendar();
     renderTable('全部');
+    renderRemindHub(hubRange);
 
     // 视图切换
     var tabs = document.querySelectorAll('.tab');

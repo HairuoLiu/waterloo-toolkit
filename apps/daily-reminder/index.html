@@ -18,68 +18,91 @@
       <p class="sub">每天一件最该做的事 · 数据来源 University of Waterloo 研究生重要日期</p>
     </section>
 
+    <!-- 顶部提醒中心：今日 / 本周 / 本月 -->
+    <section class="remind-hub">
+      <div class="remind-tabs">
+        <button class="rtab active" data-range="week">📆 本周</button>
+        <button class="rtab" data-range="today">⏰ 今日</button>
+        <button class="rtab" data-range="month">🗓️ 本月</button>
+      </div>
+      <div class="remind-body" id="remind-body"></div>
+    </section>
+
+    <!-- 控件 -->
     <section class="controls">
-      <label>查看日期
+      <label class="pick">📅 查看日期
         <input type="date" id="date-pick" />
       </label>
       <button id="btn-today" class="btn ghost">回到今天</button>
       <button id="btn-copy" class="btn primary">📋 复制文案</button>
     </section>
 
+    <!-- 今日提醒文案 -->
     <section class="card reminder">
       <pre id="reminder-text"></pre>
     </section>
 
-    <!-- 学年切换 + 筛选 + 视图切换（日历/列表共用） -->
-    <section class="view-section">
+    <!-- 学年切换（仅多于一个学年时显示） -->
+    <section class="view-section" id="year-section">
       <div class="year-label">🎓 选择学年（每个学年独立日历）</div>
       <div id="year-bar" class="year-bar"></div>
-      <div id="cat-bar" class="chips"></div>
-      <div class="view-tabs">
-        <button class="tab active" data-view="calendar">📅 日历视图</button>
-        <button class="tab" data-view="list">📋 列表视图</button>
-      </div>
     </section>
 
-    <!-- 日历视图 -->
-    <section id="calendar-view" class="cal-section">
-      <div class="cal-nav">
-        <button id="cal-prev" class="btn ghost">‹ 上月</button>
-        <span id="cal-title" class="cal-title"></span>
-        <button id="cal-next" class="btn ghost">下月 ›</button>
-        <button id="cal-this" class="btn ghost">回到本月</button>
-      </div>
-      <div class="cal-grid">
-        <div class="cal-dow-row">
-          <span>日</span><span>一</span><span>二</span><span>三</span>
-          <span>四</span><span>五</span><span>六</span>
+    <!-- 视图布局：侧栏(分类) + 主区(日历/列表) -->
+    <section class="view-layout" id="view-layout">
+      <aside class="cat-sidebar" id="cat-sidebar" aria-label="类别筛选"></aside>
+      <div class="view-main">
+        <div class="view-tabs">
+          <button class="tab active" data-view="calendar">📅 日历视图</button>
+          <button class="tab" data-view="list">📋 列表视图</button>
         </div>
-        <div id="cal-cells" class="cal-cells"></div>
-      </div>
-      <div id="cal-detail" class="cal-detail"></div>
-    </section>
 
-    <!-- 列表视图（全量对照表） -->
-    <section id="list-view" class="table-section" style="display:none">
-      <div class="table-head">
-        <h2>📚 全量重要日期对照表 <span id="table-count" class="muted"></span></h2>
-      </div>
-      <div class="table-scroll">
-        <table>
-          <thead>
-            <tr><th>日期</th><th>事项</th><th>类别</th><th>学期</th><th>行动建议</th></tr>
-          </thead>
-          <tbody id="table-body"></tbody>
-        </table>
+        <section id="calendar-view" class="cal-section">
+          <div class="cal-nav">
+            <button id="cal-prev" class="btn ghost">‹ 上月</button>
+            <span id="cal-title" class="cal-title"></span>
+            <button id="cal-next" class="btn ghost">下月 ›</button>
+            <button id="cal-this" class="btn ghost">回到本月</button>
+          </div>
+          <div class="cal-grid">
+            <div class="cal-dow-row">
+              <span>日</span><span>一</span><span>二</span><span>三</span>
+              <span>四</span><span>五</span><span>六</span>
+            </div>
+            <div id="cal-cells" class="cal-cells"></div>
+          </div>
+        </section>
+
+        <section id="list-view" class="table-section" style="display:none">
+          <div class="table-head">
+            <h2>📚 全量重要日期对照表 <span id="table-count" class="muted"></span></h2>
+          </div>
+          <div class="table-scroll">
+            <table>
+              <thead>
+                <tr><th>日期</th><th>事项</th><th>类别</th><th>学期</th><th>行动建议</th></tr>
+              </thead>
+              <tbody id="table-body"></tbody>
+            </table>
+          </div>
+        </section>
       </div>
     </section>
 
     <footer class="foot">
       <p>本工具为信息聚合，最终以
         <a href="https://uwaterloo.ca/important-dates/graduate" target="_blank" rel="noopener">学校官方页面</a>
-        为准。</p>
+        为准。数据仅覆盖已公布的学期，新增学期公布后会自动出现在这里。</p>
     </footer>
   </main>
+
+  <!-- 日期详情模态 -->
+  <div class="detail-backdrop" id="detail-backdrop">
+    <div class="detail-modal" id="detail-modal" role="dialog" aria-modal="true">
+      <button class="detail-close" id="detail-close" aria-label="关闭">×</button>
+      <div id="cal-detail"></div>
+    </div>
+  </div>
 
   <script src="data.js"></script>
   <script src="app.js"></script>
