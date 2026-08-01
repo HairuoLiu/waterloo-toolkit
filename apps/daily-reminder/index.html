@@ -36,7 +36,7 @@
         <button class="rtab" data-range="month">本月<svg class="copy-range" data-range="month" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="复制本月文案" title="复制本月文案"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
       </div>
       <div class="remind-hint" id="remind-hint"></div>
-      <div class="remind-body" id="remind-body" hidden></div>
+      <button class="remind-copy" id="remind-copy" type="button">📋 复制今日文案</button>
     </section>
 
     <!-- 学年切换（仅多于一个学年时显示） -->
@@ -47,6 +47,19 @@
 
     <!-- 主区：日历 / 列表 -->
     <section class="view-main">
+      <!-- 浮动类别筛选：与日历同一容器，浮于日历右上角 -->
+      <button class="cat-fab" id="cat-fab" aria-label="类别筛选" title="类别筛选">
+        <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+        <span class="cat-fab-dot" id="cat-fab-dot"></span>
+      </button>
+      <div class="cat-pop" id="cat-pop" hidden>
+        <div class="cat-pop-head">
+          <span>类别筛选</span>
+          <button class="cat-pop-close" id="cat-pop-close" aria-label="关闭">×</button>
+        </div>
+        <div id="cat-pop-list" class="cat-pop-list"></div>
+      </div>
+
       <div class="view-tabs">
         <button class="tab active" data-view="calendar">日历视图</button>
         <button class="tab" data-view="list">列表视图</button>
@@ -88,19 +101,6 @@
         为准。数据仅覆盖已公布的学期，新增学期公布后会自动出现在这里。</p>
     </footer>
   </main>
-
-  <!-- 浮动类别筛选 -->
-  <button class="cat-fab" id="cat-fab" aria-label="类别筛选" title="类别筛选">
-    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
-    <span class="cat-fab-dot" id="cat-fab-dot"></span>
-  </button>
-  <div class="cat-pop" id="cat-pop" hidden>
-    <div class="cat-pop-head">
-      <span>类别筛选</span>
-      <button class="cat-pop-close" id="cat-pop-close" aria-label="关闭">×</button>
-    </div>
-    <div id="cat-pop-list" class="cat-pop-list"></div>
-  </div>
 
   <!-- 日期详情模态 -->
   <div class="detail-backdrop" id="detail-backdrop">
