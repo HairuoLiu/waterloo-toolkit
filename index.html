@@ -25,8 +25,8 @@
     </section>
 
     <footer class="foot">
-      <p>每个工具都是一个独立子页面，点击卡片进入。新增工具见仓库内
-        <a href="STRUCTURE.md">STRUCTURE.md</a>。</p>
+      <p>每个工具都是一个独立子页面，点击卡片进入。命名规范与封面制作见仓库内
+        <a href="README.md">README.md</a>（含 <a href="STRUCTURE.md">STRUCTURE.md</a>）。</p>
     </footer>
   </main>
 
@@ -44,8 +44,11 @@
           var card = document.createElement('a');
           card.className = 'app-card';
           card.href = a.path;
+          var cover = a.cover
+            ? '<img class="cover" src="' + a.cover + '" alt="' + (a.title_zh || a.id) + ' 封面" loading="lazy" />'
+            : '<div class="icon">' + (a.icon || '🔧') + '</div>';
           card.innerHTML =
-            '<div class="icon">' + (a.icon || '🔧') + '</div>' +
+            cover +
             '<h3>' + (a.title_zh || a.title_en || a.id) + '</h3>' +
             '<p>' + (a.desc_zh || a.desc_en || '') + '</p>' +
             (a.category ? '<span class="tag">' + a.category + '</span>' : '');

@@ -45,12 +45,16 @@ section { margin-top: 26px; }
 }
 .app-card {
   display: block; background: var(--card); border: 1px solid var(--line);
-  border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+  border-radius: var(--radius); padding: 16px; box-shadow: var(--shadow);
   transition: transform .12s ease, box-shadow .12s ease;
 }
 .app-card:hover { transform: translateY(-3px); text-decoration: none; box-shadow: 0 6px 30px rgba(20,30,60,.12); }
+.app-card .cover {
+  display: block; width: 100%; height: 158px; object-fit: cover;
+  border-radius: 10px; margin-bottom: 14px; background: #f0f1f6;
+}
 .app-card .icon { font-size: 30px; }
-.app-card h3 { margin: 10px 0 6px; font-size: 18px; color: var(--ink); }
+.app-card h3 { margin: 0 0 6px; font-size: 18px; color: var(--ink); }
 .app-card p { margin: 0; color: var(--muted); font-size: 14px; }
 .app-card .tag {
   display: inline-block; margin-top: 12px; font-size: 12px; padding: 3px 10px;

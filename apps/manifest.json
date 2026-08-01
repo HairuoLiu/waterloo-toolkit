@@ -7,6 +7,7 @@
     "desc_en": "One thing to do each day, with action tips. Copy-ready for group chat.",
     "icon": "📅",
     "category": "日程提醒",
-    "path": "apps/daily-reminder/"
+    "path": "apps/daily-reminder/",
+    "cover": "apps/daily-reminder/cover.svg"
   }
 ]
