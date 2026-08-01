@@ -179,17 +179,19 @@
     var items = eventsInRange(w[0], w[1], currentCat);
     var label = range === 'week' ? '本周' : '本月';
     var lines2 = [];
-    lines2.push('📅 滑铁卢研究生重要日期 · ' + label);
+    lines2.push('📅 滑铁卢研究生重要日期 · ' + label + '提醒');
     lines2.push('（' + currentYear + '–' + (currentYear + 1) + ' 学年）');
     lines2.push('');
     if (!items.length) {
-      lines2.push('这个范围内暂时没有重要日期，好好享受吧～');
+      lines2.push(label + '暂时没有重要日期，享受当下吧～');
     } else {
+      lines2.push(label + '共 ' + items.length + ' 个重要节点：');
       items.forEach(function (e) {
-        var dateTxt = md(e._start) + (e._end ? ' – ' + md(e._end) : '');
         var d = dayDiff(e._start, now);
-        var tag = d > 0 ? ('（还有 ' + d + ' 天）') : (e._end && e._end > now ? '（进行中）' : '（今天）');
-        lines2.push('· ' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + ' · ' + dateTxt + tag);
+        var tag = d > 0 ? ('还有 ' + d + ' 天') : (e._end && e._end > now ? '进行中' : '就是今天');
+        var dow = WD[e._start.getDay()];
+        lines2.push('· ' + md(e._start) + ' ' + dow + ' ' + (e.emoji ? e.emoji + ' ' : '') +
+          e.title_zh + '（' + tag + '）');
       });
     }
     lines2.push('');
@@ -345,7 +347,7 @@
         return e._start.getTime() === dt.getTime() && (currentCat === '全部' || e.category === currentCat);
       }).sort(function (a, b) { return b.priority - a.priority; });
 
-      var max = 3;
+      var max = (typeof window !== 'undefined' && window.innerWidth <= 480) ? 2 : 3;
       starts.slice(0, max).forEach(function (e) {
         var chip = document.createElement('div');
         chip.className = 'cal-chip';
@@ -439,32 +441,51 @@
     hubRange = range;
     var w = rangeWindow(range);
     var items = eventsInRange(w[0], w[1], currentCat);
+    var label = range === 'today' ? '今日' : range === 'week' ? '本周' : '本月';
     var hint = document.getElementById('remind-hint');
+    var copyBtn = document.getElementById('remind-copy');
+    if (copyBtn) copyBtn.textContent = '📋 复制' + label + '文案';
+
     if (!items.length) {
       // 范围内无事件：退而求其次展示最近的即将到来节点，保持提醒有用
       var now0 = new Date(); now0.setHours(0, 0, 0, 0);
       var up = ACTIVE.filter(function (e) {
         return e._start > now0 && (currentCat === '全部' || e.category === currentCat);
       }).sort(function (a, b) { return a._start - b._start || b.priority - a.priority; });
-      var label = range === 'today' ? '今日' : range === 'week' ? '本周' : '本月';
       if (up.length) {
         var n = up[0];
         var dd = dayDiff(n._start, now0);
-        hint.innerHTML = label + '暂无节点，最近：' + (n.emoji ? n.emoji + ' ' : '') +
-          n.title_zh + '（' + md(n._start) + (n._end ? ' – ' + md(n._end) : '') +
-          '，还有 ' + dd + ' 天）· 点复制分享';
+        hint.innerHTML = '<div class="rh-empty">' + label + '暂无节点，最近：<b>' +
+          (n.emoji ? n.emoji + ' ' : '') + n.title_zh + '</b>（' + md(n._start) +
+          (n._end ? ' – ' + md(n._end) : '') + '，还有 ' + dd + ' 天）</div>';
       } else {
-        hint.textContent = '这个范围内暂时没有重要日期，好好享受吧～';
+        hint.innerHTML = '<div class="rh-empty">' + label + '暂时没有重要日期，享受当下吧～</div>';
       }
       return;
     }
-    var nearest = items[0];
+
+    var head = '<div class="rh-head">' + label + '共 <b>' + items.length + '</b> 个节点</div>';
+    var list = '<ul class="rh-list">';
     var now = new Date(); now.setHours(0, 0, 0, 0);
-    var d = dayDiff(nearest._start, now);
-    var when = d > 0 ? ('还有 ' + d + ' 天') : (nearest._end && nearest._end > now ? '进行中' : '就是今天');
-    hint.innerHTML = '最近节点：' + (nearest.emoji ? nearest.emoji + ' ' : '') + nearest.title_zh +
-      '（' + md(nearest._start) + (nearest._end ? ' – ' + md(nearest._end) : '') + '，' + when + '）· 共 ' +
-      items.length + ' 项，点复制分享';
+    items.slice(0, 8).forEach(function (e) {
+      var d = dayDiff(e._start, now);
+      var tag, cls;
+      if (e._end && e._start <= now && now <= e._end) { tag = '进行中'; cls = 'ongoing'; }
+      else if (d === 0) { tag = '今天'; cls = 'today'; }
+      else if (d === 1) { tag = '明天'; cls = 'soon'; }
+      else if (d > 0) { tag = '还有 ' + d + ' 天'; cls = 'soon'; }
+      else { tag = md(e._start); cls = ''; }
+      list += '<li class="rh-item"><span class="rh-dot" style="background:' +
+        (CAT_COLOR[e.category] || '#888') + '"></span>' +
+        '<span class="rh-title">' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + '</span>' +
+        '<span class="rh-date">' + md(e._start) + (e._end ? '–' + md(e._end) : '') + '</span>' +
+        '<span class="rh-tag ' + cls + '">' + tag + '</span></li>';
+    });
+    list += '</ul>';
+    if (items.length > 8) {
+      list += '<div class="rh-more">还有 ' + (items.length - 8) + ' 个，点上方“复制”查看完整清单</div>';
+    }
+    hint.innerHTML = head + list;
   }
 
   // ---------- 类别筛选（右下浮动按钮 + 弹出层） ----------
@@ -488,7 +509,7 @@
         renderTable(currentCat);
         renderCalendar();
         closeDetail();
-        if (hubRange !== 'today') renderRemindHub(hubRange);
+        renderRemindHub(hubRange);
         closeCatPop();
       });
       list.appendChild(b);
@@ -515,7 +536,7 @@
         renderCalendar();
         renderTable('全部');
         closeDetail();
-        if (hubRange !== 'today') renderRemindHub(hubRange);
+        renderRemindHub(hubRange);
       });
       bar.appendChild(b);
     });
@@ -555,6 +576,9 @@
         copyRange(el.getAttribute('data-range'));
       });
     });
+    // 信息下方的显式“复制文案”按钮（让用户明确知道可复制）
+    var copyHubBtn = document.getElementById('remind-copy');
+    if (copyHubBtn) copyHubBtn.addEventListener('click', function () { copyRange(hubRange); });
 
     // 分享
     var shareBtn = document.getElementById('share-btn');
