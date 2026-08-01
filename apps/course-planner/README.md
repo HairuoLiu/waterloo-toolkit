@@ -53,21 +53,32 @@
 
 ## 三、参考资料与来源（References）
 
-课程代码、开课学期与规则均来自以下公开资料交叉核对（最后整理 2026-08-01）：
+课程代码、开课学期与规则均来自以下公开资料交叉核对（最后整理 2026-08-01）。注册前所有信息以 **Quest** 实时为准。
 
-1. **ECE 研究生 tentative offering 表**（开课学期与教授的主要依据）
-   `https://ece.uwaterloo.ca/~jabarby/grad_course_offering.html`
-2. **University of Waterloo Academic Calendar**（学位与课程目录）
+### 学位与 Co-op 规则（核心依据）
+1. **ECE MEng Co-op 项目页** — 8 门课 / ≥5 ECE / 外系 ≤3 / WIL 601 / 最后一学期须为 study term
+   `https://uwaterloo.ca/electrical-computer-engineering/master-engineering-meng-co-op`
+2. **MEng Co-op Program Reminders（Spring 2026）** — 含 Business Leadership 最多 4 门 BE/BET 的精确表述、最后一学期约束
+   `https://uwaterloo.ca/electrical-computer-engineering/welcome-spring-2026-important-meng-co-op-program-reminders`
+3. **ECE Graduate Studies · Programs**
+   `https://uwaterloo.ca/electrical-computer-engineering/graduate-studies/future-students/programs`
+4. **University of Waterloo Academic Calendar**（学位与课程目录）
    `https://ucalendar.uwaterloo.ca/`
-3. **ECE Graduate Degree Programs**（MEng / Co-op 规则）
-   `https://uwaterloo.ca/electrical-computer-engineering/future-graduate-students/graduate-degree-programs`
-4. **CS 研究生开课表**
-   `https://cs.uwaterloo.ca/current-graduate-students/current-courses`
-5. **Co-operative Education / WIL**
-   `https://uwaterloo.ca/co-operative-education`
 
-**已核实的关键更正**：上一版称「ECE 657D（深度学习）W2027 不开」有误——**657D 在 W2027 / W2028 均开，Elliot Creager 教**。
+### 开课目录（课号 / 学期 / 教授）
+5. **ECE 研究生开课表**（含 tentative future offerings 与各学期 archive；657D Creager、757A、752 等均见于此）
+   `https://uwaterloo.ca/electrical-computer-engineering/graduate-studies/current-students/courses/`
+6. **Cheriton School of Computer Science 研究生开课表**（Fall / Winter / Spring；CS 854、886 专题、885 等）
+   `https://cs.uwaterloo.ca/current-graduate-students/courses/current-course-offerings/fall-2026`
+7. **Systems Design Engineering 开课表**（Fall / Spring；SYDE 671/672/675 等）
+   `https://uwaterloo.ca/systems-design-engineering/node/354` · `https://uwaterloo.ca/systems-design-engineering/node/353`
+8. **Management Sciences（MSCI）研究生课程**（MSCI 630/638/720 等）
+   `https://uwaterloo.ca/management-sciences/`
 
-**顾问复核补全**：课程库经 ECE 选课顾问复核，从 57 门扩至 **107 门**，补齐了控制 / 自主 / 机器人线（ECE 682/686/687/780 T13）、强化学习（CS 885）、special topics 与跨院系研究生课；并新增「课程地图」视图与每门课的「关系」字段。
+### 已核实的关键更正
+上一版称「ECE 657D（深度学习）W2027 不开」有误——**657D 在 W2027 / W2028 均开，Elliot Creager 教**（见来源 5 的 W2026 表）。
 
-> ⚠️ 本页为信息聚合，所有开课容量、学期、教授均为基于官方历史数据的推断，**注册前请以 Quest 实时数据为准**。
+### 顾问复核补全
+课程库经 ECE 选课顾问复核，从 57 门扩至 **107 门**，补齐了控制 / 自主 / 机器人线（ECE 682/686/687/780 T13）、强化学习（CS 885）、special topics 与跨院系研究生课；并新增「课程地图」视图与每门课的「关系」字段。
+
+> ⚠️ 本页为信息聚合，所有开课容量、学期、教授均为基于官方历史数据的推断，**注册前请以 Quest 实时数据为准**；部分 special topics 专题编号（如 ECE 780 T13）与跨院系开课学期以 Quest / 对应院系当学期通知为准。
