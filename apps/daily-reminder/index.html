@@ -3,90 +3,83 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>滑铁卢研究生每日提醒 · 工具箱</title>
+  <title>滑铁卢研究生重要日期 · 日历</title>
   <link rel="stylesheet" href="../../assets/style.css" />
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="../../index.html">← 滑铁卢工具箱</a>
-    <span class="crumb">/ 研究生每日提醒</span>
+    <a class="brand" href="../../index.html" aria-label="返回滑铁卢工具箱">
+      <span class="uw-logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="28" height="28">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#FED34C"/>
+          <path d="M9 22 L13 10 L16 18 L19 10 L23 22" fill="none" stroke="#1f2430" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="brand-text">滑铁卢研究生重要日期</span>
+    </a>
+    <div class="top-actions">
+      <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/daily-reminder" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      </a>
+      <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+      </button>
+    </div>
   </header>
 
   <main class="wrap">
-    <section class="hero">
-      <h1>📅 研究生重要日期 · 日历</h1>
-      <p class="sub">每天一件最该做的事 · 数据来源 University of Waterloo 研究生重要日期</p>
-    </section>
-
-    <!-- 顶部提醒中心：今日 / 本周 / 本月 -->
+    <!-- 顶部提醒中心：今日 / 本周 / 本月（每 tab 自带复制） -->
     <section class="remind-hub">
       <div class="remind-tabs">
-        <button class="rtab active" data-range="week">📆 本周</button>
-        <button class="rtab" data-range="today">⏰ 今日</button>
-        <button class="rtab" data-range="month">🗓️ 本月</button>
+        <button class="rtab active" data-range="today">今日<svg class="copy-range" data-range="today" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="复制今日文案" title="复制今日文案"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+        <button class="rtab" data-range="week">本周<svg class="copy-range" data-range="week" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="复制本周文案" title="复制本周文案"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+        <button class="rtab" data-range="month">本月<svg class="copy-range" data-range="month" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="复制本月文案" title="复制本月文案"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
       </div>
-      <div class="remind-body" id="remind-body"></div>
-    </section>
-
-    <!-- 控件 -->
-    <section class="controls">
-      <label class="pick">📅 查看日期
-        <input type="date" id="date-pick" />
-      </label>
-      <button id="btn-today" class="btn ghost">回到今天</button>
-      <button id="btn-copy" class="btn primary">📋 复制文案</button>
-    </section>
-
-    <!-- 今日提醒文案 -->
-    <section class="card reminder">
-      <pre id="reminder-text"></pre>
+      <div class="remind-hint" id="remind-hint"></div>
+      <div class="remind-body" id="remind-body" hidden></div>
     </section>
 
     <!-- 学年切换（仅多于一个学年时显示） -->
     <section class="view-section" id="year-section">
-      <div class="year-label">🎓 选择学年（每个学年独立日历）</div>
+      <div class="year-label">选择学年（每个学年独立日历）</div>
       <div id="year-bar" class="year-bar"></div>
     </section>
 
-    <!-- 视图布局：侧栏(分类) + 主区(日历/列表) -->
-    <section class="view-layout" id="view-layout">
-      <aside class="cat-sidebar" id="cat-sidebar" aria-label="类别筛选"></aside>
-      <div class="view-main">
-        <div class="view-tabs">
-          <button class="tab active" data-view="calendar">📅 日历视图</button>
-          <button class="tab" data-view="list">📋 列表视图</button>
-        </div>
-
-        <section id="calendar-view" class="cal-section">
-          <div class="cal-nav">
-            <button id="cal-prev" class="btn ghost">‹ 上月</button>
-            <span id="cal-title" class="cal-title"></span>
-            <button id="cal-next" class="btn ghost">下月 ›</button>
-            <button id="cal-this" class="btn ghost">回到本月</button>
-          </div>
-          <div class="cal-grid">
-            <div class="cal-dow-row">
-              <span>日</span><span>一</span><span>二</span><span>三</span>
-              <span>四</span><span>五</span><span>六</span>
-            </div>
-            <div id="cal-cells" class="cal-cells"></div>
-          </div>
-        </section>
-
-        <section id="list-view" class="table-section" style="display:none">
-          <div class="table-head">
-            <h2>📚 全量重要日期对照表 <span id="table-count" class="muted"></span></h2>
-          </div>
-          <div class="table-scroll">
-            <table>
-              <thead>
-                <tr><th>日期</th><th>事项</th><th>类别</th><th>学期</th><th>行动建议</th></tr>
-              </thead>
-              <tbody id="table-body"></tbody>
-            </table>
-          </div>
-        </section>
+    <!-- 主区：日历 / 列表 -->
+    <section class="view-main">
+      <div class="view-tabs">
+        <button class="tab active" data-view="calendar">日历视图</button>
+        <button class="tab" data-view="list">列表视图</button>
       </div>
+
+      <section id="calendar-view" class="cal-section">
+        <div class="cal-nav">
+          <button id="cal-prev" class="btn ghost">‹ 上月</button>
+          <span id="cal-title" class="cal-title"></span>
+          <button id="cal-next" class="btn ghost">下月 ›</button>
+          <button id="cal-this" class="btn ghost today-pill">今天</button>
+        </div>
+        <div class="cal-grid">
+          <div class="cal-dow-row">
+            <span>日</span><span>一</span><span>二</span><span>三</span><span>四</span><span>五</span><span>六</span>
+          </div>
+          <div id="cal-cells" class="cal-cells"></div>
+        </div>
+      </section>
+
+      <section id="list-view" class="table-section" style="display:none">
+        <div class="table-head">
+          <h2>全量重要日期对照表 <span id="table-count" class="muted"></span></h2>
+        </div>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr><th>日期</th><th>事项</th><th>类别</th><th>学期</th><th>行动建议</th></tr>
+            </thead>
+            <tbody id="table-body"></tbody>
+          </table>
+        </div>
+      </section>
     </section>
 
     <footer class="foot">
@@ -96,6 +89,19 @@
     </footer>
   </main>
 
+  <!-- 浮动类别筛选 -->
+  <button class="cat-fab" id="cat-fab" aria-label="类别筛选" title="类别筛选">
+    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="20" y2="17"/></svg>
+    <span class="cat-fab-dot" id="cat-fab-dot"></span>
+  </button>
+  <div class="cat-pop" id="cat-pop" hidden>
+    <div class="cat-pop-head">
+      <span>类别筛选</span>
+      <button class="cat-pop-close" id="cat-pop-close" aria-label="关闭">×</button>
+    </div>
+    <div id="cat-pop-list" class="cat-pop-list"></div>
+  </div>
+
   <!-- 日期详情模态 -->
   <div class="detail-backdrop" id="detail-backdrop">
     <div class="detail-modal" id="detail-modal" role="dialog" aria-modal="true">
@@ -103,6 +109,9 @@
       <div id="cal-detail"></div>
     </div>
   </div>
+
+  <!-- toast -->
+  <div class="toast" id="toast" hidden></div>
 
   <script src="data.js"></script>
   <script src="app.js"></script>

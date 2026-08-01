@@ -171,6 +171,60 @@
     return lines.join('\n');
   }
 
+  // 生成某范围的分享文案（今日用 buildMessage，本周/本月用清单）
+  function buildRangeSummary(range) {
+    var now = new Date(); now.setHours(0, 0, 0, 0);
+    if (range === 'today') return buildMessage(ACTIVE, now);
+    var w = rangeWindow(range);
+    var items = eventsInRange(w[0], w[1], currentCat);
+    var label = range === 'week' ? '本周' : '本月';
+    var lines2 = [];
+    lines2.push('📅 滑铁卢研究生重要日期 · ' + label);
+    lines2.push('（' + currentYear + '–' + (currentYear + 1) + ' 学年）');
+    lines2.push('');
+    if (!items.length) {
+      lines2.push('这个范围内暂时没有重要日期，好好享受吧～');
+    } else {
+      items.forEach(function (e) {
+        var dateTxt = md(e._start) + (e._end ? ' – ' + md(e._end) : '');
+        var d = dayDiff(e._start, now);
+        var tag = d > 0 ? ('（还有 ' + d + ' 天）') : (e._end && e._end > now ? '（进行中）' : '（今天）');
+        lines2.push('· ' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + ' · ' + dateTxt + tag);
+      });
+    }
+    lines2.push('');
+    lines2.push('———');
+    lines2.push('数据来源：University of Waterloo 研究生重要日期');
+    return lines2.join('\n');
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('toast');
+    if (!t) return;
+    t.textContent = msg; t.hidden = false;
+    clearTimeout(showToast._t);
+    showToast._t = setTimeout(function () { t.hidden = true; }, 1800);
+  }
+
+  function copyText(txt) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      return navigator.clipboard.writeText(txt);
+    }
+    var ta = document.createElement('textarea');
+    ta.value = txt; document.body.appendChild(ta); ta.select();
+    try { document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return Promise.resolve();
+  }
+
+  function copyRange(range) {
+    var txt = buildRangeSummary(range);
+    copyText(txt).then(function () {
+      var label = range === 'today' ? '今日' : range === 'week' ? '本周' : '本月';
+      showToast('已复制' + label + '文案，去发给同学吧');
+    });
+  }
+
   // ===== 渲染 =====
   var EVENTS = loadEvents();
   var ACTIVE = EVENTS;            // 当前学年过滤后的事件集
@@ -380,54 +434,63 @@
     hubRange = range;
     var w = rangeWindow(range);
     var items = eventsInRange(w[0], w[1], currentCat);
-    var body = document.getElementById('remind-body');
+    var hint = document.getElementById('remind-hint');
     if (!items.length) {
-      body.innerHTML = '<div class="remind-empty">✨ 这个范围内暂时没有重要日期，好好享受吧～</div>';
+      // 范围内无事件：退而求其次展示最近的即将到来节点，保持提醒有用
+      var now0 = new Date(); now0.setHours(0, 0, 0, 0);
+      var up = ACTIVE.filter(function (e) {
+        return e._start > now0 && (currentCat === '全部' || e.category === currentCat);
+      }).sort(function (a, b) { return a._start - b._start || b.priority - a.priority; });
+      var label = range === 'today' ? '今日' : range === 'week' ? '本周' : '本月';
+      if (up.length) {
+        var n = up[0];
+        var dd = dayDiff(n._start, now0);
+        hint.innerHTML = label + '暂无节点，最近：' + (n.emoji ? n.emoji + ' ' : '') +
+          n.title_zh + '（' + md(n._start) + (n._end ? ' – ' + md(n._end) : '') +
+          '，还有 ' + dd + ' 天）· 点复制分享';
+      } else {
+        hint.textContent = '这个范围内暂时没有重要日期，好好享受吧～';
+      }
       return;
     }
+    var nearest = items[0];
     var now = new Date(); now.setHours(0, 0, 0, 0);
-    var html = '<div class="remind-list">';
-    items.forEach(function (e) {
-      var past = e._start < now && !(e._end && e._end >= now);
-      var dateTxt = md(e._start) + (e._end ? ' – ' + md(e._end) : '');
-      var c = CAT_COLOR[e.category] || '#6b7280';
-      html += '<div class="remind-item' + (past ? ' past' : '') + '">' +
-        '<div class="ri-accent" style="background:' + c + '"></div>' +
-        '<div class="ri-main">' +
-          '<div class="ri-title">' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + '</div>' +
-          '<div class="ri-meta"><span class="cat cat-' + e.category + '">' + e.category + '</span>' +
-          '<span class="ri-date">' + dateTxt + '</span></div>' +
-        '</div>' +
-        (past ? '<span class="ri-past">已过</span>' : '') +
-        '</div>';
-    });
-    html += '</div>';
-    body.innerHTML = html;
+    var d = dayDiff(nearest._start, now);
+    var when = d > 0 ? ('还有 ' + d + ' 天') : (nearest._end && nearest._end > now ? '进行中' : '就是今天');
+    hint.innerHTML = '最近节点：' + (nearest.emoji ? nearest.emoji + ' ' : '') + nearest.title_zh +
+      '（' + md(nearest._start) + (nearest._end ? ' – ' + md(nearest._end) : '') + '，' + when + '）· 共 ' +
+      items.length + ' 项，点复制分享';
   }
 
-  // ---------- 类别筛选（侧栏） ----------
+  // ---------- 类别筛选（右下浮动按钮 + 弹出层） ----------
   function renderCatSidebar() {
     var cats = ['全部'];
     ACTIVE.forEach(function (e) { if (cats.indexOf(e.category) < 0) cats.push(e.category); });
-    var bar = document.getElementById('cat-sidebar');
-    bar.innerHTML = '<div class="cat-side-title">类别筛选</div>';
+    var list = document.getElementById('cat-pop-list');
+    if (!list) return;
+    list.innerHTML = '';
+    var fabDot = document.getElementById('cat-fab-dot');
     cats.forEach(function (c) {
       var b = document.createElement('button');
-      b.className = 'cat-item' + (c === currentCat ? ' active' : '');
+      b.className = 'cat-pop-item' + (c === currentCat ? ' active' : '');
       var dot = '<span class="dot" style="background:' + (CAT_COLOR[c] || '#888') + '"></span>';
       b.innerHTML = dot + '<span>' + c + '</span>';
       b.addEventListener('click', function () {
         currentCat = c;
-        Array.prototype.forEach.call(bar.querySelectorAll('.cat-item'), function (x) { x.classList.remove('active'); });
+        Array.prototype.forEach.call(list.querySelectorAll('.cat-pop-item'), function (x) { x.classList.remove('active'); });
         b.classList.add('active');
+        if (fabDot) { fabDot.style.background = (c === '全部') ? 'transparent' : (CAT_COLOR[c] || '#888'); }
         renderTable(currentCat);
         renderCalendar();
         closeDetail();
         if (hubRange !== 'today') renderRemindHub(hubRange);
+        closeCatPop();
       });
-      bar.appendChild(b);
+      list.appendChild(b);
     });
   }
+  function openCatPop() { var p = document.getElementById('cat-pop'); if (p) p.hidden = false; }
+  function closeCatPop() { var p = document.getElementById('cat-pop'); if (p) p.hidden = true; }
 
   function renderYearTabs() {
     var ys = presentYears();
@@ -446,7 +509,6 @@
         renderCatSidebar();
         renderCalendar();
         renderTable('全部');
-        renderReminder(todayStr);
         closeDetail();
         if (hubRange !== 'today') renderRemindHub(hubRange);
       });
@@ -455,17 +517,13 @@
   }
 
   function init() {
-    var dateInput = document.getElementById('date-pick');
     todayStr = fmtDateInput(new Date());
-    dateInput.value = todayStr;
 
-    // 默认学年：包含今天的学年；否则取最早出现的学年
     var now = new Date(); now.setHours(0, 0, 0, 0);
     var ty = (now.getMonth() >= 8) ? now.getFullYear() : now.getFullYear() - 1;
     var ys = presentYears();
     currentYear = (ys.indexOf(ty) >= 0) ? ty : ys[0];
 
-    // 仅一个学年时，隐藏学年选择器（导航无意义，页面上移）
     if (ys.length <= 1) {
       var ysEl = document.getElementById('year-section');
       if (ysEl) ysEl.style.display = 'none';
@@ -473,33 +531,43 @@
 
     refreshActive();
     setDefaultMonth();
-    renderReminder(todayStr);
+    hubRange = 'today';
 
-    dateInput.addEventListener('change', function () {
-      if (this.value) openDetail(this.value);
-    });
-    document.getElementById('btn-today').addEventListener('click', function () {
-      dateInput.value = todayStr;
-      closeDetail();
-      renderReminder(todayStr);
-    });
-    document.getElementById('btn-copy').addEventListener('click', function () {
-      var txt = document.getElementById('reminder-text').textContent;
-      navigator.clipboard.writeText(txt).then(function () {
-        var b = document.getElementById('btn-copy');
-        var old = b.textContent; b.textContent = '✅ 已复制';
-        setTimeout(function () { b.textContent = old; }, 1500);
-      });
-    });
-
-    // 顶部提醒中心 tab 切换
+    // 顶部提醒 tab（今日/本周/本月）
     var rtabs = document.querySelectorAll('.rtab');
     Array.prototype.forEach.call(rtabs, function (btn) {
-      btn.addEventListener('click', function () {
+      btn.addEventListener('click', function (e) {
+        if (e.target.classList.contains('copy-range')) return;
         Array.prototype.forEach.call(rtabs, function (x) { x.classList.remove('active'); });
         btn.classList.add('active');
         renderRemindHub(btn.getAttribute('data-range'));
       });
+    });
+    var crs = document.querySelectorAll('.copy-range');
+    Array.prototype.forEach.call(crs, function (el) {
+      el.addEventListener('click', function (e) {
+        e.stopPropagation();
+        copyRange(el.getAttribute('data-range'));
+      });
+    });
+
+    // 分享
+    var shareBtn = document.getElementById('share-btn');
+    if (shareBtn) shareBtn.addEventListener('click', function () {
+      var data = { title: '滑铁卢研究生重要日期', text: '滑铁卢研究生重要日期日历', url: location.href };
+      if (navigator.share) { navigator.share(data).catch(function () {}); }
+      else { copyText(location.href).then(function () { showToast('链接已复制，去分享吧'); }); }
+    });
+
+    // 类别浮动筛选
+    var fab = document.getElementById('cat-fab');
+    if (fab) fab.addEventListener('click', openCatPop);
+    var popClose = document.getElementById('cat-pop-close');
+    if (popClose) popClose.addEventListener('click', closeCatPop);
+    document.addEventListener('click', function (e) {
+      var pop = document.getElementById('cat-pop');
+      if (!pop || pop.hidden) return;
+      if (!pop.contains(e.target) && e.target !== fab && !fab.contains(e.target)) closeCatPop();
     });
 
     // 详情模态关闭
@@ -507,7 +575,9 @@
     document.getElementById('detail-backdrop').addEventListener('click', function (e) {
       if (e.target === this) closeDetail();
     });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeDetail(); });
+    document.addEventListener('keydown', function (e) {
+      if (e.key === 'Escape') { closeDetail(); closeCatPop(); }
+    });
 
     renderYearTabs();
     renderCatSidebar();
