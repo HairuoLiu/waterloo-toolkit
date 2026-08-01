@@ -32,9 +32,11 @@ a:hover { text-decoration: underline; }
 .brand { display: flex; align-items: center; gap: 10px; font-weight: 700; color: var(--ink); }
 .brand:hover { text-decoration: none; }
 .uw-logo { display: inline-flex; }
-.brand-text { font-size: 16px; }
+.uw-logo svg { display: block; }
+.brand-text { font-size: 16px; line-height: 1; }
 .crumb { color: var(--muted); font-size: 14px; }
-.top-actions { display: flex; align-items: center; gap: 8px; }
+.top-actions { display: flex; align-items: center; gap: 6px; }
+.top-actions .icon-btn + .icon-btn { margin-left: 6px; padding-left: 12px; border-left: 1px solid var(--line); }
 .icon-btn {
   width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--line);
   background: var(--card); color: var(--ink); display: inline-flex;
@@ -197,10 +199,10 @@ td.act { color: var(--muted); min-width: 220px; }
   .rtab:hover { border-color: var(--brand-deep); }
   .rtab.active { background: var(--brand); color: var(--brand-ink); border-color: var(--brand-deep); }
   .copy-range {
-    width: 14px; height: 14px; opacity: .5; cursor: pointer; flex: 0 0 auto;
-    transition: opacity .1s ease;
+    width: 15px; height: 15px; opacity: 1; cursor: pointer; flex: 0 0 auto;
+    border-radius: 4px; padding: 1px; transition: opacity .1s ease, background .1s ease;
   }
-  .rtab:hover .copy-range, .rtab.active .copy-range, .copy-range:hover { opacity: 1; }
+  .rtab:hover .copy-range, .rtab.active .copy-range, .copy-range:hover { background: rgba(31,36,48,.08); }
   .remind-hint { font-size: 13px; color: var(--muted); line-height: 1.6; }
   .remind-hint b, .remind-hint strong { color: var(--ink); font-weight: 600; }
   .remind-body { display: none; }
@@ -210,12 +212,12 @@ td.act { color: var(--muted); min-width: 220px; }
   .controls .pick input[type="date"] { font-family: inherit; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); color: var(--ink); }
 
   /* ===== 主区 ===== */
-  .view-main { min-width: 0; margin-top: 26px; }
+  .view-main { position: relative; min-width: 0; margin-top: 26px; }
 
-  /* ===== 浮动类别筛选（橱窗） ===== */
+  /* ===== 浮动类别筛选（橱窗）—— 浮在日历右上角上方 ===== */
   .cat-fab {
-    position: fixed; right: 22px; bottom: 22px; z-index: 40;
-    width: 54px; height: 54px; border-radius: 50%; border: none; cursor: pointer;
+    position: absolute; top: 2px; right: 2px; z-index: 40;
+    width: 46px; height: 46px; border-radius: 50%; border: none; cursor: pointer;
     background: var(--brand); color: var(--brand-ink);
     box-shadow: 0 6px 20px rgba(20,30,60,.18); display: flex; align-items: center; justify-content: center;
     transition: transform .12s ease, box-shadow .12s ease;
@@ -223,12 +225,12 @@ td.act { color: var(--muted); min-width: 220px; }
   .cat-fab:hover { transform: translateY(-2px); box-shadow: 0 10px 26px rgba(20,30,60,.24); }
   .cat-fab:active { transform: translateY(0); }
   .cat-fab-dot {
-    position: absolute; top: 8px; right: 8px; width: 12px; height: 12px; border-radius: 50%;
+    position: absolute; top: 6px; right: 6px; width: 12px; height: 12px; border-radius: 50%;
     background: transparent; box-shadow: 0 0 0 2px #fff;
   }
   .cat-fab-dot.show { background: var(--accent); }
   .cat-pop {
-    position: fixed; right: 22px; bottom: 88px; z-index: 41; width: 220px;
+    position: absolute; top: 54px; right: 2px; z-index: 41; width: 220px;
     background: var(--card); border: 1px solid var(--line); border-radius: 14px;
     box-shadow: 0 12px 40px rgba(20,30,60,.2); overflow: hidden;
     animation: pop .14s ease;
@@ -303,11 +305,11 @@ td.act { color: var(--muted); min-width: 220px; }
     .controls .btn { flex: 1 1 auto; }
     .detail-backdrop { padding: 0; align-items: stretch; }
     .detail-modal { max-width: none; border-radius: 0; min-height: 100%; padding-top: 28px; }
-    /* 浮动类别筛选 → 移动端底部抽屉 */
-    .cat-fab { right: 16px; bottom: 16px; width: 50px; height: 50px; }
+    /* 浮动类别筛选 → 移动端同样浮在日历右上角 */
+    .cat-fab { top: 2px; right: 2px; width: 44px; height: 44px; }
     .cat-pop {
-      left: 0; right: 0; bottom: 0; top: auto; width: auto;
-      border-radius: 16px 16px 0 0; box-shadow: 0 -8px 30px rgba(20,30,60,.22); max-height: 60vh;
+      top: 50px; right: 2px; width: min(220px, calc(100vw - 16px));
+      border-radius: 14px; box-shadow: 0 12px 40px rgba(20,30,60,.2); max-height: 60vh;
     }
     .cat-pop-list { max-height: 44vh; }
   }

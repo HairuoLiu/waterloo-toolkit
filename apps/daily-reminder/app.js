@@ -252,11 +252,16 @@
   }
 
   // 默认月份：今天在该学年内则停在今天；否则停在该学年 9 月（学年起点）
+  // 默认月份：始终停在“今天所在月份”，让今日高亮可见；
+  // 学年之前的月份 prev 会被禁用（见 updateCalNav），不会越界到无数据区域。
   function setDefaultMonth() {
     var now = new Date(); now.setHours(0, 0, 0, 0);
-    var ty = (now.getMonth() >= 8) ? now.getFullYear() : now.getFullYear() - 1; // 学年按日期
-    if (ty === currentYear) { curYear = now.getFullYear(); curMonth = now.getMonth(); }
-    else { curYear = currentYear; curMonth = 8; } // 9 月
+    curYear = now.getFullYear();
+    curMonth = now.getMonth();
+    var b = yearBounds();
+    if (curYear > b.maxY || (curYear === b.maxY && curMonth > b.maxM)) {
+      curYear = b.maxY; curMonth = b.maxM; // 学年结束后停在最后一个月
+    }
   }
 
   function yearBounds() {
@@ -265,8 +270,8 @@
 
   function updateCalNav() {
     var b = yearBounds();
-    var atMin = (curYear === b.minY && curMonth === b.minM);
-    var atMax = (curYear === b.maxY && curMonth === b.maxM);
+    var atMin = (curYear < b.minY) || (curYear === b.minY && curMonth <= b.minM);
+    var atMax = (curYear > b.maxY) || (curYear === b.maxY && curMonth >= b.maxM);
     document.getElementById('cal-prev').disabled = atMin;
     document.getElementById('cal-next').disabled = atMax;
   }
@@ -525,8 +530,8 @@
     currentYear = (ys.indexOf(ty) >= 0) ? ty : ys[0];
 
     if (ys.length <= 1) {
-      var ysEl = document.getElementById('year-section');
-      if (ysEl) ysEl.style.display = 'none';
+      var lbl = document.querySelector('#year-section .year-label');
+      if (lbl) lbl.textContent = '当前学年（数据仅覆盖已公布的学期）';
     }
 
     refreshActive();
