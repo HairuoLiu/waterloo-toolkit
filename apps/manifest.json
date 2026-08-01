@@ -1,0 +1,12 @@
+[
+  {
+    "id": "daily-reminder",
+    "title_zh": "研究生每日提醒",
+    "title_en": "Grad Daily Reminder",
+    "desc_zh": "每天挑出一件最该做的事，带行动建议，可一键复制发群。",
+    "desc_en": "One thing to do each day, with action tips. Copy-ready for group chat.",
+    "icon": "📅",
+    "category": "日程提醒",
+    "path": "apps/daily-reminder/"
+  }
+]

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>滑铁卢大学工具箱 · UW Toolkit</title>
+  <link rel="stylesheet" href="assets/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <span class="brand">🎓 滑铁卢大学工具箱</span>
+    <span class="crumb">UW Toolkit</span>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>滑铁卢大学 · 小工具集合</h1>
+      <p class="sub">面向滑铁卢大学学生(以研究生为主)的轻量工具，无后端、免登录，开源可改。</p>
+    </section>
+
+    <section>
+      <div id="app-grid" class="grid">
+        <p class="muted">加载中…</p>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>每个工具都是一个独立子页面，点击卡片进入。新增工具见仓库内
+        <a href="STRUCTURE.md">STRUCTURE.md</a>。</p>
+    </footer>
+  </main>
+
+  <script>
+    fetch('apps/manifest.json')
+      .then(function (r) { return r.json(); })
+      .then(function (apps) {
+        var grid = document.getElementById('app-grid');
+        grid.innerHTML = '';
+        if (!apps.length) {
+          grid.innerHTML = '<p class="muted">还没有子工具，欢迎按 STRUCTURE.md 添加。</p>';
+          return;
+        }
+        apps.forEach(function (a) {
+          var card = document.createElement('a');
+          card.className = 'app-card';
+          card.href = a.path;
+          card.innerHTML =
+            '<div class="icon">' + (a.icon || '🔧') + '</div>' +
+            '<h3>' + (a.title_zh || a.title_en || a.id) + '</h3>' +
+            '<p>' + (a.desc_zh || a.desc_en || '') + '</p>' +
+            (a.category ? '<span class="tag">' + a.category + '</span>' : '');
+          grid.appendChild(card);
+        });
+      })
+      .catch(function (e) {
+        document.getElementById('app-grid').innerHTML =
+          '<p class="muted">清单加载失败（本地直接打开时请用本地服务器预览）。' + e + '</p>';
+      });
+  </script>
+</body>
+</html>

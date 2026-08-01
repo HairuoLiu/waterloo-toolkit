@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>滑铁卢研究生每日提醒 · 工具箱</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../../index.html">← 滑铁卢工具箱</a>
+    <span class="crumb">/ 研究生每日提醒</span>
+  </header>
+
+  <main class="wrap">
+    <section class="hero">
+      <h1>📅 研究生每日提醒</h1>
+      <p class="sub">每天一件最该做的事 · 数据来源 University of Waterloo 研究生重要日期</p>
+    </section>
+
+    <section class="controls">
+      <label>查看日期
+        <input type="date" id="date-pick" />
+      </label>
+      <button id="btn-today" class="btn ghost">回到今天</button>
+      <button id="btn-copy" class="btn primary">📋 复制文案</button>
+    </section>
+
+    <section class="card reminder">
+      <pre id="reminder-text"></pre>
+    </section>
+
+    <section class="table-section">
+      <div class="table-head">
+        <h2>📚 全量重要日期对照表 <span id="table-count" class="muted"></span></h2>
+      </div>
+      <div id="cat-bar" class="chips"></div>
+      <div class="table-scroll">
+        <table>
+          <thead>
+            <tr><th>日期</th><th>事项</th><th>类别</th><th>学期</th><th>行动建议</th></tr>
+          </thead>
+          <tbody id="table-body"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>本工具为信息聚合，最终以
+        <a href="https://uwaterloo.ca/important-dates/graduate" target="_blank" rel="noopener">学校官方页面</a>
+        为准。</p>
+    </footer>
+  </main>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

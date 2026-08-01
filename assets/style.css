@@ -1,0 +1,106 @@
+:root {
+  --bg: #f6f7fb;
+  --card: #ffffff;
+  --ink: #1f2430;
+  --muted: #6b7280;
+  --line: #e6e8ef;
+  --brand: #d11610;        /* UW Waterloo Red */
+  --brand-ink: #ffffff;
+  --accent: #2b6cb0;
+  --radius: 14px;
+  --shadow: 0 1px 3px rgba(20,30,60,.08), 0 8px 24px rgba(20,30,60,.06);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", sans-serif;
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.6;
+}
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+/* 顶栏 */
+.topbar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 14px 22px; background: var(--card);
+  border-bottom: 1px solid var(--line); position: sticky; top: 0; z-index: 10;
+}
+.brand { font-weight: 700; color: var(--brand); }
+.crumb { color: var(--muted); font-size: 14px; }
+
+.wrap { max-width: 920px; margin: 0 auto; padding: 28px 20px 60px; }
+
+/* Hero */
+.hero h1 { margin: 0 0 6px; font-size: 28px; }
+.hero .sub { margin: 0; color: var(--muted); }
+section { margin-top: 26px; }
+
+/* 主站网格 */
+.grid {
+  display: grid; gap: 18px;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+}
+.app-card {
+  display: block; background: var(--card); border: 1px solid var(--line);
+  border-radius: var(--radius); padding: 20px; box-shadow: var(--shadow);
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.app-card:hover { transform: translateY(-3px); text-decoration: none; box-shadow: 0 6px 30px rgba(20,30,60,.12); }
+.app-card .icon { font-size: 30px; }
+.app-card h3 { margin: 10px 0 6px; font-size: 18px; color: var(--ink); }
+.app-card p { margin: 0; color: var(--muted); font-size: 14px; }
+.app-card .tag {
+  display: inline-block; margin-top: 12px; font-size: 12px; padding: 3px 10px;
+  border-radius: 999px; background: #fdecec; color: var(--brand); font-weight: 600;
+}
+
+/* 控件 */
+.controls { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; }
+.controls label { font-size: 14px; color: var(--muted); display: flex; align-items: center; gap: 8px; }
+.btn {
+  border: 1px solid var(--line); background: var(--card); color: var(--ink);
+  padding: 9px 16px; border-radius: 10px; cursor: pointer; font-size: 14px;
+}
+.btn.primary { background: var(--brand); color: var(--brand-ink); border-color: var(--brand); font-weight: 600; }
+.btn.ghost:hover { background: #f0f1f6; }
+.btn.primary:hover { filter: brightness(1.05); }
+
+/* 提醒卡片 */
+.card.reminder {
+  background: var(--card); border: 1px solid var(--line); border-radius: var(--radius);
+  box-shadow: var(--shadow); padding: 20px;
+}
+#reminder-text {
+  white-space: pre-wrap; margin: 0; font-family: "SF Mono", "Cascadia Code", Consolas, monospace;
+  font-size: 14px; line-height: 1.75; color: var(--ink);
+}
+
+/* 表格 */
+.table-head h2 { font-size: 18px; margin: 0 0 10px; }
+.muted { color: var(--muted); font-weight: 400; font-size: 14px; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 12px; }
+.chip {
+  border: 1px solid var(--line); background: var(--card); color: var(--muted);
+  padding: 5px 13px; border-radius: 999px; cursor: pointer; font-size: 13px;
+}
+.chip.active { background: var(--ink); color: #fff; border-color: var(--ink); }
+.table-scroll { overflow-x: auto; border: 1px solid var(--line); border-radius: var(--radius); background: var(--card); }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 11px 14px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { background: #fafbfe; color: var(--muted); font-weight: 600; position: sticky; top: 0; }
+td.act { color: var(--muted); min-width: 220px; }
+.cat { display: inline-block; padding: 2px 9px; border-radius: 6px; font-size: 12px; background: #eef1f7; color: #44506b; }
+.cat-缴费 { background: #fdecea; color: #c0392b; }
+.cat-退费 { background: #fdecea; color: #c0392b; }
+.cat-毕业 { background: #fff4e0; color: #b9770e; }
+.cat-选课 { background: #e8f3ff; color: #2563eb; }
+.cat-退课 { background: #e8f3ff; color: #2563eb; }
+.cat-考试 { background: #efeaff; color: #6b46c1; }
+.cat-假期 { background: #e8f8ef; color: #1f8a4c; }
+.cat-成绩 { background: #f0f4ff; color: #344675; }
+.cat-Co-op { background: #fdf0f6; color: #b83280; }
+
+.foot { margin-top: 30px; color: var(--muted); font-size: 13px; text-align: center; }
