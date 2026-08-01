@@ -183,3 +183,51 @@ python -m http.server 8080
 
 推送到 `master` 分支即自动生效（GitHub Pages 源已设为 `master` / `/`）。
 （仓库已含 `.nojekyll`，禁用 Jekyll。）
+
+---
+
+## 7. 顶栏（Topbar）规范 —— 全站统一
+
+> 和封面一样，顶栏也是「整站一致性」的硬性规范：**每个页面（主站 + 每个子 App）都必须包含同一套顶栏**，用户在任何页面都能一键回首页、看源码、分享。
+
+**强制项**
+1. 结构：左侧 `brand`（含返回首页链接），右侧 `.top-actions`。
+2. 右上角**必须同时有**两个图标按钮，中间用分隔线隔开：
+   - **GitHub 源码链接**（新窗口打开）
+   - **分享按钮** `#share-btn`
+3. 样式**只能**用 `assets/style.css` 里现成的 `.topbar` / `.top-actions` / `.icon-btn`，禁止子 App 自创一套顶栏 CSS。
+4. 分享行为：`navigator.share` 优先；不支持时回退为「复制当前链接 + toast 提示」。
+5. GitHub 链接：子 App 指向 `https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/<app-id>`；主站指向仓库根。
+
+**子 App 标准顶栏 HTML**
+```html
+<header class="topbar">
+  <a class="brand" href="../../index.html">
+    <span class="uw-logo" aria-hidden="true"><!-- 可选：UW 金色 logo SVG --></span>
+    <span class="brand-text">工具中文名</span>
+  </a>
+  <div class="top-actions">
+    <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/<app-id>"
+       target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码"><!-- GitHub SVG --></a>
+    <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面"><!-- 分享 SVG --></button>
+  </div>
+</header>
+```
+
+**分享按钮 JS（每个页面都要有，并含 `#toast` 容器）**
+```html
+<div class="toast" id="toast" hidden></div>
+<script>
+  (function () {
+    var sb = document.getElementById('share-btn');
+    function toast(m){ var t=document.getElementById('toast'); if(!t)return; t.textContent=m; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(function(){t.hidden=true;},1800); }
+    function copy(u){ if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(u); var ta=document.createElement('textarea'); ta.value=u; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); return Promise.resolve(); }
+    if (sb) sb.addEventListener('click', function(){
+      var d = { title: document.title, text: document.title, url: location.href };
+      if (navigator.share) { navigator.share(d).catch(function(){}); }
+      else { copy(location.href).then(function(){ toast('链接已复制，去分享吧'); }); }
+    });
+  })();
+</script>
+```
+> 现状：`daily-reminder`、`course-planner`、主站 `index.html` 均已落地此规范；新增子 App 直接复用上面两段即可，无需重写样式。

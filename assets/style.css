@@ -23,7 +23,12 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
-/* 顶栏 */
+/* ============================================================
+   顶栏（全站统一规范 · 每个页面都必须包含）
+   结构：左 = brand / 返回首页链接；右 = .top-actions（GitHub 源码 + 分享按钮）。
+   强制项：右上角必须同时有「GitHub 图标链接」和「分享按钮」，二者之间用分隔线隔开。
+   全站一致性由本文件唯一提供，子 App 禁止自创一套顶栏样式。
+   ============================================================ */
 .topbar {
   display: flex; align-items: center; justify-content: space-between; gap: 10px;
   padding: 12px 18px; background: var(--card);
