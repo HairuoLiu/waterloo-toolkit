@@ -447,20 +447,8 @@
     if (copyBtn) copyBtn.textContent = '📋 复制' + label + '文案';
 
     if (!items.length) {
-      // 范围内无事件：退而求其次展示最近的即将到来节点，保持提醒有用
-      var now0 = new Date(); now0.setHours(0, 0, 0, 0);
-      var up = ACTIVE.filter(function (e) {
-        return e._start > now0 && (currentCat === '全部' || e.category === currentCat);
-      }).sort(function (a, b) { return a._start - b._start || b.priority - a.priority; });
-      if (up.length) {
-        var n = up[0];
-        var dd = dayDiff(n._start, now0);
-        hint.innerHTML = '<div class="rh-empty">' + label + '暂无节点，最近：<b>' +
-          (n.emoji ? n.emoji + ' ' : '') + n.title_zh + '</b>（' + md(n._start) +
-          (n._end ? ' – ' + md(n._end) : '') + '，还有 ' + dd + ' 天）</div>';
-      } else {
-        hint.innerHTML = '<div class="rh-empty">' + label + '暂时没有重要日期，享受当下吧～</div>';
-      }
+      // 范围内无事件：严格只显示本范围的状态，不跨范围借“最近节点”
+      hint.innerHTML = '<div class="rh-empty">' + label + '暂无重要日期。</div>';
       return;
     }
 
@@ -518,30 +506,6 @@
   function openCatPop() { var p = document.getElementById('cat-pop'); if (p) p.hidden = false; }
   function closeCatPop() { var p = document.getElementById('cat-pop'); if (p) p.hidden = true; }
 
-  function renderYearTabs() {
-    var ys = presentYears();
-    var bar = document.getElementById('year-bar');
-    bar.innerHTML = '';
-    ys.forEach(function (y) {
-      var b = document.createElement('button');
-      b.className = 'year-tab' + (y === currentYear ? ' active' : '');
-      b.textContent = y + '–' + (y + 1) + ' 学年';
-      b.addEventListener('click', function () {
-        currentYear = y;
-        currentCat = '全部';
-        setDefaultMonth();
-        refreshActive();
-        renderYearTabs();
-        renderCatSidebar();
-        renderCalendar();
-        renderTable('全部');
-        closeDetail();
-        renderRemindHub(hubRange);
-      });
-      bar.appendChild(b);
-    });
-  }
-
   function init() {
     todayStr = fmtDateInput(new Date());
 
@@ -550,10 +514,8 @@
     var ys = presentYears();
     currentYear = (ys.indexOf(ty) >= 0) ? ty : ys[0];
 
-    if (ys.length <= 1) {
-      var lbl = document.querySelector('#year-section .year-label');
-      if (lbl) lbl.textContent = '当前学年（数据仅覆盖已公布的学期）';
-    }
+    var yb = document.getElementById('year-badge');
+    if (yb) yb.textContent = currentYear + '–' + (currentYear + 1) + ' 学年';
 
     refreshActive();
     setDefaultMonth();
@@ -562,18 +524,10 @@
     // 顶部提醒 tab（今日/本周/本月）
     var rtabs = document.querySelectorAll('.rtab');
     Array.prototype.forEach.call(rtabs, function (btn) {
-      btn.addEventListener('click', function (e) {
-        if (e.target.classList.contains('copy-range')) return;
+      btn.addEventListener('click', function () {
         Array.prototype.forEach.call(rtabs, function (x) { x.classList.remove('active'); });
         btn.classList.add('active');
         renderRemindHub(btn.getAttribute('data-range'));
-      });
-    });
-    var crs = document.querySelectorAll('.copy-range');
-    Array.prototype.forEach.call(crs, function (el) {
-      el.addEventListener('click', function (e) {
-        e.stopPropagation();
-        copyRange(el.getAttribute('data-range'));
       });
     });
     // 信息下方的显式“复制文案”按钮（让用户明确知道可复制）
@@ -608,7 +562,6 @@
       if (e.key === 'Escape') { closeDetail(); closeCatPop(); }
     });
 
-    renderYearTabs();
     renderCatSidebar();
     renderCalendar();
     renderTable('全部');

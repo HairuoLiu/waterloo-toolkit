@@ -31,18 +31,12 @@
     <!-- 顶部提醒中心：今日 / 本周 / 本月（每 tab 自带复制） -->
     <section class="remind-hub">
       <div class="remind-tabs">
-        <button class="rtab active" data-range="today">今日<svg class="copy-range" data-range="today" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="复制今日文案" title="复制今日文案"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
-        <button class="rtab" data-range="week">本周<svg class="copy-range" data-range="week" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="复制本周文案" title="复制本周文案"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
-        <button class="rtab" data-range="month">本月<svg class="copy-range" data-range="month" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" role="img" aria-label="复制本月文案" title="复制本月文案"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h10"/></svg></button>
+        <button class="rtab active" data-range="today">今日</button>
+        <button class="rtab" data-range="week">本周</button>
+        <button class="rtab" data-range="month">本月</button>
       </div>
       <div class="remind-hint" id="remind-hint"></div>
       <button class="remind-copy" id="remind-copy" type="button">📋 复制今日文案</button>
-    </section>
-
-    <!-- 学年切换（仅多于一个学年时显示） -->
-    <section class="view-section" id="year-section">
-      <div class="year-label">选择学年（每个学年独立日历）</div>
-      <div id="year-bar" class="year-bar"></div>
     </section>
 
     <!-- 主区：日历 / 列表 -->
@@ -60,9 +54,12 @@
         <div id="cat-pop-list" class="cat-pop-list"></div>
       </div>
 
-      <div class="view-tabs">
-        <button class="tab active" data-view="calendar">日历视图</button>
-        <button class="tab" data-view="list">列表视图</button>
+      <div class="view-head">
+        <span class="year-badge" id="year-badge">2026–2027 学年</span>
+        <div class="view-tabs">
+          <button class="tab active" data-view="calendar">日历视图</button>
+          <button class="tab" data-view="list">列表视图</button>
+        </div>
       </div>
 
       <section id="calendar-view" class="cal-section">
@@ -98,7 +95,7 @@
     <footer class="foot">
       <p>本工具为信息聚合，最终以
         <a href="https://uwaterloo.ca/important-dates/graduate" target="_blank" rel="noopener">学校官方页面</a>
-        为准。数据仅覆盖已公布的学期，新增学期公布后会自动出现在这里。</p>
+        为准。</p>
     </footer>
   </main>
 
