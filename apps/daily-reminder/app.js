@@ -333,16 +333,7 @@
       num.textContent = dt.getDate();
       cell.appendChild(num);
 
-      // 跨天事件：整段底色延续
-      var inRange = eventsOnDay(dt, currentCat).filter(function (e) { return e._end; });
-      if (inRange.length) {
-        inRange.sort(function (a, b) { return b.priority - a.priority; });
-        var c = CAT_COLOR[inRange[0].category] || '#6b7280';
-        cell.style.background = hexToRgba(c, 0.10);
-        cell.style.borderLeft = '3px solid ' + c;
-      }
-
-      // chip：仅在该事件「起始日」显示，避免重复
+      // chip：仅在该事件「起始日」显示，避免重复；跨天事件不再整段铺背景色，避免整月变蓝
       var starts = ACTIVE.filter(function (e) {
         return e._start.getTime() === dt.getTime() && (currentCat === '全部' || e.category === currentCat);
       }).sort(function (a, b) { return b.priority - a.priority; });
