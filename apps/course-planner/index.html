@@ -27,7 +27,10 @@ a{color:inherit;text-decoration:none}
 .brand{font-weight:700;font-size:var(--s3);letter-spacing:.2px}
 .brand b{color:var(--blue)}
 .nav{display:flex;gap:18px;font-size:var(--s2);color:var(--muted);margin-left:auto}
+.nav a{padding:2px 0;border-bottom:2px solid transparent;transition:.14s}
 .nav a:hover{color:var(--ink)}
+.nav a.on{color:var(--ink);font-weight:600;border-bottom-color:var(--blue)}
+.nav .mback{display:none}
 /* 顶栏右侧操作区（GitHub + 分享）—— 全站统一组件，结构/形状与 daily-reminder 一致 */
 .top-actions{display:flex;align-items:center;gap:6px}
 .top-actions .icon-btn + .icon-btn{margin-left:6px;padding-left:12px;border-left:1px solid var(--line)}
@@ -186,7 +189,7 @@ a{color:inherit;text-decoration:none}
 <body>
 <div class="top"><div class="wrap">
   <div class="lhs"><a class="back" href="../../index.html">← 滑铁卢工具箱</a><span class="brand">ECE MEng <b>选课导航</b></span></div>
-  <nav class="nav">
+  <nav class="nav" id="nav">
     <a href="#/">首页</a>
     <a href="#/courses">课程库</a>
     <a href="#/coop">Co-op 规则</a>
@@ -1159,6 +1162,14 @@ function renderMap(){
     '<p class="note">方向划分基于 ECE 研究生认证与就业路线；同门课可能跨多条线。标「需教授同意」的 special topics 可由你向教授提议新开。</p>'+
   '</section>';
 }
+/* 顶部导航：移动端导航始终可见并左对齐（见 style.css 的 .nav 移动端规则），无需 burger 菜单；
+   仅保留“当前页高亮”逻辑。 */
+const navEl=document.getElementById('nav');
+const NAVKEY={'':'#/','courses':'#/courses','coop':'#/coop','map':'#/map','new':'#/new'};
+function markNav(key){
+  const target=NAVKEY[key]||'';
+  navEl.querySelectorAll('a').forEach(a=>a.classList.toggle('on',!!target&&a.getAttribute('href')===target));
+}
 /* router */
 function route(){
   let h=location.hash.slice(1); if(!h||h==='/') h='/';
@@ -1173,6 +1184,8 @@ function route(){
   else if(parts[0]==='map') view.innerHTML=renderMap();
   else view.innerHTML=renderHome();
   if(parts[0]==='courses'&&q) filterCourses(q);
+  markNav(parts[0]||'');
+  closeNav();
   window.scrollTo(0,0);
 }
 window.addEventListener('hashchange',route);
