@@ -198,14 +198,20 @@ python -m http.server 8080
 3. 样式**只能**用 `assets/style.css` 里现成的 `.topbar` / `.top-actions` / `.icon-btn`，禁止子 App 自创一套顶栏 CSS。
 4. 分享行为：`navigator.share` 优先；不支持时回退为「复制当前链接 + toast 提示」。
 5. GitHub 链接：子 App 指向 `https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/<app-id>`；主站指向仓库根。
+6. **导航菜单（如有）移动端必须左对齐**：若子 App 需要顶部导航（如 course-planner 的 首页/课程库/Co-op规则/课程地图/今年新课），统一用 `<nav class="topbar-nav">` 放在 `.topbar` 内、**作为 `.brand` 与 `.top-actions` 的同级兄弟**。桌面端导航与右上角操作区相邻（靠右）；**移动端（≤680px）导航必须换行到第二行并左对齐**，绝不允许把导航堆在右上角挤成一团。GitHub/分享按钮在移动端仍保持在右上角。
 
-**子 App 标准顶栏 HTML**
+**子 App 标准顶栏 HTML（含可选导航）**
 ```html
 <header class="topbar">
   <a class="brand" href="../../index.html">
     <span class="uw-logo" aria-hidden="true"><!-- 可选：UW 金色 logo SVG --></span>
     <span class="brand-text">工具中文名</span>
   </a>
+  <!-- 可选：顶部导航菜单（移动端自动换行到第二行左对齐） -->
+  <nav class="topbar-nav">
+    <a href="#/">首页</a>
+    <a href="#/list">列表</a>
+  </nav>
   <div class="top-actions">
     <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/<app-id>"
        target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码"><!-- GitHub SVG --></a>
