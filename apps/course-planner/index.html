@@ -174,6 +174,12 @@ a{color:inherit;text-decoration:none}
 .dw .blk h5{font-size:var(--s1);text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 5px}
 .dw .blk p{margin:0;font-size:var(--s2);line-height:1.65}
 .dw .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.dw .offlink{margin:4px 0 2px;padding-top:14px;border-top:1px dashed var(--line)}
+.dw .offlink .obtn{display:block;text-align:center;padding:11px 14px;border-radius:10px;
+  background:var(--blue);color:#fff;font-weight:600;font-size:var(--s2);text-decoration:none;
+  transition:filter .12s ease}
+.dw .offlink .obtn:hover{filter:brightness(1.08)}
+.dw .offlink .hint{margin:8px 0 0;font-size:12px;color:var(--muted);text-align:center}
 @media(max-width:680px){
   .plans,.three,.keyrow{grid-template-columns:1fr}
   .tlhint{display:block}
@@ -912,6 +918,8 @@ const diffLabel=d=>DL[d]||'';
 const diffColor=d=>{const t=Math.max(0,Math.min(1,(d-1)/4));return 'hsl('+(120-120*t).toFixed(0)+',68%,42%)';};
 const groupLabel=g=>GL[g]||g;
 const tagText=t=>TAGT[t]||t;
+/* 官网链接：Waterloo 站内搜索，所有课号通用、永不 404；结果含课程描述与历年 outline/syllabus */
+const officialUrl = code => 'https://uwaterloo.ca/search?q=' + encodeURIComponent(code);
 function chip(code){
   const v=C[code];
   if(!v) return '<span class="chip" data-c="'+esc(code)+'"><b>'+esc(code)+'</b></span>';
@@ -986,7 +994,10 @@ function openD(code){
     (v.for?'<div class="blk"><h5>最适合谁</h5><p>'+v.for+'</p></div>':'')+
     (v.alt?'<div class="blk"><h5>替代课</h5><p>'+v.alt+'</p></div>':'')+
     (v.warn?'<div class="blk"><h5 style="color:var(--amber)">注意</h5><p style="color:var(--amber)">'+v.warn+'</p></div>':'')+
-    (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'');
+    (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'')+
+    '<div class="blk offlink"><h5>官方链接</h5>'+
+      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">在 uwaterloo.ca 查看官方课程页 / Syllabus ↗</a>'+
+      '<p class="hint">Waterloo 站内搜索，结果含该课官网课程描述与历年 outline / syllabus。</p></div>';
   dw.classList.add('show');
 }
 function closeD(){document.getElementById('dw').classList.remove('show');}
