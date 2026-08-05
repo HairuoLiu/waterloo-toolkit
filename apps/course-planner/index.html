@@ -152,6 +152,30 @@ a{color:inherit;text-decoration:none}
 .note{font-size:var(--s2);color:var(--muted);background:var(--card);border:1px solid var(--line);
   border-radius:var(--r);padding:13px 15px;margin:14px 0}
 .note.amber{background:var(--amber-bg);border-color:transparent;color:var(--amber)}
+/* coop: 招聘时间线 */
+.recr{margin:30px 0 0;padding-top:24px;border-top:1px solid var(--line)}
+.recr h2{margin:0 0 6px}
+.recr-intro{font-size:var(--s2);color:var(--muted);margin:0 0 18px}
+.rtl{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 20px;
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.rtl .rp{padding:14px 16px}
+.rtl .rp+.rp{border-left:1px solid var(--line)}
+.rtl .bar{height:4px;border-radius:2px;margin:0 0 10px}
+.rtl .bar.a{background:var(--blue)}
+.rtl .bar.b{background:var(--amber)}
+.rtl .bar.c{background:#16a34a}
+.rtl .lab{font-weight:700;font-size:var(--s3);margin:0 0 2px}
+.rtl .dt{font-size:12px;color:var(--muted);margin:0 0 8px;font-weight:600}
+.rtl .ds{font-size:var(--s1);color:var(--ink);line-height:1.55;opacity:.82;margin:0}
+.recr-note{background:var(--blue-bg);border-radius:var(--r);padding:14px 16px;margin:0 0 16px}
+.recr-note p{margin:0 0 8px;font-size:var(--s1);line-height:1.6}
+.recr-note p:last-child{margin:0}
+.qbtns{display:flex;gap:10px;flex-wrap:wrap}
+.qbtn{display:inline-flex;align-items:center;gap:5px;padding:10px 16px;border-radius:10px;
+  background:var(--blue);color:#fff;font-weight:600;font-size:var(--s2);text-decoration:none;
+  transition:filter .12s ease}
+.qbtn:hover{filter:brightness(1.08)}
+.qbtn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
 /* footer */
 .ft{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:22px 0;font-size:var(--s1);color:var(--muted)}
 .ft .wrap{line-height:1.8}
@@ -178,10 +202,12 @@ a{color:inherit;text-decoration:none}
 .dw .blk p{margin:0;font-size:var(--s2);line-height:1.65}
 .dw .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
 .dw .offlink{margin:4px 0 2px;padding-top:14px;border-top:1px dashed var(--line)}
-.dw .offlink .obtn{display:block;text-align:center;padding:11px 14px;border-radius:10px;
+.dw .offlink .obtns{display:flex;gap:8px;flex-wrap:wrap}
+.dw .offlink .obtn{display:block;flex:1;min-width:140px;text-align:center;padding:11px 14px;border-radius:10px;
   background:var(--blue);color:#fff;font-weight:600;font-size:var(--s2);text-decoration:none;
   transition:filter .12s ease}
 .dw .offlink .obtn:hover{filter:brightness(1.08)}
+.dw .offlink .obtn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
 .dw .offlink .hint{margin:8px 0 0;font-size:12px;color:var(--muted);text-align:center}
 @media(max-width:680px){
   .top .wrap{height:52px;padding:0 16px}
@@ -256,14 +282,14 @@ const C = {
  desc:"偏工程实践与设计：需求分析、UML 建模（类图/时序图/状态图）、模块化、内聚与耦合、面向对象设计原则、软件架构风格、同步与异步通信、验证与确认、配置管理、软件度量、成本估算模型，以及敏捷开发。",
  proj:"<b>核心是一个学期长的团队项目</b>，选题自由度高，需要走完完整的敏捷流程：需求文档 → 架构设计 → 迭代开发 → 测试 → 演示。Czarnecki 教授是模型驱动开发领域的知名学者。",
  pre:"写过一定规模的项目即可。团队协作能力比编程能力更重要。",
- why:"<b>这是少数能同时喂饱「技术项目」和「行为面试」两张嘴的课之一。</b>建议直接把团队项目做成跟你兴趣绑定的真实产品——比如「用视觉语言模型自动给素材库打标签、按情绪挑片段的剪辑助手」。一箭三雕：拿学分、进 GitHub 作品集、面试讲团队协作和技术选型时有真实故事可讲。",
+ why:"<b>这是少数能同时喂饱「技术项目」和「行为面试」两张嘴的课之一。</b>建议直接把团队项目做成跟你兴趣绑定的真实产品——比如「用视觉语言模型自动给素材库打标签、按情绪挑片段的剪辑助手」。一箭三雕：拿学分、进 GitHub 作品集、面试讲团队协作和技术选型时有真实故事可讲。<b>实评：</b>唯一一门 project 能在简历上详细描述、应对 BQ 的课，建议做 web 项目 + integrate AI。",
  alt:"只在 Winter 开。如果你的 Winter 学期是 work term，这门课就得等到下一个 Winter——这是方案 3 的真实代价之一。"},
 
 "ECE 653":{n:"Software Testing, Quality Assurance and Maintenance",zh:"软件测试与质量保证",g:"ece-sw",d:4,t:"S2027 (Dietl)",tag:["swe","hard"],
  desc:"名字听起来像「写测试用例」，实际内容硬得多：覆盖率准则（图覆盖、数据流覆盖、逻辑覆盖）、符号执行（静态/动态/concolic）、SMT 约束求解（Z3）、归纳不变式、自动演绎验证、Dafny 形式化验证语言、软件模型检查、自动漏洞利用生成。",
  proj:"Java/C/Python 编程作业为主，需要动手实现符号执行引擎、用 Z3 求解约束、用 Dafny 写带契约的可验证程序。两次 quiz + 期末。",
  pre:"<b>硬性先修 ECE 650</b>（或 750 Tpc 26，或 instructor consent）。编译原理和数理逻辑基础有帮助但非必需。",
- why:"Software 方向认证的第三门必修课。对求职的价值取决于你的目标——如果投的是需要严谨性的岗位（金融、基础设施、安全），这门课含金量很高；如果投的是常规产品线 SWE，性价比不如 ECE 751 或 656。",
+ why:"Software 方向认证的第三门必修课。对求职的价值取决于你的目标——如果投的是需要严谨性的岗位（金融、基础设施、安全），这门课含金量很高；如果投的是常规产品线 SWE，性价比不如 ECE 751 或 656。<b>实评（已毕业学长）：</b>用 Python 写编译器，作业量极大 + 考试范围巨大 + 内容 deep dive + project，是 ECE 里最痛苦的一门，强烈不建议和硬课同期。",
  alt:"只在 Spring 开。若 S2027 是 work term，可考虑 <b>ECE 654 Software Reliability Engineering</b>（同学期，Ward 教，难度稍低）或 <b>CS 846 软件测试与调试专题</b>。"},
 
 "ECE 654":{n:"Software Reliability Engineering",zh:"软件可靠性工程",g:"ece-sw",d:3,t:"S2027 (Ward)",tag:["swe"],
@@ -594,7 +620,7 @@ const C = {
 "BE 605":{n:"Project Management",zh:"项目管理",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
  desc:"项目管理的完整方法论：范围与进度管理、资源与风险、敏捷与传统方法的取舍、干系人沟通。",
  proj:"案例 + 团队作业。",pre:"无。",
- why:"负担轻、实用。而且和 ECE 651 的团队项目形成互补——一门教你怎么写，一门教你怎么管。",
+ why:"负担轻、实用。而且和 ECE 651 的团队项目形成互补——一门教你怎么写，一门教你怎么管。<b>实评：</b>水课、上的最舒服——但 2024 Fall 起难度和工作量明显增加。",
  alt:"BE 680 Consulting。",warn:"需确认是否在 ECE approved 名单上。"},
 
 "BE 650":{n:"Digital Transformations",zh:"数字化转型",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
@@ -610,7 +636,8 @@ const C = {
 "BE 602":{n:"Data Analytics for Business",zh:"商业数据分析",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
 "BE 630":{n:"Professional Selling",zh:"销售",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
 "BE 660":{n:"Negotiations",zh:"谈判",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
-"BE 603":{n:"Operations and Supply Chain Management",zh:"运营与供应链",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
+"BE 603":{n:"Operations and Supply Chain Management",zh:"运营与供应链",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"],
+ why:"<b>实评：</b>纯写作课，适合最后一学期边刷题准备面试边拿学分。"},
 "ECE 757A":{n:"Embodied Intelligence",zh:"具身智能",g:"ece-ai",d:3.5,t:"W2028 (Dautenhahn)",tag:["ai","new"],
  desc:"智能体通过身体与环境的互动来学习：感知-动作闭环、机器人认知、模仿学习。Kerstin Dautenhahn 是社交机器人领域权威。",
  proj:"研讨 + 学期 project，通常结合机器人平台。",pre:"机器学习基础。",
@@ -1032,8 +1059,11 @@ function openD(code){
     (v.warn?'<div class="blk"><h5 style="color:var(--amber)">注意</h5><p style="color:var(--amber)">'+v.warn+'</p></div>':'')+
     (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'')+
     '<div class="blk offlink"><h5>官方链接</h5>'+
-      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">在 uwaterloo.ca 查看官方课程页 / Syllabus ↗</a>'+
-      '<p class="hint">Waterloo 站内搜索，结果含该课官网课程描述与历年 outline / syllabus。</p></div>';
+      '<div class="obtns">'+
+      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">查看课程页 / Syllabus ↗</a>'+
+      '<a class="obtn ghost" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">去 Quest 选课 ↗</a>'+
+      '</div>'+
+      '<p class="hint">左：Waterloo 站内搜索（课程描述 + 历年 outline）。右：Quest 选课注册系统。</p></div>';
   dw.classList.add('show');
 }
 function closeD(){document.getElementById('dw').classList.remove('show');}
@@ -1182,6 +1212,23 @@ function renderCoop(){
     '<div class="tlfig">'+tlA+'</div>'+
     '<div class="tlfig">'+tlB+'</div>'+
     '<p class="note amber">学期名按 2026 年（Sep–Dec 2026）入学举例，用于说明结构。实际学期取决于你拿到的 Co-op offer 与招聘轮次，注册前以 ECE Graduate Office 与 Quest 的官方安排为准。</p>'+
+    '<div class="recr">'+
+      '<h2>暑期实习招聘时间线</h2>'+
+      '<p class="recr-intro">北美大厂 summer SWE intern 的招聘比实习本身早半年。以下是关键节点——如果你想让 May–Aug 2027 变成实习期，2026 年 8 月就要开始投递。</p>'+
+      '<div class="rtl">'+
+        '<div class="rp"><div class="bar a"></div><p class="lab">网申投递</p><p class="dt">Aug–Oct 2026</p><p class="ds">大厂 summer intern 岗位集中开放。此时你刚落地、刚开学，要同时投递 + 刷题 + 上课。</p></div>'+
+        '<div class="rp"><div class="bar b"></div><p class="lab">面试</p><p class="dt">Oct 2026 – Jan 2027</p><p class="ds">OA + 技术面 + 行为面。注意 12 月期末考试期会撞面试，提前规划。</p></div>'+
+        '<div class="rp"><div class="bar c"></div><p class="lab">暑期实习</p><p class="dt">May–Aug 2027</p><p class="ds">实习 12–16 周。表现好直接谈 return offer 转全职，不必等第 2 段 co-op。</p></div>'+
+      '</div>'+
+      '<div class="recr-note">'+
+        '<p><b>Co-op 工作学期 ≠ 只能投 WaterlooWorks 的岗位。</b>你自己海投找到的外部 summer intern，只要提前和 Co-op Office 沟通获批，一样算正式 co-op work term——保留 co-op 身份和工签资格。</p>'+
+        '<p><b>两条路可同时走：</b>WaterlooWorks 平台岗位 + 自己海投外部 summer intern，互不冲突。2026 年秋一开学就两手抓。</p>'+
+      '</div>'+
+      '<div class="qbtns">'+
+        '<a class="qbtn" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">去 Quest 选课注册 ↗</a>'+
+        '<a class="qbtn ghost" href="https://classes.uwaterloo.ca" target="_blank" rel="noopener noreferrer">浏览课程表 ↗</a>'+
+      '</div>'+
+    '</div>'+
   '</section>';
 }
 function renderNew(){
