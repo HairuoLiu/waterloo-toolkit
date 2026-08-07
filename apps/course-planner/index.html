@@ -176,6 +176,35 @@ a{color:inherit;text-decoration:none}
   transition:filter .12s ease}
 .qbtn:hover{filter:brightness(1.08)}
 .qbtn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
+/* 跨系申请指南 */
+.aptabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+.aptab{font:inherit;font-size:var(--s2);padding:7px 14px;border-radius:999px;background:var(--card);
+  border:1px solid var(--line);color:var(--ink);cursor:pointer}
+.aptab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.applist{display:flex;flex-direction:column;gap:8px;margin:14px 0 0}
+.approw{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:11px 14px;cursor:pointer;font-size:var(--s2)}
+.approw:hover{border-color:var(--blue)}
+.appchk{width:17px;height:17px;accent-color:var(--blue);flex:0 0 auto}
+.approw .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.approw .cc{flex:1 1 auto;min-width:0}
+.approw .ct{color:var(--muted);font-size:var(--s1);flex:0 0 auto;text-align:right}
+.approw .ctag{font-size:11px;color:var(--amber);border:1px solid var(--amber);border-radius:6px;padding:1px 7px;flex:0 0 auto}
+.apempty{margin-top:18px}
+.apcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:16px 0 0}
+.apcard-h{display:flex;align-items:center;gap:9px;font-size:var(--s2);margin-bottom:10px;flex-wrap:wrap}
+.apcard-h .dot{width:10px;height:10px;border-radius:50%}
+.apcard-t{color:var(--muted);font-size:var(--s1)}
+.aplist{margin:6px 0 0;padding-left:20px}
+.aplist li{margin:5px 0;font-size:var(--s2);line-height:1.5}
+.warn-in{color:var(--amber);font-size:var(--s1);margin:8px 0 0}
+.emailwrap{margin-top:12px}
+.emailbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px}
+.emailbar span{font-size:var(--s1);color:var(--muted)}
+.emailbox{width:100%;min-height:240px;box-sizing:border-box;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;resize:vertical}
+.obtn.sm{padding:6px 12px;font-size:var(--s1);cursor:pointer}
+.obtn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
 /* footer */
 .ft{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:22px 0;font-size:var(--s1);color:var(--muted)}
 .ft .wrap{line-height:1.8}
@@ -244,6 +273,7 @@ a{color:inherit;text-decoration:none}
       <a href="#/courses">课程库</a>
       <a href="#/coop">Co-op 规则</a>
       <a href="#/map">课程地图</a>
+      <a href="#/apply">跨系申请</a>
       <a href="#/new">今年新课</a>
       <a class="mback" href="../../index.html">← 返回滑铁卢工具箱</a>
     </nav>
@@ -1257,6 +1287,94 @@ function renderMap(){
   '</section>';
 }
 /* mobile nav */
+/* ===== 跨系申请指南（可扩展：往 APPLY_GROUPS 加 group 即可，目前开放 CS）===== */
+const APPLY_GROUPS=[
+  {key:'cs',label:'CS · 计算机科学',school:'Cheriton School of Computer Science',
+   note:'CS 研究生课在 Quest 上预留给 CS 本系研究生，外系（含 ECE）无法自己注册，需走 instructor consent 特批流程。每 term 只能申请 1 门；你 ECE MEng 最多有 3 门外系名额（Business Leadership 方向可放宽到 4，需 Graduate Office 书面确认）。'}
+];
+let applyState={group:'cs',sel:new Set()};
+function applyCourses(gk){ return Object.keys(C).filter(k=>C[k]&&C[k].g===gk); }
+function applyEmail(code){
+  const v=C[code]; if(!v) return '';
+  const title=v.n||''; const term=v.t||'';
+  return 'Subject: Permission to enroll - '+code+' ('+term+') - [你的全名], ECE MEng\n\n'+
+'Dear Prof. [教授姓],\n\n'+
+'I am a Master of Engineering (MEng) student in Electrical and Computer Engineering, and I would like to enroll in your '+code+' - '+title+' ('+term+'). As an ECE student I cannot register via Quest directly, so I am writing to request a permission number.\n\n'+
+'- Full name: [你的全名]\n'+
+'- Student ID: [学号]\n'+
+'- Home department: Electrical and Computer Engineering\n'+
+'- Course: '+code+', section ['+term+']\n\n'+
+'My background includes [一句话：相关课程/项目，例如 ECE 650 + 651，或你正在做的 app]. I plan to attend the first week of lectures and would appreciate the opportunity to join if space allows.\n\n'+
+'Thank you for your consideration.\n\n'+
+'Best,\n'+
+'[你的全名]\n'+
+'[学号] / [邮箱]';
+}
+function renderApply(){
+  const g=APPLY_GROUPS.find(x=>x.key===applyState.group)||APPLY_GROUPS[0];
+  const codes=applyCourses(g.key);
+  const tabs=APPLY_GROUPS.map(x=>'<button class="aptab'+(x.key===applyState.group?' on':'')+'" onclick="applySetGroup(\''+x.key+'\')">'+esc(x.label)+'</button>').join('');
+  const rows=codes.map(code=>{
+    const v=C[code]; if(!v) return '';
+    const title=v.zh||v.n||'';
+    const checked=applyState.sel.has(code)?'checked':'';
+    return '<label class="approw"><input type="checkbox" class="appchk" '+checked+' onchange="applyToggle(\''+esc(code)+'\')">'+
+      '<span class="dot" style="background:'+diffColor(v.d)+'"></span>'+
+      '<span class="cc"><b>'+esc(code)+'</b> '+esc(title)+'</span>'+
+      '<span class="ct">'+esc(v.t||'')+'</span>'+
+      (v.consent||/consent/i.test(v.warn||'')?'<span class="ctag">需 consent</span>':'')+'</label>';
+  }).join('');
+  return '<nav class="crumb"><a href="#/">首页</a> › <span>跨系申请指南</span></nav>'+
+    '<section class="sec"><h2>跨系选课申请指南</h2>'+
+    '<p class="lede">你是 ECE 学生，想修外系的研究生课。这类课在 Quest 上不对自己开放，要走 instructor consent 特批。勾选下方课程 → 自动生成对应的申请步骤与邮件模板。目前开放 <b>CS（计算机科学）</b>；SYDE / Math / BE 等外系会陆续接入。</p>'+
+    '<div class="aptabs">'+tabs+'</div>'+
+    '<div class="note amber">'+esc(g.note)+'</div>'+
+    '<div class="applist">'+rows+'</div>'+
+    '<div id="applyGuides"></div></section>';
+}
+function applySetGroup(key){
+  applyState.group=key; applyState.sel.clear();
+  const view=document.getElementById('view'); if(view) view.innerHTML=renderApply();
+  window.scrollTo(0,0);
+}
+function applyToggle(code){
+  if(applyState.sel.has(code)) applyState.sel.delete(code); else applyState.sel.add(code);
+  const box=document.getElementById('applyGuides');
+  if(box) box.innerHTML=renderApplyGuides();
+}
+function renderApplyGuides(){
+  const g=APPLY_GROUPS.find(x=>x.key===applyState.group)||APPLY_GROUPS[0];
+  const codes=[...applyState.sel];
+  if(!codes.length) return '<p class="apempty note">勾选上方课程，这里会自动生成对应的申请步骤与邮件模板。</p>';
+  return codes.map(code=>{
+    const v=C[code]; if(!v) return '';
+    const steps=[
+      '查先修：确认 <b>'+esc(code)+'</b> 的 prerequisite 你已满足（见课程详情的「前置」）。',
+      '开课前几周发邮件给该课 instructor（模板在下方），附：全名 / 学号 / 本系 (ECE) / 课号+section。',
+      '第一周去蹭课：名额允许时欢迎旁听，让教授确认你是认真的申请人。',
+      '第一周后拿 permission number：'+esc(g.school)+' 在开学第一周后发放；用它在 Quest 注册。',
+      '截止线：drop/add 截止（开学约 3 周）之后需 Graduate Drop/Add Form（导师 + CS Graduate Officer 双签），很麻烦——尽早申请。'
+    ].map(s=>'<li>'+s+'</li>').join('');
+    const warn=(v.consent||/consent/i.test(v.warn||''))?'<p class="warn-in">⚠ 该课标「需 instructor consent」，位置有限，建议尽早发邮件、第一周务必去听课。</p>':'';
+    const email=applyEmail(code);
+    const eid='email-'+code.replace(/\s+/g,'_');
+    return '<div class="apcard"><div class="apcard-h"><span class="dot" style="background:'+diffColor(v.d)+'"></span>'+
+      '<b>'+esc(code)+'</b> '+esc(v.zh||v.n||'')+' <span class="apcard-t">'+esc(v.t||'')+'</span></div>'+
+      '<ol class="aplist">'+steps+'</ol>'+warn+
+      '<div class="emailwrap"><div class="emailbar"><span>邮件模板（可直接复制修改）</span>'+
+      '<button class="obtn ghost sm" onclick="copyApplyEmail(this,\''+esc(code)+'\')">复制</button></div>'+
+      '<textarea class="emailbox" id="'+eid+'">'+esc(email)+'</textarea></div></div>';
+  }).join('');
+}
+function copyApplyEmail(btn,code){
+  const ta=document.getElementById('email-'+code.replace(/\s+/g,'_'));
+  if(!ta) return;
+  const done=()=>{ const old=btn.textContent; btn.textContent='已复制 ✓'; setTimeout(()=>btn.textContent=old,1500); };
+  try{ ta.focus(); ta.select(); ta.setSelectionRange(0,ta.value.length); }catch(e){}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(done,()=>{ try{document.execCommand('copy');}catch(e){} done(); });
+  } else { try{document.execCommand('copy');}catch(e){} done(); }
+}
 const navEl=document.getElementById('nav'),burgerEl=document.getElementById('burger'),navMaskEl=document.getElementById('navmask');
 function setNav(open){
   navEl.classList.toggle('open',open);
@@ -1269,7 +1387,7 @@ burgerEl.addEventListener('click',()=>setNav(!navEl.classList.contains('open')))
 navMaskEl.addEventListener('click',closeNav);
 navEl.addEventListener('click',e=>{ if(e.target.closest('a')) closeNav(); });
 document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeNav(); });
-const NAVKEY={'':'#/','courses':'#/courses','coop':'#/coop','map':'#/map','new':'#/new'};
+const NAVKEY={'':'#/','courses':'#/courses','coop':'#/coop','map':'#/map','apply':'#/apply','new':'#/new'};
 function markNav(key){
   const target=NAVKEY[key]||'';
   navEl.querySelectorAll('a').forEach(a=>a.classList.toggle('on',!!target&&a.getAttribute('href')===target));
@@ -1286,6 +1404,7 @@ function route(){
   else if(parts[0]==='coop') view.innerHTML=renderCoop();
   else if(parts[0]==='new') view.innerHTML=renderNew();
   else if(parts[0]==='map') view.innerHTML=renderMap();
+  else if(parts[0]==='apply') view.innerHTML=renderApply();
   else view.innerHTML=renderHome();
   if(parts[0]==='courses'&&q) filterCourses(q);
   markNav(parts[0]||'');
