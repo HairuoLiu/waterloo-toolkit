@@ -1007,6 +1007,7 @@ const groupLabel=g=>GL[g]||g;
 const tagText=t=>TAGT[t]||t;
 /* 官网链接：Waterloo 站内搜索，所有课号通用、永不 404；结果含课程描述与历年 outline/syllabus */
 const officialUrl = code => 'https://uwaterloo.ca/search?q=' + encodeURIComponent(code);
+const outlineUrl = code => 'https://outline.uwaterloo.ca/viewer/?q=' + encodeURIComponent(code);
 /* 学期时间序键：滑铁卢学年 Fall(Y)→Winter(Y+1)→Spring(Y+1)→Fall(Y+1)…，用于方案按时间排序 */
 const termKey = t => { const m=/^([FWS])(\d{4})/.exec(t||''); if(!m) return 0;
   const season={'F':0,'W':1,'S':2}[m[1]]; const y=+m[2]; const ay=(m[1]==='F')?y:y-1; return ay*10+season; };
@@ -1090,10 +1091,11 @@ function openD(code){
     (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'')+
     '<div class="blk offlink"><h5>官方链接</h5>'+
       '<div class="obtns">'+
-      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">查看课程页 / Syllabus ↗</a>'+
+      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">uwaterloo.ca 官方课程页 ↗</a>'+
+      '<a class="obtn" href="'+outlineUrl(code)+'" target="_blank" rel="noopener noreferrer">outline.uwaterloo.ca 历年大纲 ↗</a>'+
       '<a class="obtn ghost" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">去 Quest 选课 ↗</a>'+
       '</div>'+
-      '<p class="hint">左：Waterloo 站内搜索（课程描述 + 历年 outline）。右：Quest 选课注册系统。</p></div>';
+      '<p class="hint">左：Waterloo 站内搜索（课程描述）。中：outline.uwaterloo.ca 按课号直达该课历年 syllabus / 授课安排 / 讲师 / 先修。右：Quest 选课注册系统。</p></div>';
   dw.classList.add('show');
 }
 function closeD(){document.getElementById('dw').classList.remove('show');}
