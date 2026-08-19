@@ -17,35 +17,38 @@ body{margin:0;background:var(--bg);color:var(--ink);
   -webkit-font-smoothing:antialiased}
 a{color:inherit;text-decoration:none}
 .wrap{max-width:920px;margin:0 auto;padding:0 20px}
-/* top nav —— 顶栏结构与 daily-reminder / 主站一致：左 brand，右 GitHub+分享。
-   桌面端导航(nav)靠右与操作区相邻；移动端(≤680px)导航换行到第二行并左对齐（见下方 @media）。 */
+/* top nav */
 .top{border-bottom:1px solid var(--line);background:var(--card);position:sticky;top:0;z-index:20}
-.top .wrap{display:flex;align-items:center;height:56px;gap:16px}
-.top .lhs{display:flex;align-items:center;gap:14px;flex:0 0 auto}
+.top .wrap{display:flex;align-items:center;justify-content:space-between;height:56px}
+.top .lhs{display:flex;align-items:center;gap:14px}
 .back{font-size:var(--s2);color:var(--muted);text-decoration:none;white-space:nowrap}
 .back:hover{color:var(--blue)}
 .brand{font-weight:700;font-size:var(--s3);letter-spacing:.2px}
 .brand b{color:var(--blue)}
-.nav{display:flex;gap:18px;font-size:var(--s2);color:var(--muted);margin-left:auto}
+.nav{display:flex;gap:18px;font-size:var(--s2);color:var(--muted)}
 .nav a{padding:2px 0;border-bottom:2px solid transparent;transition:.14s}
 .nav a:hover{color:var(--ink)}
 .nav a.on{color:var(--ink);font-weight:600;border-bottom-color:var(--blue)}
 .nav .mback{display:none}
+/* burger (mobile only) */
+.burger{display:none;width:40px;height:40px;padding:0;flex-direction:column;align-items:center;
+  justify-content:center;gap:4px;border:1px solid var(--line);border-radius:10px;background:var(--card);cursor:pointer}
+.burger i{display:block;width:17px;height:2px;background:var(--ink);border-radius:2px;transition:.2s}
+.burger.on i:nth-child(1){transform:translateY(6px) rotate(45deg)}
+.burger.on i:nth-child(2){opacity:0}
+.burger.on i:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+.navmask{display:none;position:fixed;inset:0;background:rgba(20,24,28,.28);z-index:18}
+.navmask.on{display:block}
+@keyframes drop{from{opacity:0;transform:translateY(-8px)}to{opacity:1;transform:translateY(0)}}
 /* 顶栏右侧操作区（GitHub + 分享）—— 全站统一组件，结构/形状与 daily-reminder 一致 */
+.top-mid{display:flex;align-items:center;gap:16px}
 .top-actions{display:flex;align-items:center;gap:6px}
 .top-actions .icon-btn + .icon-btn{margin-left:6px;padding-left:12px;border-left:1px solid var(--line)}
 .icon-btn{width:38px;height:38px;border-radius:10px;border:1px solid var(--line);background:var(--card);color:var(--ink);display:inline-flex;align-items:center;justify-content:center;cursor:pointer;transition:all .12s ease;text-decoration:none}
 .icon-btn:hover{background:#f0f1f6;border-color:var(--brand-deep);color:var(--brand-deep)}
 .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);z-index:60;background:#1b1f24;color:#fff;padding:10px 18px;border-radius:999px;font-size:14px;box-shadow:0 8px 24px rgba(20,30,60,.28)}
 .toast[hidden]{display:none}
-/* 移动端：导航换行到第二行、左对齐；GitHub+分享保持在右上角 */
-@media(max-width:680px){
-  .top .wrap{flex-wrap:wrap;height:auto;padding:8px 14px;gap:8px 16px}
-  .top .lhs{order:1;flex:1 1 auto}
-  .top-actions{order:2;margin-left:auto}
-  .nav{order:3;flex-basis:100%;margin-left:0;justify-content:flex-start;padding-top:8px;margin-top:4px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
-  .icon-btn{width:34px;height:34px}
-}
+@media(max-width:680px){.top-mid{gap:10px}.icon-btn{width:34px;height:34px}}
 /* hero */
 .hero{padding:46px 0 30px}
 .hero h1{font-size:var(--s5);margin:0 0 10px;letter-spacing:.3px}
@@ -98,7 +101,7 @@ a{color:inherit;text-decoration:none}
 .timeline{margin:18px 0;display:flex;flex-direction:column;gap:8px}
 .term{display:flex;gap:14px;align-items:flex-start;background:var(--card);border:1px solid var(--line);
   border-radius:var(--r);padding:13px 15px}
-.term .ph{font-size:var(--s1);color:var(--muted);min-width:74px}
+.term .ph{font-size:var(--s1);color:var(--muted);min-width:96px;white-space:nowrap}
 .term .courses{display:flex;flex-wrap:wrap;gap:7px}
 .term.work{background:var(--amber-bg);border-color:transparent}
 .term.work .ph{color:var(--amber)}
@@ -149,6 +152,59 @@ a{color:inherit;text-decoration:none}
 .note{font-size:var(--s2);color:var(--muted);background:var(--card);border:1px solid var(--line);
   border-radius:var(--r);padding:13px 15px;margin:14px 0}
 .note.amber{background:var(--amber-bg);border-color:transparent;color:var(--amber)}
+/* coop: 招聘时间线 */
+.recr{margin:30px 0 0;padding-top:24px;border-top:1px solid var(--line)}
+.recr h2{margin:0 0 6px}
+.recr-intro{font-size:var(--s2);color:var(--muted);margin:0 0 18px}
+.rtl{display:grid;grid-template-columns:repeat(3,1fr);gap:0;margin:0 0 20px;
+  border:1px solid var(--line);border-radius:var(--r);overflow:hidden}
+.rtl .rp{padding:14px 16px}
+.rtl .rp+.rp{border-left:1px solid var(--line)}
+.rtl .bar{height:4px;border-radius:2px;margin:0 0 10px}
+.rtl .bar.a{background:var(--blue)}
+.rtl .bar.b{background:var(--amber)}
+.rtl .bar.c{background:#16a34a}
+.rtl .lab{font-weight:700;font-size:var(--s3);margin:0 0 2px}
+.rtl .dt{font-size:12px;color:var(--muted);margin:0 0 8px;font-weight:600}
+.rtl .ds{font-size:var(--s1);color:var(--ink);line-height:1.55;opacity:.82;margin:0}
+.recr-note{background:var(--blue-bg);border-radius:var(--r);padding:14px 16px;margin:0 0 16px}
+.recr-note p{margin:0 0 8px;font-size:var(--s1);line-height:1.6}
+.recr-note p:last-child{margin:0}
+.qbtns{display:flex;gap:10px;flex-wrap:wrap}
+.qbtn{display:inline-flex;align-items:center;gap:5px;padding:10px 16px;border-radius:10px;
+  background:var(--blue);color:#fff;font-weight:600;font-size:var(--s2);text-decoration:none;
+  transition:filter .12s ease}
+.qbtn:hover{filter:brightness(1.08)}
+.qbtn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
+/* 跨系申请指南 */
+.aptabs{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 4px}
+.aptab{font:inherit;font-size:var(--s2);padding:7px 14px;border-radius:999px;background:var(--card);
+  border:1px solid var(--line);color:var(--ink);cursor:pointer}
+.aptab.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.applist{display:flex;flex-direction:column;gap:8px;margin:14px 0 0}
+.approw{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--line);
+  border-radius:var(--r);padding:11px 14px;cursor:pointer;font-size:var(--s2)}
+.approw:hover{border-color:var(--blue)}
+.appchk{width:17px;height:17px;accent-color:var(--blue);flex:0 0 auto}
+.approw .dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto}
+.approw .cc{flex:1 1 auto;min-width:0}
+.approw .ct{color:var(--muted);font-size:var(--s1);flex:0 0 auto;text-align:right}
+.approw .ctag{font-size:11px;color:var(--amber);border:1px solid var(--amber);border-radius:6px;padding:1px 7px;flex:0 0 auto}
+.apempty{margin-top:18px}
+.apcard{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:16px 18px;margin:16px 0 0}
+.apcard-h{display:flex;align-items:center;gap:9px;font-size:var(--s2);margin-bottom:10px;flex-wrap:wrap}
+.apcard-h .dot{width:10px;height:10px;border-radius:50%}
+.apcard-t{color:var(--muted);font-size:var(--s1)}
+.aplist{margin:6px 0 0;padding-left:20px}
+.aplist li{margin:5px 0;font-size:var(--s2);line-height:1.5}
+.warn-in{color:var(--amber);font-size:var(--s1);margin:8px 0 0}
+.emailwrap{margin-top:12px}
+.emailbar{display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;gap:10px}
+.emailbar span{font-size:var(--s1);color:var(--muted)}
+.emailbox{width:100%;min-height:240px;box-sizing:border-box;font:13px/1.55 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  color:var(--ink);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:12px 14px;resize:vertical}
+.obtn.sm{padding:6px 12px;font-size:var(--s1);cursor:pointer}
+.obtn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
 /* footer */
 .ft{border-top:1px solid var(--line);background:var(--card);margin-top:30px;padding:22px 0;font-size:var(--s1);color:var(--muted)}
 .ft .wrap{line-height:1.8}
@@ -174,7 +230,29 @@ a{color:inherit;text-decoration:none}
 .dw .blk h5{font-size:var(--s1);text-transform:uppercase;letter-spacing:.5px;color:var(--muted);margin:0 0 5px}
 .dw .blk p{margin:0;font-size:var(--s2);line-height:1.65}
 .dw .rel{display:flex;flex-wrap:wrap;gap:7px;margin-top:6px}
+.dw .offlink{margin:4px 0 2px;padding-top:14px;border-top:1px dashed var(--line)}
+.dw .offlink .obtns{display:flex;gap:8px;flex-wrap:wrap}
+.dw .offlink .obtn{display:block;flex:1;min-width:140px;text-align:center;padding:11px 14px;border-radius:10px;
+  background:var(--blue);color:#fff;font-weight:600;font-size:var(--s2);text-decoration:none;
+  transition:filter .12s ease}
+.dw .offlink .obtn:hover{filter:brightness(1.08)}
+.dw .offlink .obtn.ghost{background:transparent;color:var(--blue);border:1px solid var(--blue)}
+.dw .offlink .hint{margin:8px 0 0;font-size:12px;color:var(--muted);text-align:center}
 @media(max-width:680px){
+  .top .wrap{height:52px;padding:0 16px}
+  .back{display:none}
+  .brand{font-size:var(--s3)}
+  .burger{display:flex}
+  .nav{position:fixed;top:52px;left:0;right:0;z-index:19;display:none;flex-direction:column;gap:0;
+    padding:4px 0 8px;background:rgba(255,255,255,.92);
+    backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+    border-bottom:1px solid var(--line);box-shadow:0 12px 30px rgba(0,0,0,.10);animation:drop .18s ease}
+  .nav.open{display:flex}
+  .nav a{font-size:var(--s3);color:var(--ink);padding:14px 18px;line-height:1.2;
+    border-bottom:1px solid var(--line);border-left:3px solid transparent}
+  .nav a.on{color:var(--blue);font-weight:600;background:var(--blue-bg);
+    border-left-color:var(--blue);border-bottom-color:var(--line)}
+  .nav .mback{display:block;color:var(--muted);font-size:var(--s2);border-bottom:none;padding-top:16px}
   .plans,.three,.keyrow{grid-template-columns:1fr}
   .tlhint{display:block}
   .dw-mask{background:rgba(20,24,28,.30)}
@@ -189,22 +267,28 @@ a{color:inherit;text-decoration:none}
 <body>
 <div class="top"><div class="wrap">
   <div class="lhs"><a class="back" href="../../index.html">← 滑铁卢工具箱</a><span class="brand">ECE MEng <b>选课导航</b></span></div>
-  <nav class="nav" id="nav">
-    <a href="#/">首页</a>
-    <a href="#/courses">课程库</a>
-    <a href="#/coop">Co-op 规则</a>
-    <a href="#/map">课程地图</a>
-    <a href="#/new">今年新课</a>
-  </nav>
-  <div class="top-actions">
-    <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/course-planner" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
-    </a>
-    <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面">
-      <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
-    </button>
+  <div class="top-mid">
+    <nav class="nav" id="nav">
+      <a href="#/">首页</a>
+      <a href="#/courses">课程库</a>
+      <a href="#/coop">Co-op 规则</a>
+      <a href="#/map">课程地图</a>
+      <a href="#/apply">跨系申请</a>
+      <a href="#/new">今年新课</a>
+      <a class="mback" href="../../index.html">← 返回滑铁卢工具箱</a>
+    </nav>
+    <div class="top-actions">
+      <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/course-planner" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      </a>
+      <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+      </button>
+    </div>
   </div>
+  <button class="burger" id="burger" aria-label="菜单" aria-expanded="false"><i></i><i></i><i></i></button>
 </div></div>
+<div class="navmask" id="navmask"></div>
 <main class="wrap" id="view"></main>
 <div class="dw" id="dw"><div class="dw-mask" onclick="closeD()"></div>
   <div class="dw-panel"><span class="dw-x" onclick="closeD()">&times;</span><div id="dwc"></div></div>
@@ -228,14 +312,14 @@ const C = {
  desc:"偏工程实践与设计：需求分析、UML 建模（类图/时序图/状态图）、模块化、内聚与耦合、面向对象设计原则、软件架构风格、同步与异步通信、验证与确认、配置管理、软件度量、成本估算模型，以及敏捷开发。",
  proj:"<b>核心是一个学期长的团队项目</b>，选题自由度高，需要走完完整的敏捷流程：需求文档 → 架构设计 → 迭代开发 → 测试 → 演示。Czarnecki 教授是模型驱动开发领域的知名学者。",
  pre:"写过一定规模的项目即可。团队协作能力比编程能力更重要。",
- why:"<b>这是少数能同时喂饱「技术项目」和「行为面试」两张嘴的课之一。</b>建议直接把团队项目做成跟你兴趣绑定的真实产品——比如「用视觉语言模型自动给素材库打标签、按情绪挑片段的剪辑助手」。一箭三雕：拿学分、进 GitHub 作品集、面试讲团队协作和技术选型时有真实故事可讲。",
+ why:"<b>这是少数能同时喂饱「技术项目」和「行为面试」两张嘴的课之一。</b>建议直接把团队项目做成跟你兴趣绑定的真实产品——比如「用视觉语言模型自动给素材库打标签、按情绪挑片段的剪辑助手」。一箭三雕：拿学分、进 GitHub 作品集、面试讲团队协作和技术选型时有真实故事可讲。<b>实评：</b>唯一一门 project 能在简历上详细描述、应对 BQ 的课，建议做 web 项目 + integrate AI。",
  alt:"只在 Winter 开。如果你的 Winter 学期是 work term，这门课就得等到下一个 Winter——这是方案 3 的真实代价之一。"},
 
 "ECE 653":{n:"Software Testing, Quality Assurance and Maintenance",zh:"软件测试与质量保证",g:"ece-sw",d:4,t:"S2027 (Dietl)",tag:["swe","hard"],
  desc:"名字听起来像「写测试用例」，实际内容硬得多：覆盖率准则（图覆盖、数据流覆盖、逻辑覆盖）、符号执行（静态/动态/concolic）、SMT 约束求解（Z3）、归纳不变式、自动演绎验证、Dafny 形式化验证语言、软件模型检查、自动漏洞利用生成。",
  proj:"Java/C/Python 编程作业为主，需要动手实现符号执行引擎、用 Z3 求解约束、用 Dafny 写带契约的可验证程序。两次 quiz + 期末。",
  pre:"<b>硬性先修 ECE 650</b>（或 750 Tpc 26，或 instructor consent）。编译原理和数理逻辑基础有帮助但非必需。",
- why:"Software 方向认证的第三门必修课。对求职的价值取决于你的目标——如果投的是需要严谨性的岗位（金融、基础设施、安全），这门课含金量很高；如果投的是常规产品线 SWE，性价比不如 ECE 751 或 656。",
+ why:"Software 方向认证的第三门必修课。对求职的价值取决于你的目标——如果投的是需要严谨性的岗位（金融、基础设施、安全），这门课含金量很高；如果投的是常规产品线 SWE，性价比不如 ECE 751 或 656。<b>实评（已毕业学长）：</b>用 Python 写编译器，作业量极大 + 考试范围巨大 + 内容 deep dive + project，是 ECE 里最痛苦的一门，强烈不建议和硬课同期。",
  alt:"只在 Spring 开。若 S2027 是 work term，可考虑 <b>ECE 654 Software Reliability Engineering</b>（同学期，Ward 教，难度稍低）或 <b>CS 846 软件测试与调试专题</b>。"},
 
 "ECE 654":{n:"Software Reliability Engineering",zh:"软件可靠性工程",g:"ece-sw",d:3,t:"S2027 (Ward)",tag:["swe"],
@@ -289,7 +373,7 @@ const C = {
  warn:"Topics 课的具体大纲每年由教授决定，选课前务必去 outline.uwaterloo.ca 或直接邮件确认当年内容与评分构成。"},
 
 "ECE 750 T41":{n:"Software Analysis and Engineering with LLMs",zh:"用大模型做软件分析与工程",g:"ece-ai",d:3,t:"F2026 (Zhang J)",tag:["ai","new","swe"],
- desc:"2026 秋新开。把大语言模型用到软件工程全流程：代码生成与补全、缺陷检测、程序理解与摘要、自动修复、测试生成，以及如何评估这些 LLM 系统的可靠性。",
+ desc:"2026 年秋（Sep–Dec 2026）新开。把大语言模型用到软件工程全流程：代码生成与补全、缺陷检测、程序理解与摘要、自动修复、测试生成，以及如何评估这些 LLM 系统的可靠性。",
  proj:"seminar 型课程，通常是论文研读 + 课堂展示 + 一个占比很高的学期 project。",
  pre:"有软件工程基础和 Python 能力即可，不需要深度学习理论背景。",
  why:"<b>三个优势叠在一起：最新、最对口 SWE、而且是本系课不占那 3 个外系名额。</b>2026 年的招聘市场上，「用 LLM 改造开发流程」是几乎每家公司都在做的事，这门课的 project 直接就是简历上的加分项。",
@@ -381,9 +465,17 @@ const C = {
  desc:"在一位 ECE 教授一对一指导下，用一个学期完成一个研究/工程项目，学期末提交 Project Report 由导师评分。抵 1 门课学分。",
  proj:"就是 project 本身。近期出现过「Scalable Deep Learning」（数据并行/模型并行、CUDA、DeepSpeed）这类系统向题目，简历价值很高。",
  pre:"<b>硬门槛：已修满 3 门课且均分 ≥80%。</b>所以前两学期成绩直接决定你有没有资格。",
- why:"官方认证的「带学分的 side project」，而且是一对一带。如果你能找到跟 AI/系统相关的题目，产出物比一般课程 project 更完整。",
+ why:"官方认证的「带学分的 side project」，而且是一对一带。如果你能找到跟 AI/系统相关的题目，产出物比一般课程 project 更完整。<br><b>Fall 2026 可接的 AI/SWE 选题（部分）：</b>Zahedi（Fair GPU Scheduling for Multi-Tenant LLM Serving、Prompt Optimization for Agentic LLM Systems）、Tahsin Reza（Scalable Deep Learning、向量相似度搜索加速）、Tahvildari（LLM + Digital Twin 生产智能）、Firoozi（3D Vision for robot planning）、En-Hui Yang（高效/安全 AI）、Crowley（因果推断 / RL 伦理）、Stephen L. Smith（机器人适应用户偏好）。完整清单见 ECE 系「MEng Project Opportunities」各方向子页。",
  alt:"不做 699 就多修一门常规课，风险更低、时间更可控。",
  warn:"<b>必须做教授命题的项目，不能把你自己的个人项目直接换学分。</b>流程是自己发邮件联系 ECE 教授谈题目，拿到 permission number 后在 Quest 注册——这一步没人替你做，越早联系机会越多。"},
+
+"ECE 699B":{n:"Master of Engineering Project (2nd term)",zh:"MEng 项目课（第二段）",g:"ece-proj",d:3,t:"每学期都开 (Xie LL 协调)；通常接在 699A 之后",tag:["swe","mile"],
+ desc:"ECE 699 的 B 段：在另一位（或同一位）ECE 教授指导下，再用一个学期做第二个研究/工程项目，期末提交 Project Report 由导师评分。通常在 699A 之后注册，适合想做两段不同项目、或第一段题目不够出彩想再攒一个作品的情况。抵 1 门课学分。",
+ proj:"同 699A，是另一个独立 project。",
+ pre:"<b>硬门槛：已修满 3 门课且均分 ≥80%。</b>同 699A。",
+ why:"与 699A 同属「带学分的 side project」。若 699A 的题目不够亮眼、或想换方向再补一个作品，可用 B 段。Fall 2026 可接的 AI/SWE 选题同 699A。",
+ alt:"不做 699B 就多修一门常规课。",
+ warn:"同 699A：必须做教授命题的项目，不能把个人项目直接换学分；需自己联系教授拿 permission number 在 Quest 注册。"},
 
 "WIL 601":{n:"Career Foundations for Work-Integrated Learning",zh:"职业基础（Co-op 必修）",g:"ece-proj",d:1,t:"第一个 work term 的前一学期",tag:["mile"],
  desc:"Co-op 学生的职业准备课程：简历与求职信、面试技巧、职场沟通、工作场所的专业规范与安全。",
@@ -558,7 +650,7 @@ const C = {
 "BE 605":{n:"Project Management",zh:"项目管理",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
  desc:"项目管理的完整方法论：范围与进度管理、资源与风险、敏捷与传统方法的取舍、干系人沟通。",
  proj:"案例 + 团队作业。",pre:"无。",
- why:"负担轻、实用。而且和 ECE 651 的团队项目形成互补——一门教你怎么写，一门教你怎么管。",
+ why:"负担轻、实用。而且和 ECE 651 的团队项目形成互补——一门教你怎么写，一门教你怎么管。<b>实评：</b>水课、上的最舒服——但 2024 Fall 起难度和工作量明显增加。",
  alt:"BE 680 Consulting。",warn:"需确认是否在 ECE approved 名单上。"},
 
 "BE 650":{n:"Digital Transformations",zh:"数字化转型",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","easy","ext"],
@@ -574,7 +666,8 @@ const C = {
 "BE 602":{n:"Data Analytics for Business",zh:"商业数据分析",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
 "BE 630":{n:"Professional Selling",zh:"销售",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
 "BE 660":{n:"Negotiations",zh:"谈判",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
-"BE 603":{n:"Operations and Supply Chain Management",zh:"运营与供应链",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"]},
+"BE 603":{n:"Operations and Supply Chain Management",zh:"运营与供应链",g:"be",d:2,t:"待确认（Conrad School）",tag:["biz","ext"],
+ why:"<b>实评：</b>纯写作课，适合最后一学期边刷题准备面试边拿学分。"},
 "ECE 757A":{n:"Embodied Intelligence",zh:"具身智能",g:"ece-ai",d:3.5,t:"W2028 (Dautenhahn)",tag:["ai","new"],
  desc:"智能体通过身体与环境的互动来学习：感知-动作闭环、机器人认知、模仿学习。Kerstin Dautenhahn 是社交机器人领域权威。",
  proj:"研讨 + 学期 project，通常结合机器人平台。",pre:"机器学习基础。",
@@ -770,7 +863,7 @@ const PLANS=[
   {t:"F2026 秋",k:"study",info:"2 门 · 网申高峰期",c:["ECE 650","ECE 606"]},
   {t:"W2027 冬",k:"study",info:"3 门 · 火力全开",c:["ECE 651","ECE 657A","ECE 613"]},
   {t:"S2027 春",k:"study",info:"2 门 + WIL 601 · 求职学期",c:["ECE 657","ECE 654","WIL 601"]},
-  {t:"F2027 秋",k:"work",info:"Co-op 4 个月",note:"秋季 term 的 co-op 岗位常带 return offer 通道。求职在 S2027 进行，所以 WIL 601 排在春季。"},
+  {t:"F2027 秋",k:"work",info:"Co-op 4 个月",note:"Sep–Dec 的 co-op 岗位常带 return offer 通道。求职在 May–Aug 2027 进行，所以 WIL 601 也排在 May–Aug 2027。"},
   {t:"W2028 冬",k:"study",info:"1 门 · 收尾学期",c:["ECE 657D"]}
  ],
  win:["<b>AI &amp; ML 方向认证稳拿</b>：必修 ECE 657 + 657A 全在，选修 606 / 613 / 657D 正好凑满 3 门。",
@@ -824,7 +917,7 @@ const PLANS=[
  terms:[
   {t:"F2026 秋",k:"study",info:"2 门 · 打地基",c:["ECE 650","ECE 750 T39"]},
   {t:"W2027 冬",k:"study",info:"3 门 + WIL 601 · 求职学期",c:["ECE 651","ECE 656","ECE 750 T29","WIL 601"]},
-  {t:"S2027 春",k:"work",info:"Co-op 第 1 段",note:"WaterlooWorks 的 Spring 招聘在 W2027 进行，所以 WIL 601 排在冬季。"},
+  {t:"S2027 春",k:"work",info:"Co-op 第 1 段",note:"WaterlooWorks 的招聘轮在 Jan–Apr 2027 进行，所以 WIL 601 排在 Jan–Apr 2027。"},
   {t:"F2027 秋",k:"work",info:"Co-op 第 2 段",note:"必须与第 1 段连续且同一雇主。8 个月足够独立负责一个完整模块，是 return offer 的最佳窗口。"},
   {t:"W2028 冬",k:"study",info:"3 门 · 收尾",c:["ECE 657D","ECE 657A","ECE 613"]}
  ],
@@ -912,6 +1005,15 @@ const diffLabel=d=>DL[d]||'';
 const diffColor=d=>{const t=Math.max(0,Math.min(1,(d-1)/4));return 'hsl('+(120-120*t).toFixed(0)+',68%,42%)';};
 const groupLabel=g=>GL[g]||g;
 const tagText=t=>TAGT[t]||t;
+/* 官网链接：Waterloo 站内搜索，所有课号通用、永不 404；结果含课程描述与历年 outline/syllabus */
+const officialUrl = code => 'https://uwaterloo.ca/search?q=' + encodeURIComponent(code);
+const outlineUrl = code => 'https://outline.uwaterloo.ca/viewer/?q=' + encodeURIComponent(code);
+/* 学期时间序键：滑铁卢学年 Fall(Y)→Winter(Y+1)→Spring(Y+1)→Fall(Y+1)…，用于方案按时间排序 */
+const termKey = t => { const m=/^([FWS])(\d{4})/.exec(t||''); if(!m) return 0;
+  const season={'F':0,'W':1,'S':2}[m[1]]; const y=+m[2]; const ay=(m[1]==='F')?y:y-1; return ay*10+season; };
+/* 学期 → 日期区间：F2026 秋 → Sep–Dec 2026（与 Co-op 页时间线格式统一） */
+const TERM_RANGE={'F':'Sep–Dec','W':'Jan–Apr','S':'May–Aug'};
+const termRange = t => { const m=/^([FWS])(\d{4})/.exec(t||''); return m?TERM_RANGE[m[1]]+' '+m[2]:(t||''); };
 function chip(code){
   const v=C[code];
   if(!v) return '<span class="chip" data-c="'+esc(code)+'"><b>'+esc(code)+'</b></span>';
@@ -986,7 +1088,14 @@ function openD(code){
     (v.for?'<div class="blk"><h5>最适合谁</h5><p>'+v.for+'</p></div>':'')+
     (v.alt?'<div class="blk"><h5>替代课</h5><p>'+v.alt+'</p></div>':'')+
     (v.warn?'<div class="blk"><h5 style="color:var(--amber)">注意</h5><p style="color:var(--amber)">'+v.warn+'</p></div>':'')+
-    (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'');
+    (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'')+
+    '<div class="blk offlink"><h5>官方链接</h5>'+
+      '<div class="obtns">'+
+      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">uwaterloo.ca 官方课程页 ↗</a>'+
+      '<a class="obtn" href="'+outlineUrl(code)+'" target="_blank" rel="noopener noreferrer">outline.uwaterloo.ca 历年大纲 ↗</a>'+
+      '<a class="obtn ghost" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">去 Quest 选课 ↗</a>'+
+      '</div>'+
+      '<p class="hint">左：Waterloo 站内搜索（课程描述）。中：outline.uwaterloo.ca 按课号直达该课历年 syllabus / 授课安排 / 讲师 / 先修。右：Quest 选课注册系统。</p></div>';
   dw.classList.add('show');
 }
 function closeD(){document.getElementById('dw').classList.remove('show');}
@@ -1023,9 +1132,9 @@ function renderPlan(id){
   '<nav class="crumb"><a href="#/">首页</a> › <span>方案 '+p.id+' · '+esc(p.name)+'</span></nav>'+
   '<div class="plan-h"><h1>'+esc(p.name)+'</h1><p class="sub">'+esc(p.sub)+'</p>'+
     '<div class="stats">'+p.stats.map(s=>'<span><b>'+esc(s[0])+'</b><br>'+esc(s[1])+'</span>').join('')+'</div></div>'+
-  '<div class="timeline">'+p.terms.map(t=>{
-    if(t.k==='work') return '<div class="term work"><div class="ph">'+(t.t||'工作学期')+'</div><div class="courses"><span>'+(t.note||'Co-op 工作学期')+'</span></div></div>';
-    return '<div class="term"><div class="ph">'+(t.t||'')+'</div><div class="courses">'+(t.c||[]).map(chip).join('')+'</div></div>';
+  '<div class="timeline">'+p.terms.slice().sort((a,b)=>termKey(a.t)-termKey(b.t)).map(t=>{
+    if(t.k==='work') return '<div class="term work"><div class="ph">'+termRange(t.t||'工作学期')+'</div><div class="courses"><span>'+(t.note||'Co-op 工作学期')+'</span></div></div>';
+    return '<div class="term"><div class="ph">'+termRange(t.t||'')+'</div><div class="courses">'+(t.c||[]).map(chip).join('')+'</div></div>';
   }).join('')+'</div>'+
   '<div class="three">'+
     '<div class="box"><h4>强在哪</h4><ul>'+(p.win||[]).map(w=>'<li>'+w+'</li>').join('')+'</ul></div>'+
@@ -1134,7 +1243,24 @@ function renderCoop(){
     '<p class="tlhint">← 左右滑动查看完整时间线</p>'+
     '<div class="tlfig">'+tlA+'</div>'+
     '<div class="tlfig">'+tlB+'</div>'+
-    '<p class="note amber">学期名按 2026 秋入学举例，用于说明结构。实际学期取决于你拿到的 Co-op offer 与招聘轮次，注册前以 ECE Graduate Office 与 Quest 的官方安排为准。</p>'+
+    '<p class="note amber">学期名按 2026 年（Sep–Dec 2026）入学举例，用于说明结构。实际学期取决于你拿到的 Co-op offer 与招聘轮次，注册前以 ECE Graduate Office 与 Quest 的官方安排为准。</p>'+
+    '<div class="recr">'+
+      '<h2>暑期实习招聘时间线</h2>'+
+      '<p class="recr-intro">北美大厂 summer SWE intern 的招聘比实习本身早半年。以下是关键节点——如果你想让 May–Aug 2027 变成实习期，2026 年 8 月就要开始投递。</p>'+
+      '<div class="rtl">'+
+        '<div class="rp"><div class="bar a"></div><p class="lab">网申投递</p><p class="dt">Aug–Oct 2026</p><p class="ds">大厂 summer intern 岗位集中开放。此时你刚落地、刚开学，要同时投递 + 刷题 + 上课。</p></div>'+
+        '<div class="rp"><div class="bar b"></div><p class="lab">面试</p><p class="dt">Oct 2026 – Jan 2027</p><p class="ds">OA + 技术面 + 行为面。注意 12 月期末考试期会撞面试，提前规划。</p></div>'+
+        '<div class="rp"><div class="bar c"></div><p class="lab">暑期实习</p><p class="dt">May–Aug 2027</p><p class="ds">实习 12–16 周。表现好直接谈 return offer 转全职，不必等第 2 段 co-op。</p></div>'+
+      '</div>'+
+      '<div class="recr-note">'+
+        '<p><b>Co-op 工作学期 ≠ 只能投 WaterlooWorks 的岗位。</b>你自己海投找到的外部 summer intern，只要提前和 Co-op Office 沟通获批，一样算正式 co-op work term——保留 co-op 身份和工签资格。</p>'+
+        '<p><b>两条路可同时走：</b>WaterlooWorks 平台岗位 + 自己海投外部 summer intern，互不冲突。2026 年秋一开学就两手抓。</p>'+
+      '</div>'+
+      '<div class="qbtns">'+
+        '<a class="qbtn" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">去 Quest 选课注册 ↗</a>'+
+        '<a class="qbtn ghost" href="https://classes.uwaterloo.ca" target="_blank" rel="noopener noreferrer">浏览课程表 ↗</a>'+
+      '</div>'+
+    '</div>'+
   '</section>';
 }
 function renderNew(){
@@ -1162,10 +1288,108 @@ function renderMap(){
     '<p class="note">方向划分基于 ECE 研究生认证与就业路线；同门课可能跨多条线。标「需教授同意」的 special topics 可由你向教授提议新开。</p>'+
   '</section>';
 }
-/* 顶部导航：移动端导航始终可见并左对齐（见 style.css 的 .nav 移动端规则），无需 burger 菜单；
-   仅保留“当前页高亮”逻辑。 */
-const navEl=document.getElementById('nav');
-const NAVKEY={'':'#/','courses':'#/courses','coop':'#/coop','map':'#/map','new':'#/new'};
+/* mobile nav */
+/* ===== 跨系申请指南（可扩展：往 APPLY_GROUPS 加 group 即可，目前开放 CS）===== */
+const APPLY_GROUPS=[
+  {key:'cs',label:'CS · 计算机科学',school:'Cheriton School of Computer Science',
+   note:'CS 研究生课在 Quest 上预留给 CS 本系研究生，外系（含 ECE）无法自己注册，需走 instructor consent 特批流程。每 term 只能申请 1 门；你 ECE MEng 最多有 3 门外系名额（Business Leadership 方向可放宽到 4，需 Graduate Office 书面确认）。'}
+];
+let applyState={group:'cs',sel:new Set()};
+function applyCourses(gk){ return Object.keys(C).filter(k=>C[k]&&C[k].g===gk); }
+function applyEmail(code){
+  const v=C[code]; if(!v) return '';
+  const title=v.n||''; const term=v.t||'';
+  return 'Subject: Permission to enroll - '+code+' ('+term+') - [你的全名], ECE MEng\n\n'+
+'Dear Prof. [教授姓],\n\n'+
+'I am a Master of Engineering (MEng) student in Electrical and Computer Engineering, and I would like to enroll in your '+code+' - '+title+' ('+term+'). As an ECE student I cannot register via Quest directly, so I am writing to request a permission number.\n\n'+
+'- Full name: [你的全名]\n'+
+'- Student ID: [学号]\n'+
+'- Home department: Electrical and Computer Engineering\n'+
+'- Course: '+code+', section ['+term+']\n\n'+
+'My background includes [一句话：相关课程/项目，例如 ECE 650 + 651，或你正在做的 app]. I plan to attend the first week of lectures and would appreciate the opportunity to join if space allows.\n\n'+
+'Thank you for your consideration.\n\n'+
+'Best,\n'+
+'[你的全名]\n'+
+'[学号] / [邮箱]';
+}
+function renderApply(){
+  const g=APPLY_GROUPS.find(x=>x.key===applyState.group)||APPLY_GROUPS[0];
+  const codes=applyCourses(g.key);
+  const tabs=APPLY_GROUPS.map(x=>'<button class="aptab'+(x.key===applyState.group?' on':'')+'" onclick="applySetGroup(\''+x.key+'\')">'+esc(x.label)+'</button>').join('');
+  const rows=codes.map(code=>{
+    const v=C[code]; if(!v) return '';
+    const title=v.zh||v.n||'';
+    const checked=applyState.sel.has(code)?'checked':'';
+    return '<label class="approw"><input type="checkbox" class="appchk" '+checked+' onchange="applyToggle(\''+esc(code)+'\')">'+
+      '<span class="dot" style="background:'+diffColor(v.d)+'"></span>'+
+      '<span class="cc"><b>'+esc(code)+'</b> '+esc(title)+'</span>'+
+      '<span class="ct">'+esc(v.t||'')+'</span>'+
+      (v.consent||/consent/i.test(v.warn||'')?'<span class="ctag">需 consent</span>':'')+'</label>';
+  }).join('');
+  return '<nav class="crumb"><a href="#/">首页</a> › <span>跨系申请指南</span></nav>'+
+    '<section class="sec"><h2>跨系选课申请指南</h2>'+
+    '<p class="lede">你是 ECE 学生，想修外系的研究生课。这类课在 Quest 上不对自己开放，要走 instructor consent 特批。勾选下方课程 → 自动生成对应的申请步骤与邮件模板。目前开放 <b>CS（计算机科学）</b>；SYDE / Math / BE 等外系会陆续接入。</p>'+
+    '<div class="aptabs">'+tabs+'</div>'+
+    '<div class="note amber">'+esc(g.note)+'</div>'+
+    '<div class="applist">'+rows+'</div>'+
+    '<div id="applyGuides"></div></section>';
+}
+function applySetGroup(key){
+  applyState.group=key; applyState.sel.clear();
+  const view=document.getElementById('view'); if(view) view.innerHTML=renderApply();
+  window.scrollTo(0,0);
+}
+function applyToggle(code){
+  if(applyState.sel.has(code)) applyState.sel.delete(code); else applyState.sel.add(code);
+  const box=document.getElementById('applyGuides');
+  if(box) box.innerHTML=renderApplyGuides();
+}
+function renderApplyGuides(){
+  const g=APPLY_GROUPS.find(x=>x.key===applyState.group)||APPLY_GROUPS[0];
+  const codes=[...applyState.sel];
+  if(!codes.length) return '<p class="apempty note">勾选上方课程，这里会自动生成对应的申请步骤与邮件模板。</p>';
+  return codes.map(code=>{
+    const v=C[code]; if(!v) return '';
+    const steps=[
+      '查先修：确认 <b>'+esc(code)+'</b> 的 prerequisite 你已满足（见课程详情的「前置」）。',
+      '开课前几周发邮件给该课 instructor（模板在下方），附：全名 / 学号 / 本系 (ECE) / 课号+section。',
+      '第一周去蹭课：名额允许时欢迎旁听，让教授确认你是认真的申请人。',
+      '第一周后拿 permission number：'+esc(g.school)+' 在开学第一周后发放；用它在 Quest 注册。',
+      '截止线：drop/add 截止（开学约 3 周）之后需 Graduate Drop/Add Form（导师 + CS Graduate Officer 双签），很麻烦——尽早申请。'
+    ].map(s=>'<li>'+s+'</li>').join('');
+    const warn=(v.consent||/consent/i.test(v.warn||''))?'<p class="warn-in">⚠ 该课标「需 instructor consent」，位置有限，建议尽早发邮件、第一周务必去听课。</p>':'';
+    const email=applyEmail(code);
+    const eid='email-'+code.replace(/\s+/g,'_');
+    return '<div class="apcard"><div class="apcard-h"><span class="dot" style="background:'+diffColor(v.d)+'"></span>'+
+      '<b>'+esc(code)+'</b> '+esc(v.zh||v.n||'')+' <span class="apcard-t">'+esc(v.t||'')+'</span></div>'+
+      '<ol class="aplist">'+steps+'</ol>'+warn+
+      '<div class="emailwrap"><div class="emailbar"><span>邮件模板（可直接复制修改）</span>'+
+      '<button class="obtn ghost sm" onclick="copyApplyEmail(this,\''+esc(code)+'\')">复制</button></div>'+
+      '<textarea class="emailbox" id="'+eid+'">'+esc(email)+'</textarea></div></div>';
+  }).join('');
+}
+function copyApplyEmail(btn,code){
+  const ta=document.getElementById('email-'+code.replace(/\s+/g,'_'));
+  if(!ta) return;
+  const done=()=>{ const old=btn.textContent; btn.textContent='已复制 ✓'; setTimeout(()=>btn.textContent=old,1500); };
+  try{ ta.focus(); ta.select(); ta.setSelectionRange(0,ta.value.length); }catch(e){}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(ta.value).then(done,()=>{ try{document.execCommand('copy');}catch(e){} done(); });
+  } else { try{document.execCommand('copy');}catch(e){} done(); }
+}
+const navEl=document.getElementById('nav'),burgerEl=document.getElementById('burger'),navMaskEl=document.getElementById('navmask');
+function setNav(open){
+  navEl.classList.toggle('open',open);
+  burgerEl.classList.toggle('on',open);
+  navMaskEl.classList.toggle('on',open);
+  burgerEl.setAttribute('aria-expanded',open?'true':'false');
+}
+function closeNav(){ setNav(false); }
+burgerEl.addEventListener('click',()=>setNav(!navEl.classList.contains('open')));
+navMaskEl.addEventListener('click',closeNav);
+navEl.addEventListener('click',e=>{ if(e.target.closest('a')) closeNav(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeNav(); });
+const NAVKEY={'':'#/','courses':'#/courses','coop':'#/coop','map':'#/map','apply':'#/apply','new':'#/new'};
 function markNav(key){
   const target=NAVKEY[key]||'';
   navEl.querySelectorAll('a').forEach(a=>a.classList.toggle('on',!!target&&a.getAttribute('href')===target));
@@ -1182,6 +1406,7 @@ function route(){
   else if(parts[0]==='coop') view.innerHTML=renderCoop();
   else if(parts[0]==='new') view.innerHTML=renderNew();
   else if(parts[0]==='map') view.innerHTML=renderMap();
+  else if(parts[0]==='apply') view.innerHTML=renderApply();
   else view.innerHTML=renderHome();
   if(parts[0]==='courses'&&q) filterCourses(q);
   markNav(parts[0]||'');
