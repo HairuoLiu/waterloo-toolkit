@@ -25,7 +25,7 @@
 | `daily-reminder` | 已上线，月历+列表双视图、按学年拆分、类别筛选、提醒中心、分享/GitHub 顶栏 |
 | `course-planner` | 已上线，但内容由**另一位 AI 通过 `uw-toolkit-onboard` 上架**，属于"示范/骨架"性质，课程数据待充实 |
 | 顶栏规范 | 三页（主站 / daily-reminder / course-planner）均已落地统一顶栏（GitHub + 分享 + 可选导航） |
-| 移动端导航 | `.nav` / `.topbar-nav` 移动端（≤680px）**强制换行到第二行左对齐**，GitHub+分享保持右上 |
+| 移动端导航 | **规范**：`.nav` / `.topbar-nav` 移动端（≤680px）必须换行到第二行左对齐。**现状偏差**：course-planner 线上当前为 `.top-mid` 结构、未左对齐（见 §3.2 / §11.3），待与用户确认恢复。 |
 | QA 门禁 | 推送前必须用 linkedom 真实 DOM 跑一遍（见 §8） |
 
 > ⚠️ 本仓库为 **PUBLIC**。任何写入本仓库的内容都会公开。请勿在仓库内放密钥、个人隐私或敏感数据（参见 §10 关于"已刻意省略"的说明）。
@@ -82,7 +82,8 @@ waterloo-toolkit/
 
 - **来源**：由「另一位 AI」按 `uw-toolkit-onboard` 交接 prompt 上架，目的是**验证"外部 AI 上架"流程跑得通**。
 - **当前性质**：功能骨架/示范，页面可运行（顶栏、`.nav` 导航、路由切换、移动端左对齐均已实现），但**课程数据、Co-op 规则、课程地图的具体内容待充实**。
-- **结构要点**：顶部导航 `.nav` 是 `.top .wrap` 的**直接子元素**（与 `.lhs`、`.top-actions` 同级），移动端（≤680px）`order:3; flex-basis:100%; justify-content:flex-start` 换行左对齐；JS 仅保留 `markNav(key)` 当前页高亮。
+- **结构要点（2026-08-01 状态）**：当时顶部导航 `.nav` 是 `.top .wrap` 的**直接子元素**（与 `.lhs`、`.top-actions` 同级），移动端（≤680px）`order:3; flex-basis:100%; justify-content:flex-start` 换行左对齐；JS 仅保留 `markNav(key)` 当前页高亮。
+- ⚠️ **2026-08-13 偏差**：远程提交 `7a8e857`（作者 HairuoLiu，2026-08-13，原 commit 信息为"课程抽屉加 outline.uwaterloo.ca 按课号查历年大纲按钮"）合并后，线上 `course-planner/index.html` 的顶栏结构**变回含 `.top-mid`**（`<nav class="nav">` 重新被包进 `.top-mid`、与 `.top-actions` 一起置于右上），移动端媒体查询只剩 `.top-mid{gap:10px}`，**移动端左对齐规则当前未生效**。即用户 2026-08-01 要求的"移动端导航左上"在 2026-08-19 线上版本中**未落实**。详见 §11.3。
 - **合并史**：远程曾用 `84212f6` 给它加过"汉堡菜单"把导航 `position:fixed;display:none` 隐藏，与"移动端导航可见且左上"的要求冲突，已**弃用汉堡菜单**，`99f342f` 合并提交保留可见的左上导航。
 
 ---
@@ -178,6 +179,7 @@ waterloo-toolkit/
 6. **OG / SEO**：各页补 `<title>` 与 `meta description`，并在主站/`index.html` 加 OG 标签（封面图已存在，但未确认是否作为 OG 图像被社交分享正确抓取）。
 
 ### 11.3 course-planner 的下一步（最有价值的扩展）
+- **核对并恢复顶栏规范（高优先）**：线上 course-planner 当前是 `.top-mid` 结构（见 §3.2 偏差说明），移动端导航未左对齐，违反 §4 第 5 条硬规则，也违反用户 2026-08-01 的明确要求。请未来 agent 与用户确认是否要恢复"移动端导航左上"——恢复方案即 §3.2 的 `order:3 / flex-basis:100% / justify-content:flex-start`（把 `.nav` 提升为 `.top .wrap` 直接子元素、删掉 `.top-mid` 包裹），再决定是否保留 `.top-mid` 结构。
 7. **充实真实内容**：course-planner 目前是骨架。自然下一步是把真实 ECE 课程数据、Co-op 规则、课程地图做成结构化数据并渲染（一份详细的选课规划曾存在于另一个将被移除的工作区 `2026-08-01-10-40-47/outputs/waterloo-ece-meng-选课规划.html`，建议将其内容迁移进 course-planner 的数据/页面）。
 8. **考虑新子 App**：如 `coop-tracker`（co-op 申请/投递追踪）或把 co-op 信息并入 course-planner。
 
