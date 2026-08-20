@@ -1,4 +1,4 @@
-/* accommodation-sourcing/app.js
+/* weekday-stay/app.js
  * Renders the Top-50 master table from window.ACCOM with:
  *  - city / tier filter chips (.chips / .chip from shared style.css)
  *  - free-text search

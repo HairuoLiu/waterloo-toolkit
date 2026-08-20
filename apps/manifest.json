@@ -22,14 +22,14 @@
     "cover": "apps/course-planner/cover.svg"
   },
   {
-    "id": "accommodation-sourcing",
-    "title_zh": "住宿采购助手",
-    "title_en": "Accommodation Sourcing",
-    "desc_zh": "滑铁卢周边长住住宿采购：Top50 候选、谈价策略与呼叫顺序。",
-    "desc_en": "Top-50 long-stay picks around Waterloo + negotiation playbook.",
+    "id": "weekday-stay",
+    "title_zh": "周中临时住宿",
+    "title_en": "Weekday Temporary Stay",
+    "desc_zh": "面向多伦多及周边、每周赴滑铁卢 2–3 晚的相对长期临时住宿推荐：Top 50 候选、谈价策略与呼叫顺序。",
+    "desc_en": "Top-50 weekday temporary stays near Waterloo for Toronto commuters + negotiation playbook.",
     "icon": "🏠",
     "category": "生活",
-    "path": "apps/accommodation-sourcing/",
-    "cover": "apps/accommodation-sourcing/cover.svg"
+    "path": "apps/weekday-stay/",
+    "cover": "apps/weekday-stay/cover.svg"
   }
 ]

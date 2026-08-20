@@ -26,11 +26,12 @@
 
   <!-- 标题 -->
 
-  <text x="60" y="340" font-size="58" font-weight="800" fill="#1f2430">住宿采购助手</text>
+  <text x="60" y="340" font-size="58" font-weight="800" fill="#1f2430">周中临时住宿</text>
 
   <!-- 描述 -->
 
-  <text x="60" y="442" font-size="27" fill="#6b7280">滑铁卢周边长住住宿采购Top50候选与谈价</text>
+  <text x="60" y="442" font-size="27" fill="#6b7280">面向多伦多周边·每周赴滑铁卢2-3晚的相对长期临时住</text>
+  <text x="60" y="484" font-size="27" fill="#6b7280">宿·Top50</text>
 
   <!-- 右侧装饰 -->
 
@@ -44,5 +45,5 @@
   <!-- 底栏 -->
   <line x1="60" y1="572" x2="1140" y2="572" stroke="#e6e8ef"/>
   <text x="60" y="610" font-size="22" font-weight="700" fill="#1f2430">🎓 滑铁卢大学工具箱</text>
-  <text x="1140" y="610" font-size="19" fill="#6b7280" text-anchor="end" font-family="monospace">waterloo-toolkit/accommodation-sourcing</text>
+  <text x="1140" y="610" font-size="19" fill="#6b7280" text-anchor="end" font-family="monospace">waterloo-toolkit/weekday-stay</text>
 </svg>
