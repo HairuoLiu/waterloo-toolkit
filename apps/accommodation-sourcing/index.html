@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>住宿采购助手 · 滑铁卢工具箱</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <style>
+    /* 仅住宿工具专属组件样式；其余一律复用 assets/style.css 的全站设计语言 */
+    .kpi-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap:12px; margin:14px 0; }
+    .kpi { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px; box-shadow:var(--shadow); }
+    .kpi .v { font-size:22px; font-weight:700; color:var(--ink); }
+    .kpi .l { font-size:12px; color:var(--muted); margin-top:4px; }
+    .two { display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    @media (max-width:760px){ .two { grid-template-columns:1fr; } }
+    .box-callout { border-left:4px solid #1f6feb; background:#eef4ff; padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; }
+    .box-warn { border-left:4px solid var(--brand); background:#fff6e9; padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; }
+    .box-good { border-left:4px solid #1f8a4c; background:#eafaf4; padding:12px 16px; border-radius:0 8px 8px 0; margin:12px 0; }
+    .P-A { color:#fff; background:#1f6feb; border-radius:6px; padding:2px 9px; font-weight:600; font-size:12px; }
+    .P-B { color:#fff; background:#1f8a4c; border-radius:6px; padding:2px 9px; font-weight:600; font-size:12px; }
+    .P-C { color:#fff; background:#b45309; border-radius:6px; padding:2px 9px; font-weight:600; font-size:12px; }
+    .rt-good { color:#1f8a4c; font-weight:700; }
+    .rt-mid { color:#b45309; font-weight:700; }
+    .rt-bad { color:#c0392b; font-weight:700; }
+    .rank1 td { background:#fff5cc !important; }
+    .rowlink { cursor:pointer; }
+    .rowlink:hover td { background:#f3f5fb; }
+    .rank1.rowlink:hover td { background:#fff0b3 !important; }
+    section { scroll-margin-top:72px; }
+    .pill-row { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 0; }
+    .pill { display:inline-block; background:#eef1f7; color:#44506b; border-radius:999px; padding:3px 11px; font-size:12px; }
+    .script { background:#0f1b29; color:#d6e7f5; padding:16px 18px; border-radius:10px; font-family:"SF Mono",Consolas,monospace; font-size:13px; white-space:pre-wrap; line-height:1.7; }
+    .search { flex:1 1 240px; min-width:200px; border:1px solid var(--line); border-radius:10px; padding:9px 12px; font-size:14px; outline:none; background:var(--card); }
+    .search:focus { border-color:#1f6feb; }
+    #accom-table th, #accom-table td { white-space:nowrap; }
+    #accom-table td:nth-child(2) { white-space:normal; min-width:170px; }
+    #accom-table td:nth-child(6), #accom-table td:nth-child(7) { white-space:normal; min-width:130px; }
+    .tag-city { display:inline-block; margin-top:4px; font-size:12px; padding:3px 10px; border-radius:999px; background:#eef1f7; color:#44506b; font-weight:600; }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="../../index.html" aria-label="返回滑铁卢工具箱">
+      <span class="uw-logo" aria-hidden="true">
+        <svg viewBox="0 0 32 32" width="28" height="28">
+          <rect x="1" y="1" width="30" height="30" rx="8" fill="#FED34C"/>
+          <path d="M9 22 L13 10 L16 18 L19 10 L23 22" fill="none" stroke="#1f2430" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
+        </svg>
+      </span>
+      <span class="brand-text">住宿采购助手</span>
+    </a>
+    <nav class="topbar-nav">
+      <a href="#summary">概述</a>
+      <a href="#table">总表</a>
+      <a href="#price">价格策略</a>
+      <a href="#script">谈判脚本</a>
+      <a href="#call">呼叫顺序</a>
+    </nav>
+    <div class="top-actions">
+      <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/accommodation-sourcing" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
+      </a>
+      <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
+      </button>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <section class="hero" id="summary">
+      <h1>滑铁卢周边长住住宿采购 · Top 50</h1>
+      <p class="sub">为 Manager 编制的住宿采购执行报告：Waterloo + Kitchener(含 Downtown) + Cambridge + Guelph，每周二+周三两晚，2026-09-08 ~ 12-08（共 27 间夜）。</p>
+      <div class="pill-row">
+        <span class="pill">区域：Waterloo + Kitchener + Cambridge + Guelph</span>
+        <span class="pill">目标 CAD $55–85/晚</span>
+        <span class="pill">梦想 ≈ CAD $500/月</span>
+        <span class="pill">便宜 Motel 可接受</span>
+        <span class="pill">50 个真实候选</span>
+        <span class="pill">编制 2026-08-19</span>
+      </div>
+    </section>
+
+    <!-- 1. EXEC SUMMARY -->
+    <section>
+      <h2>① 执行摘要</h2>
+      <p class="sub">一句话结论：拓展到 Kitchener（含 Downtown）、Cambridge、Guelph 后，最便宜、最易触「梦想 $500/月」的，是 <b>Kitchener / Cambridge 的预算汽车旅馆（带周价/小厨房）</b> 与 <b>KW 地区家具私人房</b> 两条赛道；延长住宿酒店（Staybridge / Homewood / Home2）仍是「酒店体验 + 可谈价」的最佳平衡点。</p>
+      <div class="kpi-grid">
+        <div class="kpi"><div class="v">27 间夜</div><div class="l">精确数（14 周二 + 13 周三），非约 26</div></div>
+        <div class="kpi"><div class="v">$450–$540/月</div><div class="l">预算 Motel 谈价后可达的「梦想」区间（税前）</div></div>
+        <div class="kpi"><div class="v">$500–$725/月</div><div class="l">家具房 / 市中心私人房 可达区间</div></div>
+        <div class="kpi"><div class="v">A 级 32 家</div><div class="l">建议首批打电话的供应商（综合≥70）</div></div>
+      </div>
+      <div class="box-good">
+        <b>首选推荐（按性价比 + 可谈性 + 区域拓展）：</b>
+        <ol>
+          <li><b>Kitchener Motel</b>（1485 Victoria St N，+1 519-745-1177）——独立汽车旅馆，周价+小厨房套房，公开 $59–75，目标 <b>≈$48–50/晚（$432–450/月税前）</b>，全榜最便宜、唯一稳定触梦想线的传统住宿。<span style="color:#b45309;font-weight:600">评分 6.6/10：便宜但设施旧、隔音差。</span></li>
+          <li><b>Travelodge / Super 8 Cambridge</b>（Hespeler Rd）——公开 $44–90（淡旺差大），目标 <b>≈$55–60/晚（$495–540/月）</b>，剑桥侧最便宜真酒店，含轻早+免费停车。<span style="color:#c0392b;font-weight:600">⚠ 口碑偏弱（5.6–6.1/10，卫生差评多）；要干净优先选 Mayflower(7.3)/Embassy(7.9)/Quality Inn(8.0)。</span></li>
+          <li><b>Quality Inn Kitchener</b>（2899 King St E）——KAYAK 低 $51，目标 <b>≈$52–55/晚</b>，与 Kitchener Motel 形成东 King 街预算双保险。</li>
+          <li><b>Staybridge Suites Waterloo</b>——全厨+含早+周价基因，目标 <b>$90/晚（$810/月）</b>，酒店赛道保底首选。</li>
+          <li><b>KW / Downtown Kitchener 家具私人房（Kijiji / Airbnb / Roomies）</b>——目标 <b>$550–725/月</b>，唯一稳定触梦想线的非酒店渠道。</li>
+        </ol>
+      </div>
+      <div class="box-warn">
+        <b>两个必须提前知道的「真相」：</b>
+        <ul>
+          <li><b>间夜数是 27，不是 26。</b> 枚举 9/8–12/8 的周二+周三 = 14+13 = <b>27 间夜</b>。所有成本按 27 计算；误用 26 会低估约 3.7%。</li>
+          <li><b>「梦想 $500/月」≈ $55.6/晚，对全服务/中端酒店极难达成。</b> 仅预算 Motel（周价长包）与家具房赛道能触碰。酒店谈价现实落点多在 $75–95/晚（$675–$855/月，+13% HST 后约 $765–$965/月）。</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 2. EXACT DATES -->
+    <section>
+      <h2>② 精确日期枚举</h2>
+      <p class="sub">窗口起点 2026-09-08 是周二，终点 2026-12-08 也是周二（已含）。周三止于 12-02（12-09 超出窗口）。</p>
+      <div class="two">
+        <div><h3>周二（14 晚）</h3><p class="small muted">Sep 08, 15, 22, 29 | Oct 06, 13, 20, 27 | Nov 03, 10, 17, 24 | Dec 01, 08</p></div>
+        <div><h3>周三（13 晚）</h3><p class="small muted">Sep 09, 16, 23, 30 | Oct 07, 14, 21, 28 | Nov 04, 11, 18, 25 | Dec 02</p></div>
+      </div>
+      <div class="box-callout">
+        <b>成本换算基准：</b> 27 间夜 ÷ 3 个计费月（9/10/11 完整 + 12 月初尾段）＝「有效月成本」。
+        公式：<code>月成本 = 每晚净价 × 27 ÷ 3 = 每晚 × 9</code>；<code>真实月成本(含税) = 月成本 × 1.13</code>。
+        例：谈下 $50/晚 → 27×50=$1,350 /3 = <b>$450/月（税前）</b> → ×1.13 = <b>≈$509/月（含税）</b>。
+      </div>
+    </section>
+
+    <!-- 3. METHODOLOGY -->
+    <section>
+      <h2>③ 方法与质量声明</h2>
+      <div class="two">
+        <div>
+          <h3>评分模型（0–10，加权）</h3>
+          <ul class="small">
+            <li>价格 Price — <b>30%</b></li>
+            <li>长住适配 Long-stay — <b>20%</b></li>
+            <li>可谈性 Negotiation — <b>20%</b></li>
+            <li>地理位置 Location — <b>15%</b></li>
+            <li>房间设施 Facilities — <b>10%</b></li>
+            <li>可联系性 Contactability — <b>5%</b></li>
+          </ul>
+          <p class="small muted">综合分×10=百分制；A≥70 / B 60–69 / C&lt;60。子分均为分析师按固定标尺估算。</p>
+        </div>
+        <div>
+          <h3>区域与渠道覆盖</h3>
+          <p class="small"><b>城市分布（50 家）：</b> Kitchener 16 · Waterloo 11 · Cambridge 8 · Guelph 12 · KW(家具房) 3</p>
+          <p class="small"><b>类型分布：</b> 经济酒店 / 汽车旅馆 / 延长住宿公寓酒店 / 私人房 / 民宿 B&B / 企业服务公寓。</p>
+          <p class="small muted">渠道：官方站点 / Google Maps / Booking / KAYAK / Expedia / IHG·Hilton·Wyndham·Marriott·Choice 官网 / Kijiji / Airbnb / Roomies.ca / Qdb / B&B 聚合站 / 企业公寓官网（联网检索快照 2026-08-19）。</p>
+        </div>
+      </div>
+      <div class="box-good">
+        <b>真实性承诺：</b> 电话/邮箱/网址均来自本次联网检索（标注检索日 2026-08-19）。已剔除本地不存在的品牌——<b>Motel 6 / Residence Inn / TownePlace Suites 在 KW/剑桥/贵湖均不存在</b>；The Barn Inn 在俄亥俄州（非本区）；DelSuites 仅 GTA。凡未拿到直接联系方式的（家具房/平台公寓），表中标注「平台消息 / 网站表单」，<b>绝不编造</b>。
+      </div>
+    </section>
+
+    <!-- 4. MASTER TABLE -->
+    <section id="table">
+      <h2>④ Top 50 总排名表 <span id="accom-count" class="muted"></span></h2>
+      <p class="sub">点击任意行查看地址、电话、可点击联系方式与口碑详情。公开价 = 检索到的 OTA/官网挂牌价（CAD，2026-08-19 快照）；谈价预估 = 按本策略两轮谈判后的预期成交价；月成本 = 谈价预估 × 27 ÷ 3（税前）。「早」= 是否含早餐。最后一列 = Google/Booking/TripAdvisor 等平台平均分（绿≥8 好 / 黄 6.5–7.9 中 / 红&lt;6.5 差）。</p>
+      <div class="controls" style="margin-bottom:12px">
+        <input id="accom-search" class="search" type="search" placeholder="搜索物业名 / 城市 / 地址 / 价格…" aria-label="搜索" />
+        <div class="chips" id="city-chips"></div>
+        <div class="chips" id="tier-chips"></div>
+      </div>
+      <div class="table-scroll">
+        <table id="accom-table">
+          <thead>
+            <tr>
+              <th>#</th><th>物业</th><th>城市</th><th>类型</th><th>早</th>
+              <th>公开价</th><th>谈价预估</th><th>月成本(税前)</th>
+              <th>综合</th><th>级</th><th>平台评分</th>
+            </tr>
+          </thead>
+          <tbody id="accom-body"></tbody>
+        </table>
+      </div>
+      <p class="small muted">* 家具房/公寓按「整月」计价，不在「27晚×每晚」框架内，单独以月费列示。所有酒店房费在安省需另加 13% HST（表中月成本为税前）。</p>
+      <div class="box-warn">
+        <b>⚠ 口碑警告（评分 &lt;6.5/10 或卫生差评集中，预算优先请慎选）：</b>
+        <ul class="small" style="margin:0">
+          <li><b>Travelodge Cambridge（5.6/10）</b>：设施破旧、卫生差、有异味</li>
+          <li><b>Super 8 Cambridge（6.1/10）</b>：脏、异味、设施失修</li>
+          <li><b>Howard Johnson Kitchener（5.2/10）</b>：陈旧脏乱、烟味、维护差</li>
+          <li><b>Knights Inn Kitchener（6.0/10）</b>：设施旧、长住客混杂</li>
+          <li><b>Royal Inn &amp; Suites Guelph（4.0/10）</b>：破旧、卫生差、邻夜店噪音</li>
+          <li><b>Hotel Laurier（6.0/10）</b>：宿舍式设施简陋（仅 11 条评论）</li>
+        </ul>
+        <p class="small" style="margin:6px 0 0"><b>预算内「干净优先」替代：</b> Mayflower Motel（7.3）、Embassy Motel（7.9）、Quality Inn Kitchener（8.0）、Kitchener Motel（6.6，便宜但旧，尚可）。<b>最便宜 ≠ 住得舒服</b>，请按「预算优先」或「舒适优先」自行取舍。</p>
+      </div>
+    </section>
+
+    <!-- 5. TOP 10 -->
+    <section>
+      <h2>⑤ Top 10 速览 + 深度解析</h2>
+      <h3>Top 10 一览</h3>
+      <ol class="small">
+        <li><b>#1 Kitchener Motel</b>（Kitchener）— 综合 89（A）· 谈价预估 $50/晚 · 月成本(税前) $450 · 周价/小厨房套房/21翻新房</li>
+        <li><b>#2 Staybridge Suites Waterloo</b>（Waterloo）— 综合 84.5（A）· $100/晚 · $900/月 · 全厨+含早+洗衣</li>
+        <li><b>#3 Kijiji 家具房（KW）</b>（KW）— 综合 84（A）· $620/月 · 真房间可现金谈</li>
+        <li><b>#4 Airbnb 月租私人房（KW）</b>（KW）— 综合 84（A）· $700/月 · 房东直谈</li>
+        <li><b>#5 Roomies.ca / Qdb 家具房</b>（KW/Guelph）— 综合 84（A）· $700/月 · 月付灵活</li>
+        <li><b>#6 Howard Johnson Kitchener</b>（Kitchener）— 综合 83（A）· $75/晚 · 明示长住折扣</li>
+        <li><b>#7 Private furnished room · Downtown Kitchener</b>（Kitchener）— 综合 83（A）· $725/月 · 近市中心</li>
+        <li><b>#8 Knights Inn Kitchener</b>（Kitchener）— 综合 82（A）· $80/晚 · 效率房全厨</li>
+        <li><b>#9 Quality Inn Kitchener</b>（Kitchener）— 综合 83（A）· $55/晚 · 含早好评</li>
+        <li><b>#10 Mayflower Motel</b>（Kitchener）— 综合 81（A）· $58/晚 · 较干净性价比高</li>
+      </ol>
+      <div class="box-callout">
+        <b>① Kitchener Motel — 综合 89（A，榜首）</b><br>
+        <span class="small">1485 Victoria St N，+1 519-745-1177 / 1-800-574-2156。本地独立汽车旅馆，<b>明示周价与冬季特价、21 间翻新房、带小厨房套房</b>。公开从 $59/晚，按 13 周固定周二三相隔长包，谈判目标可压到 <b>≈$48–50/晚（$432–450/月税前，+HST≈$490–510/月）</b>——是全榜唯一稳定触「梦想 $500/月」线的传统住宿形态。缺点是位置偏北、无早餐，但价格与长住弹性无可替代。</span>
+      </div>
+      <div class="box-warn">
+        <b>② Travelodge / Super 8 Cambridge — 预算线（口碑警告）</b><br>
+        <span class="small">两者同在 Hespeler Rd（605 / 650），公开价 $44–90/晚（淡旺季差大），带小厨房/冰箱微炉、免费停车，均含轻早餐。谈价目标 <b>$55–60/晚（$495–540/月税前）</b>。<span style="color:#c0392b;font-weight:600">⚠ 但两家口碑偏弱（Travelodge 5.6/10：设施破旧、卫生差；Super 8 6.1/10：脏、异味）</span>——纯预算优先才选；同价位更建议 Mayflower（7.3）或加 $10 选 Quality Inn（8.0）。</span>
+      </div>
+      <div class="box-callout">
+        <b>③ Quality Inn Kitchener — 综合 83（A）</b><br>
+        <span class="small">2899 King St E，+1 519-894-3500。KAYAK 低见 $51/晚，Choice 体系、本地特许经营，含早。谈判目标 <b>$52–55/晚（$470–495/月税前）</b>。与 Kitchener Motel 形成「东 King 街预算双保险」。</span>
+      </div>
+      <div class="box-callout">
+        <b>④ Howard Johnson / Knights Inn Kitchener — 综合 82–83（A）</b><br>
+        <span class="small">Howard Johnson（1333 Weber St E）<b>官网明示 Group/企业/长住折扣</b>；Knights Inn / Weber Inn（1455 Weber St E）有「效率房全厨 + 长住价」。二者是「带厨房、可长包、可现金小刀」的代表，目标 <b>$70–75/晚（$630–675/月）</b>。</span>
+      </div>
+      <div class="box-callout">
+        <b>⑤ Staybridge Suites Waterloo — 综合 84.5（A）</b><br>
+        <span class="small">10 Benjamin Rd，+1 519-514-5500，sbswaterloosj@wgroup.ca。IHG 纯延长住宿，全厨+含早+洗衣+周价基因最强。公开 $105–174，目标 <b>$90/晚（$810/月）</b>——是「酒店体验+可谈价」的最佳平衡点，作为 A 级保底首选。</span>
+      </div>
+      <div class="box-good">
+        <b>⑥ 家具房赛道（Kijiji / Airbnb / Roomies / 市中心私人房）— 综合 82–84（A）</b><br>
+        <span class="small">KW 与市中心 Kitchener 的私人房/地下室挂牌 $590–850/月，谈后可达 <b>$550–725/月</b>，是唯一稳定触「梦想 $500/月」的非酒店渠道。需平台沟通+实地看房+简易月协议，适合 Manager 接受非酒店形态时并行推进。</span>
+      </div>
+    </section>
+
+    <!-- 6. COMPETITIVE -->
+    <section>
+      <h2>⑥ 竞品区间分析</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>赛道</th><th>公开价区间</th><th>谈价后现实区间</th><th>有效月成本(税前)</th><th>现实目标</th></tr></thead>
+          <tbody>
+            <tr><td>预算汽车旅馆</td><td>$44–120/晚</td><td>$48–75/晚</td><td>$432–$675</td><td><b>可触 $500/月 梦想线</b></td></tr>
+            <tr><td>延长住宿酒店</td><td>$81–266/晚</td><td>$81–110/晚</td><td>$729–$990</td><td>可达 $80–95/晚</td></tr>
+            <tr><td>中端酒店含早</td><td>$68–182/晚</td><td>$75–115/晚</td><td>$675–$1,035</td><td>可达 $75–100/晚</td></tr>
+            <tr><td>全服务/精品</td><td>$109–249/晚</td><td>$120–175/晚</td><td>$1,080–$1,575</td><td>难破 $120/晚</td></tr>
+            <tr><td>家具私人房</td><td>$590–1,000/月</td><td>$550–725/月</td><td>$550–$725</td><td><b>可触梦想线</b></td></tr>
+            <tr><td>企业服务公寓</td><td>$1,800–2,500/月</td><td>$1,500–2,200/月</td><td>$1,500–$2,200</td><td>整租超预算</td></tr>
+            <tr><td>民宿 B&B</td><td>$89–269/晚</td><td>$85–140/晚</td><td>$765–$1,260</td><td>仅 London House 月租折扣可近预算</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="small muted">结论：要真正到 $500–600/月，必须从<b>预算 Motel（周价长包）</b>或<b>家具私人房</b>两条赛道切入。中端/延长住宿酒店谈价地板约 $75–85/晚（$675–$765/月，+HST≈$765–$865/月）。</p>
+    </section>
+
+    <!-- 7. PRICE STRATEGY -->
+    <section id="price">
+      <h2>⑦ 价格策略</h2>
+      <div class="two">
+        <div>
+          <h3>谈判锚点（不主动报底价）</h3>
+          <ul class="small">
+            <li><b>开局（Round 1）：</b> 让对方先报「13 周固定、每周二三相隔、同房号」的企业/长住价。<b>绝不先说 $500/月</b>。</li>
+            <li><b>目标价 Target：</b> 预算 Motel <b>$48–55/晚</b>；中端酒店 <b>$65–75/晚</b>（≈$585–$675/月税前）。</li>
+            <li><b>可接受上限 Max：</b> <b>$80/晚</b>（≈$720/月税前；+HST≈$814/月）。超过即放弃该家。</li>
+          </ul>
+        </div>
+        <div>
+          <h3>两轮还价逻辑（按对方首报）</h3>
+          <ul class="small">
+            <li>对方报 <b>$100</b> → 还 <b>$70–75</b></li>
+            <li>对方报 <b>$90</b> → 还 <b>$65–70</b></li>
+            <li>对方报 <b>$80</b> → 还 <b>$60–70</b></li>
+            <li>对方报 <b>$70</b> → <b>接受</b>（仍可顺手压到 $65）</li>
+            <li>对方报 <b>$60 以下（Motel 周价）</b> → <b>直接接受并锁 13 周</b></li>
+          </ul>
+          <p class="small muted">杠杆：周二三为酒店周中相对低需夜；13 周 Guaranteed + 零周转成本 + 同房号 = 强谈判筹码。可承诺「先付押金/签简单协议」换更低锁价。</p>
+        </div>
+      </div>
+      <div class="box-good">
+        <b>27 晚真实成本示例（以谈下 $50/晚 为例）：</b><br>
+        房费 27×$50 = <b>$1,350</b> → ÷3 = <b>$450/月（税前）</b> → ×1.13 HST = <b>≈$509/月（含税）</b>。<br>
+        对比梦想 $500/月（≈$55.6/晚税前）：预算 Motel 周价长包可等价达成；家具房亦可达。
+      </div>
+    </section>
+
+    <!-- 8. CONTACT STRATEGY -->
+    <section>
+      <h2>⑧ 联系策略</h2>
+      <div class="box-warn"><b>核心原则：找「销售 / 企业价 / 长住经理」，不要只找前台。</b> 前台无权批长住折扣。本案已标注可联系的销售触点（Cambridge Hotel 的 Marc Chiarenza、HIE Kitchener SE 的 Cathy Burke、Courtyard/Delta 销售直线、Staybridge 的 wgroup 长住邮箱、Days Inn 团体 1-800-906-2871）。</div>
+      <ul class="small">
+        <li><b>预算 Motel / 独立旅店：</b> 直接打电话给业主/经理，说明「13 周固定包段 + 周价」，现金/签简协议可再让。</li>
+        <li><b>连锁品牌（IHG/Hilton/Wyndham/Choice/Marriott）：</b> 走官网 Group/Corporate/Long-stay 表单 + 直接电话销售直线；同时报公司价代码（如有）。</li>
+        <li><b>家具房/民宿：</b> Kijiji / Roomies / Airbnb 用「平台消息」先问「是否接受每周二三相隔的固定长包、可否月付优惠」，再转电话/实地看房。</li>
+        <li><b>企业公寓（City Casa / Nest / Blueground）：</b> 走官网表单，明确「仅需每周两晚、可否降月费」——多数按整月报价，需主动砍。</li>
+        <li><b>记录模板：</b> 每通电话记「接线人/职位/首报价/还价/跟进日」，便于横向比价与二轮压价。</li>
+      </ul>
+    </section>
+
+    <!-- 9. SCRIPT -->
+    <section id="script">
+      <h2>⑨ 英文电话谈判脚本</h2>
+      <div class="script">[Opening — ask them to quote first]
+"Hi, this is [Name]. I'm sourcing accommodation for a recurring work stay and I'd like to speak with whoever handles corporate or long-term rates. Is that you, or can you point me to the right person?"
+
+[If yes — state the pattern, let them price it]
+"Great. Here's what I need: a fixed room, same room number, every Tuesday and Wednesday night, from September 8 through December 8 — that's 27 room-nights across about 13 weeks. It's a guaranteed, recurring block with very low turnover on our side.
+Before I compare options — what's your best recurring corporate or long-stay rate for that specific pattern? I'm not after the public walk-in price; I want the number you'd give a company booking the same room week after week."
+
+[After they quote — Round 1 counter]
+(If ~$100) "Okay. For a guaranteed 27-night block with zero churn, I was hoping we could land closer to $70–75 a night. What can you do if I commit to the full 13 weeks and put down a deposit this week?"
+(If ~$90) "That's in the ballpark, but for a locked 13-week block I'd target $65–70. Can you meet that if I sign and pay a deposit now?"
+(If ~$80) "That works for me — though if you can do $60–65 I'll confirm today."
+(If ~$60 or less — Motel weekly) "That's exactly the kind of recurring rate I was hoping for. I'll lock the full 27 nights today if you can send it in writing."
+
+[Anchor + close]
+"I'm talking to a few hotels in the area with similar setups, so whichever gives me the cleanest recurring rate wins the block. If you can come back with $[target] all-in — tax, parking, and breakfast included — I'll book the full 27 nights today. Can you send that to me in writing by [date]?"</div>
+      <p class="small muted">话术要点：① 先让对方报价，不亮 $500/月 底牌；② 用「27 晚 Guaranteed + 零周转 + 本周付押金」做杠杆；③ 始终要求「含税/停车/早餐 all-in 书面价」；④ 留「我还在比几家」的余地制造竞争。</p>
+    </section>
+
+    <!-- 10. BUDGET TIERS -->
+    <section>
+      <h2>⑩ 按预算档位的决策标准</h2>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>预算档</th><th>等价每晚(税前)</th><th>可选供应商</th><th>决策动作</th></tr></thead>
+          <tbody>
+            <tr><td><b>梦想 $500/月</b></td><td>≈$55.6</td><td>Kitchener Motel、Super 8/Travelodge Cambridge、Quality Inn、KW 家具房</td><td>走预算 Motel 周价长包 + 家具房双线；预算 Motel 中干净优先选 Quality Inn/Mayflower。</td></tr>
+            <tr><td><b>$600/月（好）</b></td><td>≈$66.7</td><td>Howard Johnson/Knights、Embassy、Comfort Inn Cambridge、家具房、Staybridge 边缘</td><td>优先预算 Motel + 家具房；酒店压到 $65–70/晚 即达成。</td></tr>
+            <tr><td><b>$700/月（可接受）</b></td><td>≈$77.8</td><td>Home2、Crowne、BW Plus、Staybridge、家具房</td><td>放宽到 $75–85/晚；Staybridge/Homewood/Crowne 中任意一家谈成就锁。</td></tr>
+            <tr><td><b>硬上限 $80/晚</b></td><td>$80</td><td>上述 A/B 中除全服务外的全部</td><td>超过 $80/晚（含税≈$90+/晚，$720+/月）一律放弃，转下一家或家具房。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <!-- 11. CALL SEQUENCE -->
+    <section id="call">
+      <h2>⑪ 呼叫顺序 Call #1 → #8</h2>
+      <p class="sub">按「可谈性×落地速度×预算契合×区域」排序。每家开局都让对方先报价，还价按第 ⑦ 节逻辑，max 不超过 $80/晚（含税≈$90/晚）。</p>
+      <div class="table-scroll">
+        <table>
+          <thead><tr><th>次序</th><th>供应商</th><th>开场诉求</th><th>目标</th><th>上限</th><th>备注</th></tr></thead>
+          <tbody>
+            <tr><td>#1</td><td>Kitchener Motel</td><td>「13 周固定周二三，周价长包，小厨房套房」</td><td>$48–50/晚</td><td>$55/晚</td><td>全榜最便宜，落地最快</td></tr>
+            <tr><td>#2</td><td>Travelodge / Super 8 Cambridge</td><td>「13 周固定周二三，给周度长住价」</td><td>$55–60/晚</td><td>$65/晚</td><td>剑桥最便宜，但口碑弱（5.6–6.1⚠），预算优先才选</td></tr>
+            <tr><td>#2b</td><td>Mayflower / Embassy / Quality Inn（Kitchener）</td><td>「预算内干净优先：周价长包」</td><td>$55–65/晚</td><td>$72/晚</td><td>口碑 7.3–8.0，比剑桥双雄干净</td></tr>
+            <tr><td>#3</td><td>Quality Inn Kitchener</td><td>「独立特许经营，13 周包段，本周付押金」</td><td>$52–55/晚</td><td>$60/晚</td><td>东 King 街预算双保险</td></tr>
+            <tr><td>#4</td><td>Howard Johnson / Knights Inn Kitchener</td><td>「明示长住折扣，效率房全厨，锁 13 周」</td><td>$70–75/晚</td><td>$85/晚</td><td>带厨房可长包，可现金小刀</td></tr>
+            <tr><td>#5</td><td>Staybridge Suites Waterloo</td><td>「转长住销售，27 晚 Guaranteed 周度价」</td><td>$90/晚</td><td>$100/晚</td><td>体验最佳，A 级保底</td></tr>
+            <tr><td>#6</td><td>KW / Downtown Kitchener 家具房（并行）</td><td>「平台消息问周/月付长包优惠」</td><td>$550–650/月</td><td>$725/月</td><td>唯一触梦想线渠道，当天发消息</td></tr>
+            <tr><td>#7</td><td>Crowne Plaza / Cambridge Hotel</td><td>「转企业销售，周二三固定包段」</td><td>$80/晚</td><td>$95/晚</td><td>市中心/LRT，弹性定价信号强</td></tr>
+            <tr><td>#8</td><td>Best Western Plus Waterloo / Royal Brock Guelph</td><td>「独立业主，13 周包段，含早+停车」</td><td>$75–80/晚</td><td>$90/晚</td><td>含早中端，灵活度中高</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="box-callout"><b>并行建议：</b> #1–#5 为预算 Motel + 延长住宿主线（一周内打完），#6 为家具房替代赛道（当天即可发消息）。任一家 Motel 落地 ≤$55/晚 即锁；若全部 &gt;$85/晚，则全力转 #6 家具房，并把 City Casa/Nest 企业公寓作为「要整间公寓」的备选。</div>
+    </section>
+
+    <!-- 12. REGION -->
+    <section>
+      <h2>⑫ 区域拓展亮点</h2>
+      <div class="two">
+        <div>
+          <h3>Kitchener Downtown（用户重点关注）</h3>
+          <p class="small">市中心（King/Queen/Frederick/Victoria Park）新增可用项：<b>Frederick Street Inn</b>（230 Frederick St，明示 Long Term Stay 套餐，含全早）、<b>Green Gables / Queens Landing Guest House</b>（189/187 Queen St N，含早民宿）、<b>Walper Hotel</b>（20 Queen St S，精品）、<b>Crowne Plaza</b>（105 King St E，全服务+市中心+LRT）。市中心优势=通勤便利、近 GO/LRT；但纯酒店价偏高，<b>真正便宜的在北 Victoria St 的预算 Motel 带（Kitchener Motel / Mayflower / Embassy）</b>与家具私人房。</p>
+        </div>
+        <div>
+          <h3>便宜 Motel（包/不包早餐均可）</h3>
+          <p class="small">用户明确接受便宜 Motel。已收录：<b>Kitchener Motel</b>（无早，小厨房，周价）、<b>Mayflower</b>（无早，~$61）、<b>Embassy</b>（无早，从$75）、<b>Travelodge/Super 8 Cambridge</b>（含轻早）、<b>Howard Johnson</b>（含 24/7 早）、<b>Knights Inn</b>（含早，全厨）、<b>Quality Inn</b>（含早）、<b>Super 8 Guelph</b>（含早）、<b>Days Inn Guelph</b>（含早）。无早 Motel 普遍更便宜，适合 Manager 自炊或仅周二三短住。</p>
+        </div>
+      </div>
+      <div class="box-warn"><b>Cambridge / Guelph 提示：</b> 剑桥（Hespeler Rd 走廊）与贵湖（Gordon/Silvercreek 走廊）选择更多、房价略低，但距滑铁卢核心区 20–40 分钟车程。若 Manager 活动点在滑铁卢/基奇纳，优先 KW 侧；若接受通勤或活动点在剑桥/贵湖，则 Cambridge Hotel、Travelodge Cambridge、BW Royal Brock、London House B&B 均为高性价比之选。</div>
+    </section>
+
+    <!-- 13. BACKUP -->
+    <section>
+      <h2>⑬ 备选 / 后备方案</h2>
+      <ul class="small">
+        <li><b>家具房赛道（首选后备，触梦想线）：</b> Kijiji.ca（搜 "Kitchener room"/"Waterloo basement"，$590–850/月）、Roomies.ca / Qdb、Airbnb 月租私人房。优势：可现金谈、无/低 HST、真厨房洗衣。风险：需实地看房/合同松散，建议签简易月度协议。</li>
+        <li><b>企业服务公寓（要整间公寓时）：</b> City Casa（citycasarentals.com）、Nest Suite Living（nestsuiteliving.com）、Blueground（平台价硬）。整月 $1,500–2,200 谈后，仅当 Manager 坚持「完整私人公寓」时启用。</li>
+        <li><b>大学住宿（季节性排除但记录）：</b> UW Ron Eydt Village（$60/晚、$300/周、$725/月 +HST）仅 5/1–8/29 开放，本次窗口不适用；UofG 与 Conestoga 宿舍仅学生/会议，不接公众周二三长包。</li>
+        <li><b>经济 Motel 兜底：</b> Kitchener Motel / Travelodge / Super 8 Cambridge / Howard Johnson / Quality Inn 作为「酒店形态但不超预算」的底线，且最易触梦想线。</li>
+      </ul>
+    </section>
+
+    <!-- 14. RISKS -->
+    <section>
+      <h2>⑭ 风险、注意与核实清单</h2>
+      <div class="box-warn">
+        <ul class="small" style="margin:0">
+          <li><b>间夜数 27 ≠ 26：</b> 所有预算已按 27 计算，汇报时勿回退到 26。</li>
+          <li><b>13% HST：</b> 安省酒店房费必加 13% HST（表中月成本多为税前）。家具房私人交易常可协商含税或免税，需明示。</li>
+          <li><b>停车/早餐：</b> 多数含免费停车+含早；但 Delta/DoubleTree/HGI 可能收停车费，谈时要求「all-in」。</li>
+          <li><b>「同址多品牌」：</b> 4355 King St E 同时是 Hampton Inn 与 HIE Kitchener SE（共用总机）；2899 King St E 的 Quality Inn 即原 BW Plus 旧址——联系时确认当前经营品牌。Days Inn Guelph 团体线 1-800-906-2871 与本地 +1 519-822-9112 均有效。</li>
+          <li><b>不存在品牌已剔除：</b> 本地无 Motel 6 / Residence Inn / TownePlace Suites / DelSuites(GTA) / The Barn Inn(俄亥俄)——勿被 OTA 旧页误导。</li>
+          <li><b>家具房合同风险：</b> Kijiji/Roomies 多为个人，建议平台沟通+实地看房+简易书面协议，避免「到店无房」。</li>
+          <li><b>汇率/时点：</b> 公开价随淡旺浮动，最终以打电话当日的书面报价为准；本报告价均为 2026-08-19 检索快照。</li>
+        </ul>
+      </div>
+      <div class="box-good">
+        <b>下一步动作（交给 Manager 决策）：</b>
+        <ol class="small" style="margin:0">
+          <li>确认是否接受「酒店 Motel」与「家具房」两种形态并行（影响能否触 $500/月）。</li>
+          <li>授权我按 Call #1–#8 顺序致电销售/业主，目标 ≤$55/晚（预算 Motel）/ $600/月（家具房），max 不超 $80/晚。</li>
+          <li>若需，我可代拟每家的书面询盘邮件 + 简易长包协议模板。</li>
+        </ol>
+      </div>
+    </section>
+
+    <footer class="foot">
+      <p>住宿采购执行代理 · 编制 2026-08-19 · 数据来源：官方站点 / OTA / Kijiji / Airbnb / Roomies / 企业公寓官网（联网检索快照）<br>
+      区域覆盖 Waterloo + Kitchener(含Downtown) + Cambridge + Guelph；所有电话·邮箱·网址均来自本次检索，未编造；缺失项已标注「平台消息 / 网站表单」。评分与价格为 Google/Booking/TripAdvisor/Trip.com/KAYAK/Expedia 等平台 2026-08-19 检索快照。报价以电话当日书面确认为准。</p>
+    </footer>
+  </main>
+
+  <!-- 详情模态（复用全站 .detail-backdrop / .cal-detail） -->
+  <div class="detail-backdrop" id="detail-backdrop">
+    <div class="detail-modal" id="detail-modal" role="dialog" aria-modal="true">
+      <button class="detail-close" id="detail-close" aria-label="关闭">×</button>
+      <div id="cal-detail"></div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast" hidden></div>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+  <script>
+    (function () {
+      var sb = document.getElementById('share-btn');
+      function toast(m){ var t=document.getElementById('toast'); if(!t)return; t.textContent=m; t.hidden=false; clearTimeout(toast._t); toast._t=setTimeout(function(){t.hidden=true;},1800); }
+      function copy(u){ if(navigator.clipboard&&navigator.clipboard.writeText) return navigator.clipboard.writeText(u); var ta=document.createElement('textarea'); ta.value=u; document.body.appendChild(ta); ta.select(); try{document.execCommand('copy');}catch(e){} document.body.removeChild(ta); return Promise.resolve(); }
+      if (sb) sb.addEventListener('click', function(){
+        var d = { title: document.title, text: document.title, url: location.href };
+        if (navigator.share) { navigator.share(d).catch(function(){}); }
+        else { copy(location.href).then(function(){ toast('链接已复制，去分享吧'); }); }
+      });
+    })();
+  </script>
+</body>
+</html>

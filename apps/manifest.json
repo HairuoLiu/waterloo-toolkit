@@ -20,5 +20,16 @@
     "category": "选课",
     "path": "apps/course-planner/",
     "cover": "apps/course-planner/cover.svg"
+  },
+  {
+    "id": "accommodation-sourcing",
+    "title_zh": "住宿采购助手",
+    "title_en": "Accommodation Sourcing",
+    "desc_zh": "滑铁卢周边长住住宿采购：Top50 候选、谈价策略与呼叫顺序。",
+    "desc_en": "Top-50 long-stay picks around Waterloo + negotiation playbook.",
+    "icon": "🏠",
+    "category": "生活",
+    "path": "apps/accommodation-sourcing/",
+    "cover": "apps/accommodation-sourcing/cover.svg"
   }
 ]
