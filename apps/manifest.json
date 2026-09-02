@@ -31,5 +31,16 @@
     "category": "生活",
     "path": "apps/weekday-stay/",
     "cover": "apps/weekday-stay/cover.svg"
+  },
+  {
+    "id": "locker-finder",
+    "title_zh": "UW 储物柜地图",
+    "title_en": "UW Locker Finder",
+    "desc_zh": "全校储物柜位置与详情：免费/租赁、学期/日租、是否可自带挂锁。",
+    "desc_en": "Campus locker map: location, price, term vs day-use, own padlock.",
+    "icon": "🔒",
+    "category": "生活",
+    "path": "apps/locker-finder/",
+    "cover": "apps/locker-finder/cover.svg"
   }
 ]
