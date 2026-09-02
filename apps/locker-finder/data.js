@@ -2,9 +2,9 @@
  * 滑铁卢大学全校储物柜数据集（核验快照 2026-08-27）。
  * 数据内联为 window.LOCKERS，避免 fetch 本地文件限制（与工具箱规范一致）。
  * 字段说明：
- *   id        唯一 id（与地图 marker data-id 对应）
+ *   id        唯一 id（与地图 marker 对应）
  *   name_zh / name_en   中英文名称
- *   building  楼代号（地图标签）
+ *   building  楼代号
  *   building_full  楼全称
  *   cat       分类：免费 / 租赁 / 日租
  *   term      租期：学期 / 日租
@@ -14,12 +14,11 @@
  *   provider  管理方
  *   who       适用人群 / 资格
  *   floor     楼层
- *   x, y      地图坐标（SVG viewBox 0 0 1000 760）
+ *   coord     [lat, lng] 真实地理坐标（用于真实地图落点）
  *   apply_url 申请/登记网址
  *   apply_text 申请方式（中文简述）
  *   recommend best(首选) / good(推荐) / fallback(备选)
  *   notes_zh / notes_en  备注（资格风险等）
- *   email_to  可发邮件咨询的对象（可选）
  */
 window.LOCKERS = [
   {
@@ -36,13 +35,12 @@ window.LOCKERS = [
     provider: "Science Undergraduate Office",
     who: "全校学生（Science 管理，建议先试）",
     floor: "2 楼",
-    x: 560, y: 332,
+    coord: [43.4728, -80.5442],
     apply_url: "https://uwaterloo.ca/science-undergraduate-office/new-students-science/get-science-ready/locker-registration",
     apply_text: "先到 EIT 2 楼实地占一个空柜 → 再填 Science Locker Registration 网页表单登记",
     recommend: "best",
     notes_zh: "ECE 学生（工程系）也可尝试：页面由 Science 本科学办管理，未明确限制仅 Science 学生。位于 ECE 主楼、免费、自带锁，是距离最近、性价比最高的选择。若被拒，转 MathSoc / Athletics。",
     notes_en: "ECE (Engineering) students may still try — page is run by Science UG Office and does not explicitly restrict to Science students. Closest + free + bring-your-own-lock. Fallback to MathSoc/Athletics if rejected.",
-    email_to: null
   },
   {
     id: "science-stc",
@@ -58,13 +56,12 @@ window.LOCKERS = [
     provider: "Science Undergraduate Office",
     who: "全校学生（Science 管理）",
     floor: "楼层见现场",
-    x: 650, y: 327,
+    coord: [43.4731, -80.5432],
     apply_url: "https://uwaterloo.ca/science-undergraduate-office/new-students-science/get-science-ready/locker-registration",
     apply_text: "实地占空柜 → 填 Science Locker Registration 网页表单",
     recommend: "good",
     notes_zh: "Science 楼群免费学期柜之一，与 EIT 同属 Science 登记体系。",
     notes_en: "Part of the Science faculty free-term locker network; same registration as EIT.",
-    email_to: null
   },
   {
     id: "science-c2",
@@ -80,13 +77,12 @@ window.LOCKERS = [
     provider: "Science Undergraduate Office",
     who: "全校学生（Science 管理）",
     floor: "楼层见现场",
-    x: 715, y: 392,
+    coord: [43.4724, -80.5421],
     apply_url: "https://uwaterloo.ca/science-undergraduate-office/new-students-science/get-science-ready/locker-registration",
     apply_text: "实地占空柜 → 填 Science Locker Registration 网页表单",
     recommend: "good",
     notes_zh: "Science 楼群免费学期柜之一，偏东校区。",
     notes_en: "Part of Science free-term locker network; east campus.",
-    email_to: null
   },
   {
     id: "science-esc",
@@ -102,13 +98,12 @@ window.LOCKERS = [
     provider: "Science Undergraduate Office",
     who: "全校学生（Science 管理）",
     floor: "楼层见现场",
-    x: 670, y: 442,
+    coord: [43.4717, -80.5424],
     apply_url: "https://uwaterloo.ca/science-undergraduate-office/new-students-science/get-science-ready/locker-registration",
     apply_text: "实地占空柜 → 填 Science Locker Registration 网页表单",
     recommend: "good",
     notes_zh: "Science 楼群免费学期柜之一。",
     notes_en: "Part of Science free-term locker network.",
-    email_to: null
   },
   {
     id: "science-phy",
@@ -124,13 +119,12 @@ window.LOCKERS = [
     provider: "Science Undergraduate Office",
     who: "全校学生（Science 管理）",
     floor: "楼层见现场",
-    x: 610, y: 462,
+    coord: [43.4711, -80.5432],
     apply_url: "https://uwaterloo.ca/science-undergraduate-office/new-students-science/get-science-ready/locker-registration",
     apply_text: "实地占空柜 → 填 Science Locker Registration 网页表单",
     recommend: "good",
     notes_zh: "Science 楼群免费学期柜之一。",
     notes_en: "Part of Science free-term locker network.",
-    email_to: null
   },
   {
     id: "mathsoc-mc",
@@ -146,13 +140,12 @@ window.LOCKERS = [
     provider: "Math Society (MathSoc)",
     who: "Math 学生为主，通常对全校开放",
     floor: "MC 内指定区",
-    x: 435, y: 122,
+    coord: [43.4717, -80.5463],
     apply_url: "https://uwaterloo.ca/math/society",
     apply_text: "开学初在 MathSoc 柜台 / 网站租赁，先到先得",
     recommend: "good",
     notes_zh: "全校最便宜的租赁柜之一，靠近 DC。资格：Math 学生优先，往年对全校学生开放；以当年 MathSoc 政策为准。",
     notes_en: "Among the cheapest rentals, near DC. Math students priority; historically open to all. Confirm current MathSoc policy.",
-    email_to: null
   },
   {
     id: "ath-pac",
@@ -168,13 +161,12 @@ window.LOCKERS = [
     provider: "Athletics & Recreation",
     who: "全校学生",
     floor: "PAC 更衣区",
-    x: 475, y: 610,
+    coord: [43.4690, -80.5428],
     apply_url: "https://uwaterloo.ca/athletics",
     apply_text: "秋季学期约 9/8 开放租赁，前台或网站办理",
     recommend: "fallback",
     notes_zh: "对全校学生开放，但离 ECE 楼较远；适合常去健身房的人。秋季开学初开放，名额有限。",
     notes_en: "Open to all students but far from ECE; good if you use the gym. Fall term opens ~Sept 8, limited spots.",
-    email_to: null
   },
   {
     id: "ath-cif",
@@ -190,13 +182,12 @@ window.LOCKERS = [
     provider: "Athletics & Recreation",
     who: "全校学生",
     floor: "CIF 更衣区",
-    x: 565, y: 655,
+    coord: [43.4680, -80.5433],
     apply_url: "https://uwaterloo.ca/athletics",
     apply_text: "秋季学期约 9/8 开放租赁，前台或网站办理",
     recommend: "fallback",
     notes_zh: "与 PAC 同属 Athletics 体系，靠近运动场。",
     notes_en: "Same Athletics system as PAC, by the fields.",
-    email_to: null
   },
   {
     id: "ess-ev",
@@ -212,13 +203,12 @@ window.LOCKERS = [
     provider: "Environment Society (ESS)",
     who: "仅 Environment 学院学生",
     floor: "EV 楼内",
-    x: 180, y: 570,
+    coord: [43.4692, -80.5478],
     apply_url: "https://uwaterloo.ca/environment",
     apply_text: "通过 Environment Society 申请，限 Environment 学生",
     recommend: "fallback",
     notes_zh: "仅限 Environment 学院学生，ECE 学生通常不符合资格——列为备选仅供参考。",
     notes_en: "Environment students only; ECE students normally not eligible. Listed as fallback reference only.",
-    email_to: null
   },
   {
     id: "lib-dana",
@@ -234,13 +224,12 @@ window.LOCKERS = [
     provider: "University of Waterloo Libraries",
     who: "全校学生 / 教职工",
     floor: "Dana Porter 6 楼（DC 也有）",
-    x: 697, y: 107,
+    coord: [43.4719, -80.5453],
     apply_url: "https://uwaterloo.ca/libraries",
     apply_text: "现场自助取号，当天归还，不适合长期存放",
     recommend: "good",
     notes_zh: "免费、当日有效（约 8 小时），适合白天临时放书；不可过夜长期存。Dana Porter 与 Davis Centre 均有。",
     notes_en: "Free, same-day (~8h) only — good for daytime books, not overnight storage. Available at Dana Porter and Davis Centre.",
-    email_to: null
   },
   {
     id: "qnc-day",
@@ -256,12 +245,11 @@ window.LOCKERS = [
     provider: "Quantum Nano Centre",
     who: "全校学生（以 QNC 规定为准）",
     floor: "QNC 内",
-    x: 497, y: 262,
+    coord: [43.4722, -80.5446],
     apply_url: "https://uwaterloo.ca/quantum-nano-centre",
     apply_text: "现场办理日租，具体以 QNC 前台为准",
     recommend: "good",
     notes_zh: "校园中心位置，日租为主；适合白天在 QNC / 中校区活动时使用。",
     notes_en: "Central location; day-use oriented. Good for daytime use around the mid-campus.",
-    email_to: null
   }
 ];
