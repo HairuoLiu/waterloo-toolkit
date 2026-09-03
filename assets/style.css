@@ -359,3 +359,24 @@ td.act { color: var(--muted); min-width: 220px; }
     .rtab { padding: 6px 13px; font-size: 13px; }
     .cal-nav .btn { padding: 7px 10px; font-size: 13px; }
   }
+
+  /* 主站：Featured 大卡（如 SOP）— 占满整行、置顶、视觉强化 */
+  .app-card.featured {
+    grid-column: 1 / -1;
+    display: flex;
+    border: 1.5px solid var(--brand-deep);
+    background: linear-gradient(180deg, #fffdf4 0%, #fff7df 100%);
+  }
+  .app-card.featured .feat-inner { display: flex; gap: 18px; align-items: center; width: 100%; }
+  .app-card.featured .feat-icon { font-size: 54px; line-height: 1; flex: 0 0 auto; }
+  .app-card.featured .feat-text { flex: 1 1 auto; min-width: 0; }
+  .app-card.featured .feat-tag {
+    display: inline-block; font-size: 12px; font-weight: 700; color: #7a5b00;
+    background: var(--brand); padding: 2px 10px; border-radius: 999px; margin-bottom: 8px;
+  }
+  .app-card.featured h3 { font-size: 22px; margin: 0 0 6px; }
+  .app-card.featured p { margin: 0; color: var(--muted); font-size: 15px; }
+  .app-card.featured .feat-cta { display: inline-block; margin-top: 10px; font-weight: 700; color: #7a5b00; }
+  @media (max-width: 680px) {
+    .app-card.featured .feat-inner { flex-direction: column; align-items: flex-start; }
+  }

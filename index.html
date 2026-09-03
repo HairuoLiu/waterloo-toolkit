@@ -47,18 +47,34 @@
           grid.innerHTML = '<p class="muted">还没有子工具，欢迎按 STRUCTURE.md 添加。</p>';
           return;
         }
+        // featured 置顶（其余保持原顺序）
+        apps = apps.slice().sort(function (a, b) { return (b.featured ? 1 : 0) - (a.featured ? 1 : 0); });
         apps.forEach(function (a) {
           var card = document.createElement('a');
-          card.className = 'app-card';
           card.href = a.path;
-          var cover = a.cover
-            ? '<img class="cover" src="' + a.cover + '" alt="' + (a.title_zh || a.id) + ' 封面" loading="lazy" />'
-            : '<div class="icon">' + (a.icon || '🔧') + '</div>';
-          card.innerHTML =
-            cover +
-            '<h3>' + (a.title_zh || a.title_en || a.id) + '</h3>' +
-            '<p>' + (a.desc_zh || a.desc_en || '') + '</p>' +
-            (a.category ? '<span class="tag">' + a.category + '</span>' : '');
+          if (a.featured) {
+            card.className = 'app-card featured';
+            card.innerHTML =
+              '<div class="feat-inner">' +
+                '<div class="feat-icon">' + (a.icon || '🧭') + '</div>' +
+                '<div class="feat-text">' +
+                  '<span class="feat-tag">新生必读 · 本工具箱最重要的项目</span>' +
+                  '<h3>' + (a.title_zh || a.title_en || a.id) + '</h3>' +
+                  '<p>' + (a.desc_zh || a.desc_en || '') + '</p>' +
+                  '<span class="feat-cta">进入 Wiki →</span>' +
+                '</div>' +
+              '</div>';
+          } else {
+            card.className = 'app-card';
+            var cover = a.cover
+              ? '<img class="cover" src="' + a.cover + '" alt="' + (a.title_zh || a.id) + ' 封面" loading="lazy" />'
+              : '<div class="icon">' + (a.icon || '🔧') + '</div>';
+            card.innerHTML =
+              cover +
+              '<h3>' + (a.title_zh || a.title_en || a.id) + '</h3>' +
+              '<p>' + (a.desc_zh || a.desc_en || '') + '</p>' +
+              (a.category ? '<span class="tag">' + a.category + '</span>' : '');
+          }
           grid.appendChild(card);
         });
       })

@@ -1,5 +1,18 @@
 [
   {
+    "id": "sop",
+    "title_zh": "滑铁卢入学 SOP",
+    "title_en": "Waterloo Onboarding SOP",
+    "desc_zh": "新生入学全攻略 Wiki：行前 → 抵达 → 注册 → 学术生活，每一步该做什么、怎么设置；踩坑记录持续更新。",
+    "desc_en": "Step-by-step Waterloo onboarding SOP wiki: pre-arrival, arrival, enrollment, academic life + a living pitfall log.",
+    "icon": "🧭",
+    "category": "新生攻略",
+    "path": "apps/sop/",
+    "cover": "apps/sop/cover.svg",
+    "featured": true,
+    "size": "wide"
+  },
+  {
     "id": "daily-reminder",
     "title_zh": "研究生每日提醒",
     "title_en": "Grad Daily Reminder",

@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', 'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', sans-serif">
+  <defs>
+    <linearGradient id="sopGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FED34C"/>
+      <stop offset="100%" stop-color="#EAAB00"/>
+    </linearGradient>
+    <pattern id="dots" width="26" height="26" patternUnits="userSpaceOnUse">
+      <circle cx="3" cy="3" r="2" fill="#e6e8ef"/>
+    </pattern>
+  </defs>
+
+  <!-- 背景 -->
+  <rect width="1200" height="630" fill="#f6f7fb"/>
+  <rect width="1200" height="630" fill="url(#dots)" opacity="0.5"/>
+
+  <!-- 顶部 kicker -->
+  <text x="62" y="74" font-size="20" font-weight="700" letter-spacing="2" fill="#d11610">UW TOOLKIT</text>
+
+  <!-- 图标 + 分类 -->
+  <rect x="60" y="146" width="130" height="130" rx="30" fill="url(#sopGrad)"/>
+  <text x="125" y="214" font-size="76" text-anchor="middle" dominant-baseline="central">🧭</text>
+
+  <rect x="218" y="168" width="128" height="46" rx="23" fill="#EAAB00" opacity="0.14"/>
+  <text x="282.0" y="196" font-size="23" font-weight="600" fill="#b9770e" text-anchor="middle" dominant-baseline="central">新生攻略</text>
+
+  <!-- 标题 -->
+  <text x="60" y="336" font-size="60" font-weight="800" fill="#1f2430">滑铁卢入学 SOP</text>
+
+  <!-- 描述 -->
+  <text x="60" y="436" font-size="27" fill="#6b7280">新生入学全攻略 Wiki：行前 → 抵达 → 注册 → 学术生活，</text>
+  <text x="60" y="478" font-size="27" fill="#6b7280">每一步该做什么、怎么设置；踩坑记录持续更新。</text>
+
+  <!-- 右侧装饰 -->
+  <circle cx="1075" cy="120" r="170" fill="#FED34C" opacity="0.12"/>
+  <circle cx="1130" cy="250" r="70" fill="#EAAB00" opacity="0.10"/>
+  <rect x="930" y="372" width="240" height="150" rx="16" fill="#ffffff" stroke="#e6e8ef"/>
+  <rect x="952" y="402" width="150" height="14" rx="7" fill="#EAAB00" opacity="0.55"/>
+  <rect x="952" y="430" width="196" height="14" rx="7" fill="#e6e8ef"/>
+  <rect x="952" y="458" width="120" height="14" rx="7" fill="#e6e8ef"/>
+
+  <!-- 底栏 -->
+  <line x1="60" y1="572" x2="1140" y2="572" stroke="#e6e8ef"/>
+  <text x="60" y="610" font-size="22" font-weight="700" fill="#1f2430">🎓 滑铁卢大学工具箱</text>
+  <text x="1140" y="610" font-size="19" fill="#6b7280" text-anchor="end" font-family="monospace">waterloo-toolkit/sop</text>
+</svg>
