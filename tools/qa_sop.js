@@ -79,7 +79,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   /* ---------- 3. 目录（TOC） ---------- */
   const secs = qsa('.sop-main section[data-toc]');
   const tocLinks = qsa('#side-toc a');
-  check('正文含带 data-toc 的章节', secs.length >= 6, secs.length + ' 个章节');
+  check('正文含带 data-toc 的章节', secs.length >= 10, secs.length + ' 个章节');
   check('目录已自动生成且数量匹配', tocLinks.length === secs.length,
     '目录 ' + tocLinks.length + ' / 章节 ' + secs.length);
 
@@ -91,6 +91,18 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   check('目录链接与章节 id 一一对应', JSON.stringify(hrefs) === JSON.stringify(ids),
     '目录 ' + hrefs.join(',') + ' | 章节 ' + ids.join(','));
   check('目录项含序号与标题', tocLinks.every((a) => a.querySelector('.t-num') && a.querySelector('.t-label')));
+
+  /* ---------- 3.5 新增章节（Co-op / 住房 / 选课 / 杂费）存在性与外链规范 ---------- */
+  ['coop', 'housing', 'courses', 'fees'].forEach((id) => {
+    const el = document.getElementById(id);
+    check('新增章节 #' + id + ' 存在且带 data-toc', !!el && !!el.getAttribute('data-toc'));
+    const links = el ? qsa('#' + id + ' .link-row a') : [];
+    const ext = links.filter((x) => /^https?:/.test(x.getAttribute('href') || ''));
+    check('#' + id + ' 含外链且带 target=_blank & rel=noopener',
+      ext.length > 0 && ext.every((x) =>
+        x.getAttribute('target') === '_blank' && /noopener/.test(x.getAttribute('rel') || '')),
+      ext.length + ' 条外链');
+  });
 
   /* ---------- 4. 踩坑记录渲染 ---------- */
   const logItems = qsa('#sop-log .log-item');
@@ -188,9 +200,9 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   check('目录含「重要日期速查」', tocLabels.some((t) => /重要日期速查/.test(t)), tocLabels.join(' / '));
 
   const metaRows = qsa('.meta-row');
-  check('时间窗口 chip 覆盖多个阶段', metaRows.length >= 4, metaRows.length + ' 个阶段');
+  check('时间窗口 chip 覆盖多个阶段', metaRows.length >= 8, metaRows.length + ' 个阶段');
   const needsBlocks = qsa('.needs');
-  check('材料清单块存在', needsBlocks.length >= 3, needsBlocks.length + ' 个');
+  check('材料清单块存在', needsBlocks.length >= 7, needsBlocks.length + ' 个');
 
   const linkEls = qsa('.link-row a');
   check('官方链接已配置', linkEls.length >= 8, linkEls.length + ' 条');

@@ -35,7 +35,7 @@
 
 ```
 apps/sop/
-├── index.html      # 页面骨架：顶栏 + 左侧(搜索/目录) + 正文 6 个 <section> + 内联 <style>
+├── index.html      # 页面骨架：顶栏 + 左侧(搜索/目录) + 正文 10 个 <section> + 内联 <style>
 ├── data.js         # ★ window.SOP_LOG = [...] —— 踩坑记录的数据源（最常改的文件）
 ├── app.js          # 交互：渲染记录 / 生成目录 / 全文搜索 / 滚动联动 / 分享
 ├── cover.svg       # 主站卡片封面（由 assets/gen_cover.py 生成，禁止手写）
@@ -228,9 +228,9 @@ curl -s -o /dev/null -w "%{http_code}" https://hairuoliu.github.io/waterloo-tool
 | 目标 / 步骤清单 | ✅ 四阶段齐备 |
 | 时间窗口 | ✅ 已补（每节顶部 `.meta-chip`，含迎新周、NFA 冻结、Fees Arranged 等硬日期） |
 | 所需材料 | ✅ 已补（每节 `.needs` 材料清单块） |
-| 常见坑 | ✅ 已沉淀 5 条（UHIP 涨价 / NFA 冻结 / U-Pass 忘带卡 / 期末含周日 / 闭校） |
+| 常见坑 | ✅ 已沉淀 7 条（UHIP 涨价 / NFA 冻结 / U-Pass 忘带卡 / 期末含周日 / 闭校 / 租房押金红线 / Co-op 首尾约束） |
 | 官方链接 | ✅ 已补（每节底部 `.link-row`，均为官方站点 + `rel="noopener"`） |
-| **剩余缺口** | **Co-op 求职时间线细节、住宿与租房、选课策略（可链 `course-planner`）、研究生杂费明细（除 UHIP 外）** |
+| **剩余缺口** | ✅ 已全部补齐：⑦ Co-op 求职时间线 / ⑧ 住宿与租房指南 / ⑨ 选课策略 / ⑩ 研究生杂费明细（见各自 `.meta-chip` / `.needs` / `.link-row` 与官方链接） |
 
 > 补内容时的**素材优先级**：本仓库 `apps/daily-reminder/data.js`（UW 官方研究生重要日期，已整理 105 条）
 > > 官方站点 > 通用经验。**能引用仓库内已有数据就不要重抄一遍**，用链接串联即可（见「重要日期速查」章节的做法）。
@@ -249,6 +249,7 @@ curl -s -o /dev/null -w "%{http_code}" https://hairuoliu.github.io/waterloo-tool
 | 2026-09-02 | SOP Wiki 建站：四阶段骨架 + 数据驱动的踩坑记录 |
 | 2026-09-03 | 改造为大厂文档站形态：左侧目录 + 全文搜索 + 滚动联动；新增本文档 |
 | 2026-09-03 | 按 §9 完整性标准补全四阶段的「时间窗口 / 所需材料 / 官方链接」；新增「重要日期速查 · 2026 秋季」章节（复用 daily-reminder 同源数据）；沉淀 5 条常见坑 |
+| 2026-09-03 | 补齐 §9 剩余缺口：新增 ⑦ Co-op 求职时间线 / ⑧ 住宿与租房指南 / ⑨ 选课策略 / ⑩ 研究生杂费明细 四个章节（含 `.meta-chip` / `.needs` / `.link-row` 与官方链接），踩坑记录新增「租房押金红线」「Co-op 首尾约束」2 条；正文章节由 6 → 10 节 |
 
 ---
 
