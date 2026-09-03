@@ -108,6 +108,34 @@
     /* 搜索命中高亮 */
     mark { background: var(--brand); color: var(--brand-ink); border-radius: 3px; padding: 0 2px; }
 
+    /* 时间窗口 / 材料 / 官方链接（SOP 完整性三件套） */
+    .meta-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 2px; }
+    .meta-chip {
+      display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 600;
+      padding: 3px 11px; border-radius: 999px;
+      background: #fff7df; color: #7a5b00; border: 1px solid var(--brand);
+    }
+    .needs {
+      border: 1px dashed var(--line); border-radius: 10px; padding: 11px 15px;
+      margin: 12px 0; background: #fafbfe; font-size: 14px;
+    }
+    .needs > b {
+      display: block; font-size: 12px; letter-spacing: .04em;
+      color: var(--muted); margin-bottom: 6px;
+    }
+    .needs ul { margin: 0; padding-left: 20px; line-height: 1.75; }
+    .link-row { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0 0; }
+    .link-row a {
+      display: inline-flex; align-items: center; gap: 5px; font-size: 13px;
+      padding: 4px 11px; border: 1px solid var(--line); border-radius: 999px;
+      background: var(--card); color: var(--accent); text-decoration: none;
+    }
+    .link-row a:hover { border-color: var(--brand-deep); background: #fffdf3; text-decoration: none; }
+
+    /* 重要日期表：复用全站 table 规范，仅补两个分类色 */
+    .cat-迎新 { background: #fff4e0; color: #b9770e; }
+    .cat-上课 { background: #e8f8ef; color: #1f8a4c; }
+
     @media (max-width: 900px) {
       .sop-layout { grid-template-columns: 1fr; gap: 18px; }
       .sop-side { position: static; max-height: none; overflow: visible; }
@@ -187,6 +215,20 @@
         <!-- ② 阶段一 行前 -->
         <section id="pre" data-toc="阶段一 · 行前准备">
           <h2>② 阶段一 · 行前准备（出国前 1–3 个月）</h2>
+          <div class="meta-row">
+            <span class="meta-chip">⏰ 时间窗口：出国前 1–3 个月</span>
+            <span class="meta-chip">🎯 建议落地：早于开课 1–2 周（2026 秋季 9/9 开课）</span>
+          </div>
+          <div class="needs">
+            <b>📎 材料清单（电子版 + 打印各一份）</b>
+            <ul>
+              <li>护照（有效期须覆盖整个学业长度）</li>
+              <li>LOA / 录取信、学费首付凭证</li>
+              <li>资金证明：加元存款证明或 GIC 凭证</li>
+              <li>学历与成绩单、疫苗记录</li>
+              <li>本国驾照 + 国际翻译认证件（可选，落地考 G1 或办 Photo ID 用得上）</li>
+            </ul>
+          </div>
           <ul class="check-list">
             <li>确认 <b>录取与 LOA（Letter of Acceptance）</b>，核对专业 / 入学季 / Co-op 选项是否与你实际计划一致。</li>
             <li>申请 <b>学习许可（Study Permit）</b> 与（如适用）入境签证；准备 <b>资金证明</b>（加元存款 / GIC）。</li>
@@ -197,54 +239,135 @@
             <li>开通国际信用卡 / 准备少量 <b>加元现金</b> 落地应急。</li>
           </ul>
           <div class="box-warn"><b>关键提醒：</b> 学签有效期务必覆盖整个学业长度；资金与 GIC 材料是入境与本地开户的常见核查项，提前整理好。</div>
+          <div class="link-row">
+            <a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html" target="_blank" rel="noopener">IRCC · 学习许可 ↗</a>
+            <a href="https://uwaterloo.ca/important-dates/graduate" target="_blank" rel="noopener">UW 研究生重要日期 ↗</a>
+            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener">UW Finance · 学费与杂费 ↗</a>
+          </div>
         </section>
 
         <!-- ③ 阶段二 抵达 -->
         <section id="arrive" data-toc="阶段二 · 抵达滑铁卢">
           <h2>③ 阶段二 · 抵达滑铁卢（落地 1–2 周内）</h2>
+          <div class="meta-row">
+            <span class="meta-chip">⏰ 时间窗口：落地后 1–2 周内</span>
+            <span class="meta-chip">🎓 研究生迎新周：2026-09-07 ~ 09-10</span>
+          </div>
+          <div class="needs">
+            <b>📎 材料清单（开户 / 办证反复要用到）</b>
+            <ul>
+              <li>护照 + Study Permit（入境当场领取，务必核对姓名拼写与有效期）</li>
+              <li>住址证明：租房合同，或含本人姓名与地址的水电 / 话费账单</li>
+              <li>UW 录取信 / LOA（办银行卡、办 SIN 常被要求出示）</li>
+              <li>加元现金少量（落地首日打车、餐费应急）</li>
+            </ul>
+          </div>
           <ul class="check-list">
             <li><b>机场入境：</b> 持护照 / 学签 / LOA 走入境通道，当场领取 Study Permit——<b>当场核对有效期与姓名拼写</b>。</li>
             <li><b>手机卡：</b> Bell / Rogers / Telus 或廉价品牌（Public Mobile / Fido / Chatr），落地即可办，选含流量的套餐。</li>
             <li><b>银行开户：</b> RBC / TD / Scotiabank / BMO / CIBC；国际学生账户多免月费，带护照 + 学签 + 住址证明。</li>
             <li><b>SIN（工号）：</b> 打工 / 报税必需，Service Canada 线上或线下申请，拿到后妥善保存。</li>
-            <li><b>医保 UHIP：</b> 滑铁卢大学国际生强制医保，按学校指引激活；了解报销流程，可另购补充险。</li>
+            <li><b>医保 UHIP：</b> 安省 22 所公立大学统一的国际生强制医保，<b>2026–27 年度 $948/年（分 3 期，每学期 $316）</b>，自动计入学生账户、无需自行投保；保额上限 100 万加元/年。需账户状态变为 <b>"Fees Arranged"</b> 后才正式生效——所以缴费不是拖到最后一刻的事。</li>
             <li><b>Photo ID / 驾照：</b> 如无本国驾照，可考 Ontario G1；或用护照 + 住址证明办 Ontario Photo ID。</li>
             <li>校外租房者：办理 <b>网络 / 水电</b> 开户（租赁合同通常要求租客自行申请）。</li>
           </ul>
           <div class="box-good"><b>优先级建议：</b> 入境拿学签 → 手机 → 银行+SIN → UHIP → Photo ID，是落地头几天最高杠杆的五件事。</div>
+          <div class="link-row">
+            <a href="https://uhip.ca/" target="_blank" rel="noopener">UHIP 官网 ↗</a>
+            <a href="https://www.canada.ca/en/employment-social-development/services/sin.html" target="_blank" rel="noopener">Service Canada · 申请 SIN ↗</a>
+            <a href="https://www.ontario.ca/page/ontario-photo-id" target="_blank" rel="noopener">ServiceOntario · Photo ID ↗</a>
+          </div>
         </section>
 
         <!-- ④ 阶段三 注册 -->
         <section id="enroll" data-toc="阶段三 · 入学注册">
           <h2>④ 阶段三 · 入学注册（开学前—开学初）</h2>
+          <div class="meta-row">
+            <span class="meta-chip">⏰ 时间窗口：8 月下旬 – 9 月中</span>
+            <span class="meta-chip">🚨 09-23 NFA 冻结生效</span>
+            <span class="meta-chip">🚨 10-31 Fees Arranged 截止</span>
+          </div>
+          <div class="needs">
+            <b>📎 材料 / 前置条件</b>
+            <ul>
+              <li>UW ID（录取信上的 8 位学号）—— 激活 WatIAM 必需</li>
+              <li>WatIAM 账号与 @uwaterloo.ca 邮箱 —— 所有学校系统的统一入口</li>
+              <li>WatCard 学生卡：门禁、图书馆、校内消费、公交一卡通</li>
+              <li>Co-op 学生另需 Waterloo Works 档案（简历 + PD 课程要求）</li>
+            </ul>
+          </div>
           <ul class="check-list">
             <li>激活 <b>WatIAM 账号</b> 与 UW 邮箱（@uwaterloo.ca），这是所有学校系统的入口。</li>
             <li>用 <b>Quest</b> 完成课程注册：选课、加退课、查看 timetable 与 prerequisites。</li>
             <li>Co-op 学生：在 <b>Waterloo Works</b> 完善 profile、了解 PD 课程（Professional Development）要求与时间线。</li>
-            <li>缴纳 <b>学费</b>（Finance 账户），注意截止日与加元汇率；保留缴费凭证。</li>
+            <li>缴纳 <b>学费</b>（Finance 账户）：<b>9/23 起未做缴费安排的账户会被加 NFA 冻结（直接影响选课等操作），10/31 是办理 "Fees Arranged" 的最后期限</b>；注意加元汇率并保留凭证。</li>
             <li>领取 / 激活 <b>学生卡（WatCard）</b>——门禁、图书馆、校内消费一体。</li>
             <li>参加 <b>Orientation / 院系迎新</b>，加入学生群与社团，建立信息渠道。</li>
             <li>熟悉 campus：图书馆、IST（IT 服务）、写作 / 英语辅导、健康中心。</li>
           </ul>
           <div class="box-callout"><b>Co-op 时间线：</b> 滑铁卢的 study term 与 job search 高度交错，选课与求职要并行规划，避免学期中才发现投递窗口已过。</div>
+          <div class="link-row">
+            <a href="https://quest.uwaterloo.ca/" target="_blank" rel="noopener">Quest · 选课与账单 ↗</a>
+            <a href="https://uwaterloo.ca/watcard/" target="_blank" rel="noopener">WatCard 学生卡 ↗</a>
+            <a href="https://waterlooworks.uwaterloo.ca/" target="_blank" rel="noopener">Waterloo Works · Co-op ↗</a>
+          </div>
         </section>
 
         <!-- ⑤ 阶段四 学术生活 -->
         <section id="life" data-toc="阶段四 · 学术与日常生活">
           <h2>⑤ 阶段四 · 学术与日常生活（持续）</h2>
+          <div class="meta-row">
+            <span class="meta-chip">⏰ 时间窗口：贯穿整个学业</span>
+            <span class="meta-chip">🚌 U-Pass：全日制本硕自动含，刷 WatCard 乘车</span>
+          </div>
           <ul class="check-list">
             <li><b>课程节奏：</b> 滑铁卢 term 短（约 13 周）、进度快，尽早建立每周计划，不要等 midterm 前才突击。</li>
             <li><b>Co-op 周期：</b> 关注 job search 与 study term 的时间线，提前准备简历 / 面试。</li>
             <li><b>校园资源：</b> 图书馆、tutoring、心理咨询、职业中心、健康中心——都是已含在学费里的权益。</li>
-            <li><b>交通：</b> GRT 公交 + 学生优惠；多伦多通勤可选 GO Transit。</li>
-            <li><b>税务：</b> 凭 SIN 与学费凭证（T2202）在次年报税，国际学生也可退回部分税。</li>
+            <li><b>交通：</b> 全日制本科生与研究生都<b>自动获得 GRT U-Pass</b>（已含在 incidental fees 里），<b>刷 WatCard 即可无限次乘坐 GRT 公交与 ION 轻轨</b>；忘带卡需付现金 $3.75 且须自备零钱。多伦多通勤可选 GO Transit。</li>
+            <li><b>税务：</b> 凭 SIN 与学费凭证（<b>T2202</b>，通常在次年 2 月底前可从学生账户下载）报税，国际学生同样可退回部分税款。</li>
             <li>把遇到的问题随时追加到本页 <a href="#log">踩坑记录</a>，让它越来越像「你自己的入学百科」。</li>
           </ul>
+          <div class="link-row">
+            <a href="https://uwaterloo.ca/sustainability/transportation" target="_blank" rel="noopener">UW 交通与 U-Pass ↗</a>
+            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener">UW Finance · T2202 与账单 ↗</a>
+            <a href="../daily-reminder/">本工具箱 · 研究生每日提醒 →</a>
+          </div>
         </section>
 
-        <!-- ⑥ 踩坑记录 / 更新日志 -->
+        <!-- ⑥ 重要日期速查（2026 秋季） -->
+        <section id="dates" data-toc="重要日期速查 · 2026 秋季">
+          <h2>⑥ 重要日期速查 · 2026 秋季学期</h2>
+          <p class="sub">下表与本工具箱 <a href="../daily-reminder/">研究生每日提醒</a> 同源，均整理自 UW 官方「研究生重要日期」页。<b>具体以学校当年公布为准。</b></p>
+          <div class="table-scroll">
+            <table>
+              <thead><tr><th>日期</th><th>事项</th><th>类别</th></tr></thead>
+              <tbody>
+                <tr><td>09-07 ~ 09-10</td><td>研究生迎新指导周</td><td><span class="cat cat-迎新">迎新</span></td></tr>
+                <tr><td>09-08</td><td>研究生迎新会（Graduate Orientation）</td><td><span class="cat cat-迎新">迎新</span></td></tr>
+                <tr><td>09-09</td><td>开课 · 学期第一天</td><td><span class="cat cat-上课">上课</span></td></tr>
+                <tr><td>09-23</td><td>未安排缴费（NFA）冻结生效 —— 影响后续选课等操作</td><td><span class="cat cat-缴费">缴费</span></td></tr>
+                <tr><td>09-29</td><td>100% 退费截止</td><td><span class="cat cat-退费">退费</span></td></tr>
+                <tr><td>10-01 ~ 11-24</td><td>退课记 WD 期（成绩单标 Withdrawn，不计学分）</td><td><span class="cat cat-退课">退课</span></td></tr>
+                <tr><td>10-02</td><td>期末考试时间表发布（Quest 可查）</td><td><span class="cat cat-考试">考试</span></td></tr>
+                <tr><td>10-10 ~ 10-18</td><td>Reading Week · 阅读周（无课）</td><td><span class="cat cat-假期">假期</span></td></tr>
+                <tr><td>10-12</td><td>感恩节（Thanksgiving）</td><td><span class="cat cat-假期">假期</span></td></tr>
+                <tr><td>10-23</td><td>50% 退费截止</td><td><span class="cat cat-退费">退费</span></td></tr>
+                <tr><td>10-31</td><td>办理 "Fees Arranged" 最后期限</td><td><span class="cat cat-缴费">缴费</span></td></tr>
+                <tr><td>12-08</td><td>停课 · 本学期课程结束</td><td><span class="cat cat-上课">上课</span></td></tr>
+                <tr><td>12-10 ~ 12-23</td><td>期末考试期</td><td><span class="cat cat-考试">考试</span></td></tr>
+                <tr><td>12-13</td><td><b>周日也安排期末考试</b> —— 务必确认自己是否有场次</td><td><span class="cat cat-考试">考试</span></td></tr>
+                <tr><td>12-24</td><td>成绩开始在 Quest 显示</td><td><span class="cat cat-成绩">成绩</span></td></tr>
+                <tr><td>12-24 ~ 12-31</td><td>学校假期闭校（办公室关闭，事务无法办理）</td><td><span class="cat cat-假期">假期</span></td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="box-warn"><b>最容易被忽略的三条：</b> ① <b>9/23</b> 未安排缴费会触发 NFA 冻结，直接影响选课；② <b>10/31</b> 是办理 Fees Arranged 的最后期限；③ 期末考期<b>含周日场次</b>（12/13），别默认周末没考试。</div>
+        </section>
+
+        <!-- ⑦ 踩坑记录 / 更新日志 -->
         <section id="log" data-toc="踩坑记录 / 更新日志">
-          <h2>⑥ 踩坑记录 / 更新日志</h2>
+          <h2>⑦ 踩坑记录 / 更新日志</h2>
           <p class="sub">这是本页「活」的部分——由 <code>apps/sop/data.js</code> 里的 <code>window.SOP_LOG</code> 数组驱动。你之后在不同时间段遇到的问题，直接往数组里追加一条对象即可，无需改 HTML。</p>
           <div id="sop-log"><p class="muted">加载中…</p></div>
           <p class="log-hint">追加格式（复制一条改内容，加在数组里）：<br>

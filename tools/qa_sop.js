@@ -44,6 +44,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   const { window, document } = parseHTML(html);
   const qsa = (sel) => Array.prototype.slice.call(document.querySelectorAll(sel));
+  const lower = (s) => String(s || '').toLowerCase();
 
   /* ---------- 1. 执行脚本 ---------- */
   new Function('window', dataJs)(window);
@@ -107,41 +108,51 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
   const visibleIds = () => secs.filter((s) => s.style.display !== 'none')
     .map((s) => s.getAttribute('id'));
+  const isVisible = (el) => {
+    let n = el;
+    while (n) { if (n.style && n.style.display === 'none') return false; n = n.parentNode; }
+    return true;
+  };
+  // 用「属性断言」而非硬编码章节名：内容增长后关键词不再唯一，也不会造成假失败
+  async function search(term) {
+    input.value = term;
+    fire(input, 'input');
+    await sleep(300);
+    return lower(term);
+  }
 
-  // 5a. 唯一命中：WatCard 全页仅出现 1 次，位于「阶段三 · 入学注册」
-  input.value = 'WatCard';
-  fire(input, 'input');
-  await sleep(300);
-
+  // 5a. 关键词过滤的正确性
+  const needle = await search('WatCard');
   const marks = qsa('.sop-main mark');
-  check('搜索产生 <mark> 高亮', marks.length > 0, marks.length + ' 处');
-  check('高亮文本正确（大小写不敏感）',
-    marks.length > 0 && marks[0].textContent === 'WatCard',
-    marks.length ? marks[0].textContent : '');
-
   const kept = secs.filter((s) => s.style.display !== 'none');
   const hid = secs.filter((s) => s.style.display === 'none');
-  check('命中章节保留、未命中隐藏', kept.length > 0 && hid.length > 0,
-    '保留 ' + kept.length + ' / 隐藏 ' + hid.length);
-  check('唯一命中「注册」章节',
-    kept.length === 1 && kept[0].getAttribute('id') === 'enroll',
+
+  check('搜索产生 <mark> 高亮', marks.length > 0, marks.length + ' 处');
+  check('高亮文本正确（大小写不敏感）',
+    marks.length > 0 && marks.every((m) => lower(m.textContent) === needle),
+    marks.length ? marks[0].textContent : '');
+  check('所有高亮都落在可见内容内', marks.every(isVisible));
+  check('可见章节的文本确实含关键词（无假阳性）',
+    kept.length > 0 && kept.every((s) => lower(s.textContent).indexOf(needle) !== -1),
     visibleIds().join(','));
+  check('隐藏章节的文本确实不含关键词（无假阴性）',
+    hid.length > 0 && hid.every((s) => lower(s.textContent).indexOf(needle) === -1),
+    hid.map((s) => s.getAttribute('id')).join(','));
 
   const status = document.getElementById('sop-status');
   check('搜索状态文案已更新', /处匹配/.test(status.textContent || ''), status.textContent);
-  check('目录显示命中数徽标', qsa('#side-toc .t-count').length > 0,
-    qsa('#side-toc .t-count').length + ' 个');
-  check('未命中章节在目录中变灰', qsa('#side-toc a.dim').length === secs.length - 1,
-    qsa('#side-toc a.dim').length + ' 项变灰');
+  check('目录命中徽标数 = 可见章节数', qsa('#side-toc .t-count').length === kept.length,
+    qsa('#side-toc .t-count').length + ' 个 / 可见 ' + kept.length + ' 章');
+  check('未命中章节在目录中变灰', qsa('#side-toc a.dim').length === hid.length,
+    qsa('#side-toc a.dim').length + ' 项 / 隐藏 ' + hid.length + ' 章');
 
-  // 5b. 多章节命中：「银行」同时出现在「总览」的阶段二卡片与「抵达」正文
-  input.value = '银行';
-  fire(input, 'input');
-  await sleep(300);
-  const kept2 = visibleIds();
-  check('多章节命中正确（总览 + 抵达）',
-    kept2.length === 2 && kept2.indexOf('overview') !== -1 && kept2.indexOf('arrive') !== -1,
-    kept2.join(','));
+  // 5b. 关键词分布在多个章节时应全部保留
+  const needle2 = await search('银行');
+  const kept2 = secs.filter((s) => s.style.display !== 'none');
+  check('多章节命中（≥2 章）', kept2.length >= 2, visibleIds().join(','));
+  check('多章节命中均含关键词',
+    kept2.every((s) => lower(s.textContent).indexOf(needle2) !== -1),
+    visibleIds().join(','));
 
   /* ---------- 6. 搜索：踩坑记录可被命中 ---------- */
   input.value = '建站';
@@ -164,6 +175,34 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   check('清空后目录徽标清除', qsa('#side-toc .t-count').length === 0);
   check('清空后目录无变灰项', qsa('#side-toc a.dim').length === 0);
   check('清空后状态文案隐藏', status.style.display === 'none' || status.hasAttribute('hidden'));
+
+  /* ---------- 7.5 内容完整性（对应 AGENT_GUIDE §9 的七维标准） ---------- */
+  check('「重要日期速查」章节已存在', !!document.getElementById('dates'));
+  const dateRows = qsa('#dates tbody tr');
+  check('重要日期表 ≥15 行', dateRows.length >= 15, dateRows.length + ' 行');
+
+  const tocLabels = tocLinks.map((a) => {
+    const t = a.querySelector('.t-label');
+    return t ? t.textContent : '';
+  });
+  check('目录含「重要日期速查」', tocLabels.some((t) => /重要日期速查/.test(t)), tocLabels.join(' / '));
+
+  const metaRows = qsa('.meta-row');
+  check('时间窗口 chip 覆盖多个阶段', metaRows.length >= 4, metaRows.length + ' 个阶段');
+  const needsBlocks = qsa('.needs');
+  check('材料清单块存在', needsBlocks.length >= 3, needsBlocks.length + ' 个');
+
+  const linkEls = qsa('.link-row a');
+  check('官方链接已配置', linkEls.length >= 8, linkEls.length + ' 条');
+  const extLinks = linkEls.filter((a) => /^https?:/.test(a.getAttribute('href') || ''));
+  check('外链均带 target=_blank 与 rel=noopener',
+    extLinks.length > 0 && extLinks.every((a) =>
+      a.getAttribute('target') === '_blank' && /noopener/.test(a.getAttribute('rel') || '')),
+    extLinks.length + ' 条外链');
+
+  check('踩坑记录 ≥5 条（常见坑已沉淀）',
+    qsa('#sop-log .log-item').length >= 5,
+    qsa('#sop-log .log-item').length + ' 条');
 
   /* ---------- 8. 静态红线 ---------- */
   const styleBlock = (html.match(/<style>([\s\S]*?)<\/style>/) || [])[1] || '';
