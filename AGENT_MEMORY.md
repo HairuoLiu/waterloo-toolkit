@@ -44,18 +44,28 @@ waterloo-toolkit/
 ├── assets/
 │   ├── style.css          # ★ 唯一共享样式（含 .topbar / .top-actions / .icon-btn / .topbar-nav）
 │   └── gen_cover.py       # ★ 封面统一生成器（所有 cover.svg 都靠它，禁止手写 SVG）
-└── apps/
+├── apps/
     ├── manifest.json      # ★ 子 App 清单（数组）；新增/改名必改
     ├── daily-reminder/
     │   ├── index.html     # 页面骨架 + 顶栏 + 视图容器
     │   ├── app.js         # 全部逻辑：日历/列表/学年/提醒中心/类别筛选/分享
     │   ├── data.js         # window.UW_EVENTS = [...]（由 transform_data.py 生成，97 条）
     │   └── cover.svg       # gen_cover.py 生成
-    └── course-planner/
-        ├── index.html     # 页面（含 .nav 顶部导航、顶栏、内联样式）
-        ├── README.md      # 该子 App 自己的说明
-        ├── DEV.md         # 该子 App 的实现细节
-        └── cover.svg
+    ├── course-planner/
+    │   ├── index.html     # 页面（含 .nav 顶部导航、顶栏、内联样式）
+    │   ├── README.md      # 该子 App 自己的说明
+    │   ├── DEV.md         # 该子 App 的实现细节
+    │   └── cover.svg
+    ├── sop/               # ★ 新生入学 SOP（主站置顶旗舰，整行 featured banner）
+    │   ├── index.html     # 大厂文档站形态：左侧目录 + 全文搜索 + 正文 7 个 section
+    │   ├── data.js        # window.SOP_LOG = [...]（踩坑记录数据源，最常改的文件）
+    │   ├── app.js         # 渲染记录 / 生成目录 / 搜索高亮 / 滚动联动 / 分享
+    │   ├── cover.svg      # gen_cover.py 生成
+    │   └── AGENT_GUIDE.md # ★ 给 AI 的贡献规范（怎么加内容/加章节 + 红线），先读它
+    ├── locker-finder/     # 校园储物柜地图（Leaflet 真实地图）
+    └── weekday-stay/      # 周中临时住宿
+└── tools/
+    └── qa_sop.js          # linkedom 真实 DOM 门禁（push 前必跑，要求 0 失败）
 ```
 
 > 注意：仓库**不含** `daily-reminder` 的构建管线脚本（`parse_dates.py` / `enrich_dates.py` / `transform_data.py`）——它们原本在 `2026-07-31-14-35-22/` 工作区根目录（即本次准备移除的本地项目），**没有被纳入本仓库**。详见 §9 数据管线说明与风险。
@@ -131,6 +141,7 @@ waterloo-toolkit/
 ## 7. 推送前 QA 门禁（linkedom 真实 DOM）
 
 - **位置**：历史脚本 `qa_dr.js` 原本在 `C:\Users\h\WorkBuddy\2026-07-31-14-35-22\qa_dr.js`（**仓库外，不会被纳入本仓库，且本次本地项目将被移除**）。建议未来 agent 把 QA 脚本**放进仓库**（如 `tools/qa_dr.js`）以便长期留存。
+- ✅ **已入库（2026-09-03）**：`tools/qa_sop.js` —— SOP 页的 linkedom 门禁，38 项断言（顶栏规范 / 目录生成 / 章节 id 唯一 / 搜索高亮 / 多章节命中 / 清空无损还原 / 相对路径红线 / 无 token 泄漏）。运行：`node tools/qa_sop.js`，要求 0 失败。**给其它子 App 补 QA 时照此模板写，并统一放进 `tools/`。**
 - **linkedom 位置**：`~/.workbuddy/binaries/node/workspace/node_modules/linkedom/cjs/index.js`（CJS 入口）。
 - **做法**：用 linkedom `parseHTML` 真实解析 `apps/daily-reminder/index.html` → 注入 `data.js` + 执行 `app.js` → 捕获抛错 → 断言（学年徽标可见 / 今日高亮 / 三范围复制含来源 / FAB 在容器内 / 倒数标签 / 移动端 CSS 规则等）。**push 前必须 0 错误通过**。
 - **course-planner 的 QA 清单**（曾用一次性脚本验证 14/14）：`.nav` 是 `.top .wrap` 直接子元素、无 `.top-mid`、`.lhs`/`.top-actions` 存在、5 个 nav 链接、`@media(max-width:680px) .nav{order:3/flex-basis:100%/justify-content:flex-start}` 都在、无 `.burger`/`.navmask` CSS、`markNav` 存在、无 `burgerEl`/`closeNav`。
@@ -172,6 +183,8 @@ waterloo-toolkit/
 1. **数据更新（2027–2028 学年）**：等 UW 公布 2027 秋季后，重建/运行数据管线，给 `data.js` 加 `academicYear` 字段，网页会自动多出对应学年 tab。建议顺手把管线脚本迁进仓库 `tools/`。
 2. **保持规范同步**：任何顶栏/封面/命名改动，必须同时更新 `README.md` + `STRUCTURE.md` + 两个 skill（`uw-toolkit-site` / `uw-toolkit-onboard`）。
 3. **QA 脚本入库**：把 linkedom QA 脚本放进仓库（如 `tools/qa_dr.js`），避免随本地项目丢失。
+   - ✅ **部分完成（2026-09-03）**：已加 `tools/qa_sop.js`（SOP 页，38 断言全过）。
+     **待补**：`tools/qa_dr.js`（daily-reminder）、以及 course-planner / locker-finder / weekday-stay 的门禁脚本。
 
 ### 11.2 待用户确认的优化（曾讨论，未落地）
 4. **daily-reminder tab 顺序**：用户曾希望"今日 → 本周 → 本月"；请先核对当前顺序（记忆中为 今日/本周/本月）与用户期望是否一致，再决定是否调整 `app.js` 的渲染顺序。
