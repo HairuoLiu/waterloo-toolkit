@@ -31,7 +31,7 @@ apps/course-planner/
 
 | 变量 | 含义 |
 |------|------|
-| `C` | 课程库（约 107 门）。每门字段：`n` 英文名、`zh` 中文名、`g` 分组、`d` 难度(1-5)、`t` 开课学期+教授、`tag` 标签数组、`desc` 内容、`proj` 项目/考核、`pre` 先修、`why` 为什么值得上、`alt` 替代课、`builds` 铺垫了什么、`needs` 需要什么、`for` 最适合谁、`ext` 占外系名额、`consent` 需教授同意、`warn` 警告。 |
+| `C` | 课程库（112 门）。每门字段：`n` 英文名、`zh` 中文名、`g` 分组、`d` 难度(1-5)、`t` 开课学期+教授、`tag` 标签数组、`desc` 内容、`proj` 项目/考核、`pre` 先修、`why` 为什么值得上、`alt` 替代课、`builds` 铺垫了什么、`needs` 需要什么、`for` 最适合谁、`ext` 占外系名额、`consent` 需教授同意、`warn` 警告。 |
 | `PLANS` | 4 套方案。每套：`id`/`name`/`sub`/`lead`/`stats`/`terms`（学期时间轴，含 `k:'study'\|'work'`）/`win`/`risk`/`swap`/`fit`。 |
 | `FRONTIER` / `NEWCOURSES` | 首页「最前沿」与「今年新课」卡片列表（引用 `C` 中的课号）。 |
 | `MAP` | 课程地图：方向 → 基础/核心/进阶三层 → 课号（引用 `C`）。 |
