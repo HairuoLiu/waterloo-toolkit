@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>滑铁卢大学工具箱 · UW Toolkit</title>
   <link rel="stylesheet" href="assets/style.css" />
+  <link rel="stylesheet" href="assets/nav.css" />
 </head>
 <body>
   <header class="topbar">
@@ -36,6 +37,10 @@
         <a href="README.md">README.md</a>（含 <a href="STRUCTURE.md">STRUCTURE.md</a>）。</p>
     </footer>
   </main>
+
+  <!-- 顶部站点导航：滑铁卢常用站点分类索引（数据 / 行为分离，子 App 引入同样三行即可复用） -->
+  <script src="assets/nav-data.js"></script>
+  <script src="assets/nav.js"></script>
 
   <script>
     fetch('apps/manifest.json')

@@ -1,0 +1,149 @@
+/* ============================================================
+   UW Toolkit · 顶部导航（滑铁卢站点索引）
+   设计基调：UW Gold 只做点睛，不铺陈；靠留白、层级与微交互建立质感。
+   依赖：assets/nav-data.js（数据）、assets/nav.js（行为）
+   ============================================================ */
+
+/* ---------- 容器 ---------- */
+.uw-nav { position: relative; margin-left: auto; }
+
+/* ---------- 分类标签 ---------- */
+.uw-nav-tabs { display: flex; align-items: center; gap: 2px; }
+
+.uw-tab {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 8px 13px; border: 0; border-radius: 10px;
+  background: transparent; color: var(--muted);
+  font: inherit; font-size: 14px; font-weight: 500; line-height: 1;
+  cursor: pointer; white-space: nowrap;
+  transition: background .16s ease, color .16s ease;
+}
+.uw-tab:hover { background: #f0f1f6; color: var(--ink); }
+.uw-tab:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: 1px; }
+.uw-tab[aria-expanded="true"] { background: #f0f1f6; color: var(--ink); }
+
+/* 标签小图标：默认降透明度，激活/悬浮时点亮为金 */
+.uw-tab-ico { display: inline-flex; width: 17px; height: 17px; opacity: .62;
+  transition: opacity .16s ease, color .16s ease; }
+.uw-tab-ico svg { width: 100%; height: 100%; display: block; }
+.uw-tab:hover .uw-tab-ico,
+.uw-tab[aria-expanded="true"] .uw-tab-ico { opacity: 1; color: var(--brand-deep); }
+
+/* 标签右侧的「数量」角标 */
+.uw-tab-count {
+  font-size: 11px; font-weight: 600; line-height: 1;
+  padding: 3px 6px; border-radius: 999px;
+  background: #f0f1f6; color: var(--muted);
+}
+.uw-tab[aria-expanded="true"] .uw-tab-count { background: var(--brand); color: var(--brand-ink); }
+
+/* ---------- 下拉面板 ---------- */
+.uw-nav-panels { position: relative; }
+
+.uw-panel {
+  position: absolute; top: calc(100% + 10px); right: 0; z-index: 40;
+  width: 372px; max-width: calc(100vw - 28px);
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: 0 2px 6px rgba(20,30,60,.06), 0 18px 44px rgba(20,30,60,.13);
+  opacity: 0; visibility: hidden; transform: translateY(-6px) scale(.985);
+  transform-origin: top right;
+  transition: opacity .18s ease, transform .18s ease, visibility .18s;
+  overflow: hidden;
+}
+.uw-panel.is-open { opacity: 1; visibility: visible; transform: none; }
+
+/* 面板顶部一条金色细线：品牌锚点 */
+.uw-panel::before {
+  content: ""; display: block; height: 3px;
+  background: linear-gradient(90deg, var(--brand-deep), var(--brand));
+}
+
+/* ---------- 面板头 ---------- */
+.uw-panel-head { padding: 15px 18px 13px; border-bottom: 1px solid var(--line); }
+.uw-panel-title {
+  display: flex; align-items: baseline; gap: 8px;
+  font-size: 15px; font-weight: 700; color: var(--ink); margin: 0 0 3px;
+}
+.uw-panel-title span { font-size: 11.5px; font-weight: 600; color: var(--muted); letter-spacing: .3px; }
+.uw-panel-desc { font-size: 12.5px; color: var(--muted); margin: 0; }
+
+/* ---------- 链接列表 ---------- */
+.uw-panel-items { padding: 7px; }
+
+.uw-item {
+  display: flex; align-items: flex-start; gap: 11px;
+  padding: 10px 11px; border-radius: 11px;
+  color: var(--ink); text-decoration: none;
+  transition: background .14s ease;
+}
+.uw-item:hover { background: #f7f8fc; text-decoration: none; }
+.uw-item:focus-visible { outline: 2px solid var(--brand-deep); outline-offset: -2px; }
+
+/* 条目图标：方形浅底，悬浮转金底 */
+.uw-item-ico {
+  flex: 0 0 auto; width: 32px; height: 32px; border-radius: 9px;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: #f0f1f6; color: var(--muted);
+  transition: background .16s ease, color .16s ease;
+}
+.uw-item-ico svg { width: 17px; height: 17px; display: block; }
+.uw-item:hover .uw-item-ico { background: var(--brand); color: var(--brand-ink); }
+
+.uw-item-body { flex: 1 1 auto; min-width: 0; }
+
+.uw-item-name {
+  display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+  font-size: 14px; font-weight: 600; color: var(--ink); line-height: 1.35;
+}
+.uw-item-name em {
+  font-style: normal; font-size: 11.5px; font-weight: 500; color: var(--muted);
+}
+.uw-item-desc {
+  display: block; margin-top: 2px;
+  font-size: 12.5px; color: var(--muted); line-height: 1.5;
+}
+
+/* 「热门 / 官方」小徽标 */
+.uw-item .badge {
+  font-size: 10px; font-weight: 700; line-height: 1;
+  padding: 3px 6px; border-radius: 5px;
+  background: #fff4d6; color: #8a6100; letter-spacing: .2px;
+}
+
+/* 外链箭头：默认淡，悬浮时点亮并右移 */
+.uw-item-go {
+  flex: 0 0 auto; align-self: center;
+  width: 15px; height: 15px; color: #c3c8d4;
+  transition: transform .16s ease, color .16s ease;
+}
+.uw-item-go svg { width: 100%; height: 100%; display: block; }
+.uw-item:hover .uw-item-go { transform: translate(2px, -2px); color: var(--brand-deep); }
+
+/* ---------- 面板底注 ---------- */
+.uw-panel-foot {
+  padding: 9px 18px 11px; border-top: 1px solid var(--line);
+  font-size: 11.5px; color: #9aa1ae;
+}
+
+/* ---------- 移动端 ---------- */
+@media (max-width: 860px) {
+  .uw-nav { margin-left: 0; order: 3; flex-basis: 100%; }
+  .uw-nav-tabs {
+    padding-top: 8px; margin-top: 6px; border-top: 1px solid var(--line);
+    overflow-x: auto; -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; gap: 6px;
+  }
+  .uw-nav-tabs::-webkit-scrollbar { display: none; }
+  .uw-tab { padding: 7px 11px; font-size: 13px; }
+  .uw-tab-count { display: none; }
+
+  /* 面板改为常规流布局，铺满宽度 */
+  .uw-panel {
+    position: static; width: auto; max-width: none;
+    margin-top: 8px; box-shadow: var(--shadow);
+    transform-origin: top center;
+  }
+  .uw-panel:not(.is-open) { display: none; }
+}
