@@ -8,9 +8,10 @@
    脚本会自动把导航插入到 .topbar 内、.top-actions 之前（桌面端），
    并在 .top-actions 左侧注入移动端「☰ 导航」触发按钮。
 
-   桌面端：悬停即开 / 点击钉住的下拉面板。
+   桌面端：每个分类是一个 .uw-nav-item（标签 + 其下拉面板同属一项），
+   面板在该标签正下方展开（最后一个分类右对齐防溢屏）。悬停即开、点击可钉住。
    移动端（≤860px）：隐藏桌面标签，改用底部抽屉（bottom sheet），
-   带遮罩、滑动入场、≥52px 触控区、滚动锁定与完整键盘/读屏支持。
+   带遮罩、滑动入场、≥48px 触控区、滚动锁定与完整键盘/读屏支持。
    ============================================================ */
 (function () {
   'use strict';
@@ -50,20 +51,23 @@
       '</a>';
   }
 
-  /* ---------- 桌面：分类标签 + 下拉面板 ---------- */
+  /* ---------- 桌面：每个分类 = .uw-nav-item（标签 + 下拉面板） ---------- */
   var tabsWrap = document.createElement('div');
   tabsWrap.className = 'uw-nav-tabs';
   tabsWrap.setAttribute('role', 'tablist');
 
-  var panelsWrap = document.createElement('div');
-  panelsWrap.className = 'uw-nav-panels';
-
   DATA.categories.forEach(function (cat) {
     var panelId = 'uw-panel-' + cat.id;
+    var tabId = 'uw-tab-' + cat.id;
+
+    var item = document.createElement('div');
+    item.className = 'uw-nav-item';
+    item.setAttribute('role', 'presentation');
 
     var tab = document.createElement('button');
     tab.className = 'uw-tab';
     tab.type = 'button';
+    tab.id = tabId;
     tab.setAttribute('role', 'tab');
     tab.setAttribute('aria-controls', panelId);
     tab.setAttribute('aria-expanded', 'false');
@@ -72,12 +76,13 @@
       '<span class="uw-tab-ico">' + (ICONS[cat.icon] || '') + '</span>' +
       '<span class="uw-tab-txt">' + cat.label + '</span>' +
       '<span class="uw-tab-count">' + cat.items.length + '</span>';
-    tabsWrap.appendChild(tab);
+    item.appendChild(tab);
 
     var panel = document.createElement('div');
     panel.className = 'uw-panel';
     panel.id = panelId;
     panel.setAttribute('role', 'tabpanel');
+    panel.setAttribute('aria-labelledby', tabId);
     panel.setAttribute('data-cat', cat.id);
     var items = cat.items.map(itemHTML).join('');
     panel.innerHTML =
@@ -85,13 +90,13 @@
         '<div class="uw-panel-title">' + cat.label + '<span>' + cat.labelEn + '</span></div>' +
         '<div class="uw-panel-desc">' + cat.desc + '</div>' +
       '</div>' +
-      '<div class="uw-panel-items">' + items + '</div>' +
-      '<div class="uw-panel-foot">链接在新标签页打开 · 校验于 ' + DATA.version + '</div>';
-    panelsWrap.appendChild(panel);
+      '<div class="uw-panel-items">' + items + '</div>';
+    item.appendChild(panel);
+
+    tabsWrap.appendChild(item);
   });
 
   mount.appendChild(tabsWrap);
-  mount.appendChild(panelsWrap);
 
   /* ---------- 移动：触发按钮 + 底部抽屉 ---------- */
   var trigger = document.createElement('button');
@@ -141,8 +146,7 @@
       '</div>' +
       '<button type="button" class="uw-sheet-close" aria-label="关闭">×</button>' +
     '</div>' +
-    '<div class="uw-sheet-body">' + catsHTML + '</div>' +
-    '<div class="uw-sheet-foot">链接在新标签页打开 · 校验于 ' + DATA.version + '</div>';
+    '<div class="uw-sheet-body">' + catsHTML + '</div>';
 
   document.body.appendChild(scrim);
   document.body.appendChild(sheet);
@@ -150,7 +154,7 @@
 
   /* ---------- 行为 ---------- */
   var tabs = [].slice.call(tabsWrap.querySelectorAll('.uw-tab'));
-  var panels = [].slice.call(panelsWrap.querySelectorAll('.uw-panel'));
+  var panels = [].slice.call(tabsWrap.querySelectorAll('.uw-panel'));
   var closeTimer = null, openTimer = null;
 
   function panelOf(id) {
@@ -193,14 +197,21 @@
   }
   function sheetIsOpen() { return sheet.classList.contains('is-open'); }
 
-  /* 桌面：悬停打开（带轻微延迟，避免掠过闪烁） */
+  /* 桌面：悬停在 .uw-nav-item 上（标签与其面板同属一项，移入面板不会关闭） */
   tabs.forEach(function (tab) {
     var id = tab.getAttribute('data-cat');
-    tab.addEventListener('mouseenter', function () {
+    var item = tab.parentNode;
+
+    item.addEventListener('mouseenter', function () {
       if (mq.matches) return;
       clearTimeout(closeTimer);
       openTimer = setTimeout(function () { openPanel(id); }, 70);
     });
+    item.addEventListener('mouseleave', function () {
+      clearTimeout(openTimer);
+      closeTimer = setTimeout(closeAll, 180);
+    });
+
     tab.addEventListener('click', function (e) {
       e.preventDefault();
       clearTimeout(openTimer);
@@ -222,12 +233,6 @@
     });
   });
 
-  mount.addEventListener('mouseleave', function () {
-    clearTimeout(openTimer);
-    closeTimer = setTimeout(closeAll, 180);
-  });
-  mount.addEventListener('mouseenter', function () { clearTimeout(closeTimer); });
-
   /* 移动：触发 / 遮罩 / 关闭 / 点击链接 */
   trigger.addEventListener('click', function (e) {
     e.stopPropagation();
@@ -239,6 +244,9 @@
   sheet.addEventListener('click', function (e) {
     if (e.target.closest && e.target.closest('.uw-item')) closeSheet();
   });
+  tabsWrap.addEventListener('click', function (e) {
+    if (e.target.closest && e.target.closest('.uw-item')) closeAll();
+  });
 
   /* 全局：Esc 关闭并归还焦点；点击空白关闭桌面面板 */
   document.addEventListener('keydown', function (e) {
@@ -249,9 +257,6 @@
   });
   document.addEventListener('click', function (e) {
     if (!mount.contains(e.target)) closeAll();
-  });
-  mount.addEventListener('focusout', function (e) {
-    if (!mount.contains(e.relatedTarget)) closeAll();
   });
 
   /* 跨断点清理：避免状态残留 */

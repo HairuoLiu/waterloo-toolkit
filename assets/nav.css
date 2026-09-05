@@ -38,21 +38,24 @@
 .uw-tab[aria-expanded="true"] .uw-tab-count { background: var(--brand); color: var(--brand-ink); }
 
 /* ---------- 下拉面板 ---------- */
-.uw-nav-panels { position: relative; }
+/* 每个分类 = 一个相对定位的 .uw-nav-item（标签 + 其下拉面板同属一项），
+   面板默认贴着该标签左下缘展开；最后一个分类的面板右对齐以防超出视口。 */
+.uw-nav-item { position: relative; }
 
 .uw-panel {
-  position: absolute; top: calc(100% + 10px); right: 0; z-index: 40;
+  position: absolute; top: calc(100% + 10px); left: 0; z-index: 40;
   width: 372px; max-width: calc(100vw - 28px);
   background: var(--card);
   border: 1px solid var(--line);
   border-radius: 16px;
   box-shadow: 0 2px 6px rgba(20,30,60,.06), 0 18px 44px rgba(20,30,60,.13);
   opacity: 0; visibility: hidden; transform: translateY(-6px) scale(.985);
-  transform-origin: top right;
+  transform-origin: top left;
   transition: opacity .18s ease, transform .18s ease, visibility .18s;
   overflow: hidden;
 }
 .uw-panel.is-open { opacity: 1; visibility: visible; transform: none; }
+.uw-nav-item:last-child .uw-panel { left: auto; right: 0; transform-origin: top right; }
 
 /* 面板顶部一条金色细线：品牌锚点 */
 .uw-panel::before {
@@ -120,12 +123,6 @@
 }
 .uw-item-go svg { width: 100%; height: 100%; display: block; }
 .uw-item:hover .uw-item-go { transform: translate(2px, -2px); color: var(--brand-deep); }
-
-/* ---------- 面板底注 ---------- */
-.uw-panel-foot {
-  padding: 9px 18px 11px; border-top: 1px solid var(--line);
-  font-size: 11.5px; color: #9aa1ae;
-}
 
 /* ---------- 移动端触发按钮（仅窄屏显示，置于顶栏右侧） ---------- */
 .uw-mobile-trigger {
@@ -196,10 +193,6 @@
 
 .uw-sheet .uw-item { min-height: 48px; padding: 10px 8px; -webkit-tap-highlight-color: transparent; }
 .uw-sheet .uw-item:active { background: #f2f4fa; }
-.uw-sheet-foot {
-  padding: 8px 18px calc(12px + env(safe-area-inset-bottom, 0px));
-  border-top: 1px solid var(--line); font-size: 11.5px; color: #9aa1ae; text-align: center;
-}
 
 body.uw-no-scroll { overflow: hidden; }
 
