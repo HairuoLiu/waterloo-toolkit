@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Goose Glance for WaterlooWorks · 滑铁卢工具箱</title>
+  <link rel="stylesheet" href="../../assets/style.css" />
+  <style>
+    .gg-wrap { max-width: 760px; margin: 0 auto; padding: 28px 20px 64px; }
+    .gg-back { display: inline-block; margin: 18px 0 8px; color: var(--brand-deep, #EAAB00); font-weight: 600; text-decoration: none; }
+    .gg-hero { text-align: center; padding: 36px 0 12px; }
+    .gg-hero .emoji { font-size: 56px; line-height: 1; }
+    .gg-hero h1 { margin: 14px 0 6px; font-size: 30px; }
+    .gg-hero .en { color: var(--muted, #6b7280); font-size: 15px; }
+    .gg-card { background: #fff; border: 1px solid var(--line, #e6e8ef); border-radius: 16px; padding: 22px 22px; margin: 22px 0; box-shadow: 0 6px 22px rgba(20,24,40,.06); }
+    .gg-card h2 { font-size: 18px; margin: 0 0 10px; }
+    .gg-card p { color: var(--ink, #1f2430); line-height: 1.7; margin: 8px 0; }
+    .gg-card ul { margin: 8px 0; padding-left: 20px; line-height: 1.8; }
+    .gg-btns { display: flex; flex-wrap: wrap; gap: 14px; justify-content: center; margin: 26px 0 8px; }
+    .gg-btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 22px; border-radius: 12px; font-weight: 700; text-decoration: none; font-size: 15px; transition: transform .12s ease, box-shadow .12s ease; }
+    .gg-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(20,24,40,.14); }
+    .gg-btn.store { background: var(--brand, #FED34C); color: #1f2430; }
+    .gg-btn.repo { background: #1f2430; color: #fff; }
+    .gg-note { text-align: center; color: var(--muted, #6b7280); font-size: 13px; margin-top: 18px; }
+    .lang-toggle { text-align: right; margin-top: 14px; }
+    .lang-toggle button { border: 1px solid var(--line, #e6e8ef); background: #fff; color: var(--ink, #1f2430); border-radius: 8px; padding: 5px 12px; cursor: pointer; font-size: 13px; margin-left: 6px; }
+    .lang-toggle button.active { background: var(--brand, #FED34C); border-color: var(--brand, #FED34C); font-weight: 700; }
+    .en { display: none; }
+    body.lang-en .zh { display: none; }
+    body.lang-en .en { display: block; }
+    body.lang-en .gg-hero .en { display: inline; }
+  </style>
+</head>
+<body>
+  <div class="gg-wrap">
+    <a class="gg-back" href="../../index.html">← <span class="zh">滑铁卢工具箱</span><span class="en">UW Toolkit</span></a>
+
+    <div class="lang-toggle">
+      <button id="btn-zh" class="active" onclick="setLang('zh')">中文</button>
+      <button id="btn-en" onclick="setLang('en')">EN</button>
+    </div>
+
+    <div class="gg-hero">
+      <div class="emoji">🔎</div>
+      <h1>Goose Glance <span class="en">for WaterlooWorks</span></h1>
+      <div class="en" style="display:inline;color:var(--muted,#6b7280);font-size:15px;">AI-powered job-posting insight, right inside Waterloo Works</div>
+      <div class="zh" style="color:var(--muted,#6b7280);font-size:15px;">用 AI 一眼看穿 Waterloo Works 招聘岗位</div>
+    </div>
+
+    <div class="gg-card">
+      <h2 class="zh">这是什么？</h2>
+      <h2 class="en">What is it?</h2>
+      <p class="zh">Goose Glance 是一个 <b>Chrome 浏览器扩展</b>（MIT 开源）。它会自动读取 Waterloo Works 的招聘职位页面，用浏览器本地的 AI 模型（WebLLM，无需服务器、不上传数据）把长长的职位描述提炼成一张「洞察卡」：</p>
+      <p class="en">Goose Glance is an open-source (MIT) <b>Chrome extension</b>. It reads Waterloo Works job pages and, using an in-browser AI model (WebLLM — no server, no data upload), condenses long postings into an "insight card":</p>
+      <ul>
+        <li class="zh">AI 生成的职位名 + 1–3 条关键职责（高亮关键词）</li>
+        <li class="en">AI-generated job title + 1–3 key responsibilities (keywords highlighted)</li>
+        <li class="zh">实习时长、工作地点（城市/省/国）+ 远程 / 混合 / 现场</li>
+        <li class="en">Work-term length, location (city/province/country) + remote / hybrid / on-site</li>
+        <li class="zh">公司名、所需技能（技术 / 语言 / 框架 / 软技能）</li>
+        <li class="en">Company, required skills (technical / language / framework / soft)</li>
+        <li class="zh">特殊要求（法语、驾照、背景调查、加国公民/PR、海外工签、证书）与所需材料（简历、Co-op 经历、求职信、成绩、作品集）</li>
+        <li class="en">Special requirements (French, driver's license, background check, citizenship/PR, foreign visa, certs) & required docs (resume, co-op history, cover letter, grades, portfolio)</li>
+      </ul>
+    </div>
+
+    <div class="gg-btns">
+      <a class="gg-btn store" href="https://chromewebstore.google.com/detail/goose-glance-for-waterloo/hblfffccmiegiahkolkendnfkaegogjg" target="_blank" rel="noopener">🛒 <span class="zh">在 Chrome 网上应用店安装</span><span class="en">Install on Chrome Web Store</span></a>
+      <a class="gg-btn repo" href="https://github.com/lacser/Goose-Glance-for-WaterlooWorks" target="_blank" rel="noopener">⭐ <span class="zh">查看源码 (GitHub)</span><span class="en">View Source (GitHub)</span></a>
+    </div>
+
+    <p class="gg-note zh">第三方开源工具（MIT），与滑铁卢大学无隶属关系。所有推理均在你的浏览器本地完成，职位数据不会离开你的设备。</p>
+    <p class="gg-note en">Third-party open-source tool (MIT), not affiliated with the University of Waterloo. All inference runs locally in your browser — your job data never leaves your device.</p>
+  </div>
+
+  <script>
+    function setLang(l){ document.body.classList.toggle('lang-en', l==='en'); document.getElementById('btn-zh').classList.toggle('active', l==='zh'); document.getElementById('btn-en').classList.toggle('active', l==='en'); }
+  </script>
+</body>
+</html>

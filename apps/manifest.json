@@ -55,5 +55,16 @@
     "category": "生活",
     "path": "apps/locker-finder/",
     "cover": "apps/locker-finder/cover.svg"
+  },
+  {
+    "id": "goose-glance",
+    "title_zh": "Goose Glance 职位洞察",
+    "title_en": "Goose Glance Job Insight",
+    "desc_zh": "用 AI 一眼看穿 Waterloo Works 招聘岗位的 Chrome 扩展（需在浏览器安装后使用）。",
+    "desc_en": "AI-powered glance at Waterloo Works postings — a Chrome extension (install in browser).",
+    "icon": "🔎",
+    "category": "求职辅助",
+    "path": "apps/goose-glance/",
+    "cover": "apps/goose-glance/cover.svg"
   }
 ]
