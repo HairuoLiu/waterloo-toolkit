@@ -279,6 +279,49 @@ a{color:inherit;text-decoration:none}
     box-shadow:0 -8px 30px rgba(0,0,0,.18)}
   .dw-x{top:14px;right:16px}
 }
+
+/* =============================================================
+ * 顶栏重构补丁：修复 681–919px 区间文字溢出 / 挤压
+ * 三档断点：桌面 ≥920 单行紧凑 · 中等 681–919 导航下沉二行 · 小屏 ≤680 收口
+ * 纯 CSS，无 JS；兼容 data-i18n 与 UW_I18N.mountToggle() 注入的语言切换按钮
+ * ============================================================= */
+
+/* 1. 基础保护：lhs / top-actions 不压缩，nav 为唯一弹性区，文字全部 nowrap */
+.top .lhs{flex:0 0 auto;min-width:0}
+.top .brand{white-space:nowrap}
+.top .back{white-space:nowrap}
+.top .top-actions{flex:0 0 auto;min-width:0;gap:6px}
+.top .nav{flex:1 1 auto;min-width:0;margin-left:auto;justify-content:flex-end}
+.top .nav a{white-space:nowrap}
+
+/* 2. 桌面档 ≥920：收紧间距，释放 ~40px 容纳语言切换按钮 */
+@media(min-width:920px){
+  .top .wrap{gap:12px}
+  .top .nav{gap:10px}
+  .top .lhs{gap:8px}
+}
+
+/* 3. 中等档 681–919：nav 整块下沉到第二行左对齐（核心修复） */
+@media(max-width:919px){
+  .top .wrap{height:auto;padding:8px 16px;flex-wrap:wrap;gap:8px 16px}
+  .top .lhs{order:1;flex:1 1 auto}
+  .top .top-actions{order:2;margin-left:auto}
+  .top .nav{order:3;flex-basis:100%;margin-left:0;justify-content:flex-start;
+    padding-top:8px;margin-top:6px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
+  .top .back{display:none}
+  .top .ext-btn{height:34px;padding:0 10px}
+  .top .ext-btn .txt{display:none}
+}
+
+/* 4. 小屏 ≤680：沿用既有移动行为，并防操作区溢出 */
+@media(max-width:680px){
+  .top .icon-btn{width:34px;height:34px}
+  .top .top-actions{flex-wrap:wrap;justify-content:flex-end;row-gap:6px}
+  .top .ext-menu{min-width:240px;max-width:calc(100vw - 32px)}
+}
+
+/* 5. 下拉菜单防溢出视口左缘 */
+.top .ext-menu{right:0;left:auto;max-width:min(300px,calc(100vw - 24px))}
 </style>
   <!-- SEO: canonical + hreflang（zh 变体 = ?lang=zh，客户端切换；x-default 指向英文） -->
     <link rel="canonical" href="https://hairuoliu.github.io/waterloo-toolkit/apps/course-planner/" />
@@ -313,6 +356,11 @@ a{color:inherit;text-decoration:none}
         <a href="https://classes.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">C</span><span class="tx"><b data-i18n="cp.ext.classes">Classes</b><small data-i18n="cp.ext.classes.s">课程时间表查询</small></span></a>
         <a href="https://uwaterloo.ca/academic-calendar/graduate-studies/catalog#/home" target="_blank" rel="noopener noreferrer"><span class="ic">G</span><span class="tx"><b data-i18n="cp.ext.cal">Graduate Calendar</b><small data-i18n="cp.ext.cal.s">学位要求 · 学术日历 · 重要日期</small></span></a>
         <a href="https://uwaterloo.ca/electrical-computer-engineering" target="_blank" rel="noopener noreferrer"><span class="ic">E</span><span class="tx"><b data-i18n="cp.ext.ece">ECE 系官网</b><small data-i18n="cp.ext.ece.s">系通知 · Information Package</small></span></a>
+        <a href="https://uwaterloo.ca/graduate-studies-postdoctoral-affairs" target="_blank" rel="noopener noreferrer"><span class="ic">S</span><span class="tx"><b data-i18n="cp.ext.gspa">GSPA 研究生院</b><small data-i18n="cp.ext.gspa.s">研究生规则 · 表格 · 加退课 · 截止日期</small></span></a>
+        <a href="https://uwaterloo.ca/watiam/" target="_blank" rel="noopener noreferrer"><span class="ic">K</span><span class="tx"><b data-i18n="cp.ext.watiam">WatIAM 账号</b><small data-i18n="cp.ext.watiam.s">改密码 · 密保邮箱 · 账号管理</small></span></a>
+        <a href="https://outlook.office365.com/mail/" target="_blank" rel="noopener noreferrer"><span class="ic">@</span><span class="tx"><b data-i18n="cp.ext.mail">UW 邮箱</b><small data-i18n="cp.ext.mail.s">Office 365 · 校方唯一通知渠道</small></span></a>
+        <a href="https://uwaterloo.ca/important-dates/graduate" target="_blank" rel="noopener noreferrer"><span class="ic">D</span><span class="tx"><b data-i18n="cp.ext.dates">重要日期</b><small data-i18n="cp.ext.dates.s">学期 · 缴费 · 加退课截止</small></span></a>
+        <a href="https://lib.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">B</span><span class="tx"><b data-i18n="cp.ext.lib">图书馆</b><small data-i18n="cp.ext.lib.s">数据库 · 文献检索 · 学习空间</small></span></a>
       </div>
     </div>
     <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/course-planner" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
