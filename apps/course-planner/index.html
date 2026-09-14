@@ -1,9 +1,13 @@
 <!doctype html>
-<html lang="zh-CN">
+<html lang="en" data-lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>滑铁卢 ECE MEng 选课导航 · 工具箱</title>
+<title data-i18n="cp.title">滑铁卢 ECE MEng 选课导航 · 工具箱</title>
+<script src="../../assets/i18n.js"></script>
+<script src="../../assets/i18n/common.js"></script>
+<script src="../../assets/i18n/course-planner.js"></script>
+<link rel="stylesheet" href="../../assets/i18n.css">
 <style>
 :root{
   --ink:#1b1f24; --muted:#6b7280; --line:#e6e8eb; --bg:#f6f7f9; --card:#fff;
@@ -272,31 +276,31 @@ a{color:inherit;text-decoration:none}
 </head>
 <body>
 <div class="top"><div class="wrap">
-  <div class="lhs"><a class="back" href="../../index.html">← 滑铁卢工具箱</a><span class="brand">ECE MEng <b>选课导航</b></span></div>
+  <div class="lhs"><a class="back" href="../../index.html" data-i18n="cp.back">← 滑铁卢工具箱</a><span class="brand"><span data-i18n="cp.brand.a">ECE MEng </span><b data-i18n="cp.brand.b">选课导航</b></span></div>
   <nav class="nav" id="nav">
-    <a href="#/">首页</a>
-    <a href="#/courses">课程库</a>
-    <a href="#/coop">Co-op 规则</a>
-    <a href="#/map">课程地图</a>
-    <a href="#/apply">跨系申请</a>
-    <a href="#/new">今年新课</a>
+    <a href="#/" data-i18n="cp.nav.home">首页</a>
+    <a href="#/courses" data-i18n="cp.nav.courses">课程库</a>
+    <a href="#/coop" data-i18n="cp.nav.coop">Co-op 规则</a>
+    <a href="#/map" data-i18n="cp.nav.map">课程地图</a>
+    <a href="#/apply" data-i18n="cp.nav.apply">跨系申请</a>
+    <a href="#/new" data-i18n="cp.nav.new">今年新课</a>
   </nav>
   <div class="top-actions">
     <div class="ext-wrap">
-      <button class="ext-btn" id="ext-btn" aria-haspopup="true" aria-expanded="false" title="滑铁卢常用官方站点">
+      <button class="ext-btn" id="ext-btn" aria-haspopup="true" aria-expanded="false" data-i18n-attr="title:cp.ext.btn" title="滑铁卢常用官方站点">
         <svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 11l9-8 9 8"/><path d="M5 10v10h5v-6h4v6h5V10"/></svg>
-        <span class="txt">常用站点</span>
+        <span class="txt" data-i18n="cp.ext.btn">常用站点</span>
         <svg class="chev" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
       </button>
       <div class="ext-menu" id="ext-menu">
-        <div class="hl">常用官方站点</div>
-        <a href="https://portal.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">P</span><span class="tx"><b>Portal 学生门户</b><small>注册 · 缴费 · 课表 · 一站式入口</small></span></a>
-        <a href="https://waterlooworks.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">W</span><span class="tx"><b>WaterlooWorks</b><small>Co-op / 实习求职系统</small></span></a>
-        <a href="https://learn.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">L</span><span class="tx"><b>LEARN</b><small>课件 · 作业 · 成绩</small></span></a>
-        <a href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">Q</span><span class="tx"><b>Quest</b><small>选课注册系统</small></span></a>
-        <a href="https://classes.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">C</span><span class="tx"><b>Classes</b><small>课程时间表查询</small></span></a>
-        <a href="https://uwaterloo.ca/academic-calendar/graduate-studies/catalog#/home" target="_blank" rel="noopener noreferrer"><span class="ic">G</span><span class="tx"><b>Graduate Calendar</b><small>学位要求 · 学术日历 · 重要日期</small></span></a>
-        <a href="https://uwaterloo.ca/electrical-computer-engineering" target="_blank" rel="noopener noreferrer"><span class="ic">E</span><span class="tx"><b>ECE 系官网</b><small>系通知 · Information Package</small></span></a>
+        <div class="hl" data-i18n="cp.ext.hl">常用官方站点</div>
+        <a href="https://portal.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">P</span><span class="tx"><b data-i18n="cp.ext.portal">Portal 学生门户</b><small data-i18n="cp.ext.portal.s">注册 · 缴费 · 课表 · 一站式入口</small></span></a>
+        <a href="https://waterlooworks.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">W</span><span class="tx"><b data-i18n="cp.ext.ww">WaterlooWorks</b><small data-i18n="cp.ext.ww.s">Co-op / 实习求职系统</small></span></a>
+        <a href="https://learn.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">L</span><span class="tx"><b data-i18n="cp.ext.learn">LEARN</b><small data-i18n="cp.ext.learn.s">课件 · 作业 · 成绩</small></span></a>
+        <a href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">Q</span><span class="tx"><b data-i18n="cp.ext.quest">Quest</b><small data-i18n="cp.ext.quest.s">选课注册系统</small></span></a>
+        <a href="https://classes.uwaterloo.ca" target="_blank" rel="noopener noreferrer"><span class="ic">C</span><span class="tx"><b data-i18n="cp.ext.classes">Classes</b><small data-i18n="cp.ext.classes.s">课程时间表查询</small></span></a>
+        <a href="https://uwaterloo.ca/academic-calendar/graduate-studies/catalog#/home" target="_blank" rel="noopener noreferrer"><span class="ic">G</span><span class="tx"><b data-i18n="cp.ext.cal">Graduate Calendar</b><small data-i18n="cp.ext.cal.s">学位要求 · 学术日历 · 重要日期</small></span></a>
+        <a href="https://uwaterloo.ca/electrical-computer-engineering" target="_blank" rel="noopener noreferrer"><span class="ic">E</span><span class="tx"><b data-i18n="cp.ext.ece">ECE 系官网</b><small data-i18n="cp.ext.ece.s">系通知 · Information Package</small></span></a>
       </div>
     </div>
     <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/course-planner" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
@@ -312,13 +316,13 @@ a{color:inherit;text-decoration:none}
   <div class="dw-panel"><span class="dw-x" onclick="closeD()">&times;</span><div id="dwc"></div></div>
 </div>
 <footer class="ft"><div class="wrap">
-  数据来源与完整引用：<a href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/course-planner#%E4%B8%89%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E4%B8%8E%E6%9D%A5%E6%BA%90references" style="color:var(--ink);text-decoration:underline">GitHub 仓库 README（参考资料与来源）</a>。<br>
-  收录 112 门研究生课，覆盖 ECE 各方向与控制 / 自主 / 机器人线、强化学习、special topics 及跨院系课。标「需教授同意」的需向授课教授单独申请；OVGS 为安省校际互修通道。<br>
-  开源静态页面，数据整理于 2026-08-01。开课学期与课程容量为历史数据推断，注册前请以 Quest 实时信息为准。
+  <span data-i18n="cp.foot.src">数据来源与完整引用：</span><a href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/course-planner#%E4%B8%89%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99%E4%B8%8E%E6%9D%A5%E6%BA%90references" style="color:var(--ink);text-decoration:underline" data-i18n="cp.foot.link">GitHub 仓库 README（参考资料与来源）</a>。<br>
+  <span data-i18n="cp.foot.p2">收录 112 门研究生课，覆盖 ECE 各方向与控制 / 自主 / 机器人线、强化学习、special topics 及跨院系课。标「需教授同意」的需向授课教授单独申请；OVGS 为安省校际互修通道。</span><br>
+  <span data-i18n="cp.foot.p3">开源静态页面，数据整理于 2026-08-01。开课学期与课程容量为历史数据推断，注册前请以 Quest 实时信息为准。</span>
 </div></footer>
 <script>
 
-const C = {
+var C = {
 "ECE 650":{n:"Methods and Tools for Software Engineering",zh:"软件工程方法与工具",g:"ece-sw",d:3,t:"F2026 (Crowley) · F2027 (Ward)",tag:["swe"],
  desc:"被很多同学认为是整个 MEng 里最像「转码训练营」的一门。四条线并行：系统编程（C/C++/Python、fork、pipe、进程间通信、并发与锁）、数理逻辑（命题逻辑、谓词逻辑、SAT 可满足性）、操作系统原理、以及数据结构与算法复杂度。",
  proj:"有一个贯穿学期的大 project：用 SAT 求解器解最小顶点覆盖问题，需要写多进程 C++ 程序、接 MiniSat、做性能对比分析。这个 project 拿出来讲面试完全够格。另有 A0–A4 五次编程作业 + 期末考。",
@@ -871,7 +875,7 @@ const C = {
  for:"排课被学期窗口卡死、又必须上某门课的人。",
  warn:"ECE 硬规则：最后一学期不得注册 OVGS，且第 2 周之后不再批准；需提前申请。"}
 };
-const PLANS=[
+var PLANS=[
 {
  id:"A",tag:"方案 1",name:"AI 认证线",sub:"8 门全 ECE · 5 学期 20 个月 · 1 个 co-op",
  badge:["AI&ML 认证","全 ECE","稳"],
@@ -984,7 +988,7 @@ const PLANS=[
  fit:"真的打算把 CNC 造物或影像工具做成产品、或者想走技术 + 商业复合路线（产品经理、创业、Solutions Engineering）的人。<b>纯粹想拿大厂 SWE offer 的话，方案 3 更直接。</b>"
 }
 ];
-const FRONTIER=[
+var FRONTIER=[
  {c:"ECE 657D",it:["ai","cam"],hot:"ECE 目前最对口现代 AI 的深度学习课（W2026 首开）；期末 project 可往生成式视频做"},
  {c:"CS 854",it:["ai","swe"],hot:"把大模型部署上线（系统视角）——目前市场最缺人、薪资最高的方向之一"},
  {c:"CS 886 SEM 001",it:["ai"],hot:"Transformer 与 LLM 的学习理论，理论深度最高"},
@@ -994,7 +998,7 @@ const FRONTIER=[
  {c:"ECE 752",it:["ai"],hot:"多智能体系统——2026 LLM Agent 热潮的理论底座"},
  {c:"ECE 613",it:["cam"],hot:"全校离摄影最近、本系不计外系名额的课；SSIM 作者 Zhou Wang 教"}
 ];
-const NEWCOURSES=[
+var NEWCOURSES=[
  {c:"CS 886 SEM 001",n:"Transformers & LLMs 学习理论",t:"F2026 全新专题"},
  {c:"CS 886 SEM 002",n:"Vision-Language Models",t:"F2026 全新专题"},
  {c:"CS 886 SEM 003",n:"Theory & Applications of Generative Models",t:"F2026 全新专题"},
@@ -1019,10 +1023,30 @@ const GL={
 const TAGT={ai:'AI',swe:'软件',cam:'视觉·摄影',easy:'轻松',hard:'硬核',new:'新课',ext:'外系课',biz:'商科',mile:'里程',ctrl:'控制·机器人',rl:'强化学习'};
 const DL={1:'易',2:'较易',2.5:'较易',3:'中',3.5:'中偏难',4:'偏难',4.5:'偏难+',5:'难'};
 const esc=s=>String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-const diffLabel=d=>DL[d]||'';
+/* ===== 语言感知助手 =====
+   isEN()  当前是否英文
+   T(k,zh) 界面串取英文，缺键回落到中文原文（保证中文永不退化）
+   F(o,b)  数据字段：英文模式优先 b_en，否则回落无后缀原字段
+   FA(o,b) 同上，但取数组
+   E(path) 取 window.UW_CP_EN 下的英文内容（'home.h1' 这类点路径） */
+function isEN(){try{return (window.UW_I18N&&UW_I18N.get)?UW_I18N.get()==='en':(document.documentElement.getAttribute('data-lang')==='en');}catch(e){return false;}}
+function T(k,zh){try{if(window.UW_I18N&&UW_I18N.t)return UW_I18N.t(k,zh);}catch(e){}return zh;}
+function _enAt(p){var o=window.UW_CP_EN;if(!o||!p)return undefined;var a=p.split('.');for(var i=0;i<a.length;i++){o=o&&o[a[i]];if(o==null)return undefined;}return o;}
+function E(p,zh){if(!isEN())return zh;var v=_enAt(p);return (v==null||v==='')?zh:v;}
+function F(o,b){if(!o)return '';if(isEN()){var e=o[b+'_en'];if(e!=null&&e!=='')return e;}return o[b]||'';}
+function FA(o,b){if(!o)return [];if(isEN()){var e=o[b+'_en'];if(Array.isArray(e)&&e.length)return e;}return o[b]||[];}
+const diffLabel=d=>{var m=(window.UW_CP_EN&&isEN())?window.UW_CP_EN.dl:null;return (m&&m[d])?m[d]:(DL[d]||'');};
 const diffColor=d=>{const t=Math.max(0,Math.min(1,(d-1)/4));return 'hsl('+(120-120*t).toFixed(0)+',68%,42%)';};
-const groupLabel=g=>GL[g]||g;
-const tagText=t=>TAGT[t]||t;
+const groupLabel=g=>{var m=(window.UW_CP_EN&&isEN())?window.UW_CP_EN.gl:null;return (m&&m[g])?m[g]:(GL[g]||g);};
+const tagText=t=>{var m=(window.UW_CP_EN&&isEN())?window.UW_CP_EN.tagt:null;return (m&&m[t])?m[t]:(TAGT[t]||t);};
+/* 课程名：英文模式用官方英文名 n，中文模式用中文名 zh */
+function cname(v){if(!v)return '';return isEN()?(v.n||v.zh||''):(v.zh||v.n||'');}
+/* 抽屉里的「标题 + 正文」块；style 用于把「注意」染成琥珀色 */
+function _blk(h5,body,style){
+  if(!body) return '';
+  var s=style?' style="'+style+'"':'';
+  return '<div class="blk"><h5'+s+'>'+esc(h5)+'</h5><p'+s+'>'+body+'</p></div>';
+}
 /* 官网链接：Waterloo 站内搜索，所有课号通用、永不 404；结果含课程描述与历年 outline/syllabus */
 const officialUrl = code => 'https://uwaterloo.ca/search?q=' + encodeURIComponent(code);
 const outlineUrl = code => 'https://outline.uwaterloo.ca/viewer/?q=' + encodeURIComponent(code);
@@ -1035,14 +1059,15 @@ const termRange = t => { const m=/^([FWS])(\d{4})/.exec(t||''); return m?TERM_RA
 function chip(code){
   const v=C[code];
   if(!v) return '<span class="chip" data-c="'+esc(code)+'"><b>'+esc(code)+'</b></span>';
-  const title=v.zh||v.n||'';
+  const title=cname(v);
+  const dLab=diffLabel(v.d);
   return '<span class="chip" data-c="'+esc(code)+'"><b>'+esc(code)+'</b>'+
     (title?'<span class="t">'+esc(title)+'</span>':'')+
-    '<span class="dot" title="难度 '+diffLabel(v.d)+'" style="background:'+diffColor(v.d)+'"></span>'+
-    '<span class="d">'+diffLabel(v.d)+'</span></span>';
+    '<span class="dot" title="'+esc(E('drawer.difficulty','难度')+' '+dLab)+'" style="background:'+diffColor(v.d)+'"></span>'+
+    '<span class="d">'+dLab+'</span></span>';
 }
 /* course map: high-level 方向 -> low-level 单门课 */
-const MAP=[
+var MAP=[
  {dir:"AI & Machine Learning · 人工智能与机器学习",cl:[
    {n:"基础 · 数学与工具",c:["ECE 604","ECE 602","CS 794","ECE 606"]},
    {n:"核心 · 认证基本盘",c:["ECE 657","ECE 657A","CS 686","MSCI 718"]},
@@ -1082,38 +1107,38 @@ const MAP=[
 /* drawer */
 function openD(code){
   const v=C[code], dw=document.getElementById('dw'), dwc=document.getElementById('dwc');
-  if(!v){dwc.innerHTML='<p>该课程信息待补充。</p>'; dw.classList.add('show'); return;}
+  if(!v){dwc.innerHTML='<p>'+esc(E('drawer.empty','该课程信息待补充。'))+'</p>'; dw.classList.add('show'); return;}
   const rel=Object.keys(C).filter(c=>C[c].g===v.g&&c!==code).slice(0,3)
     .map(c=>'<span class="chip" data-c="'+esc(c)+'">'+esc(c)+'</span>').join('');
   let pills=(v.tag||[]).map(t=>{
     const cls=(t==='new'?'new':(t==='ext'?'warn':''));
     return '<span class="pill '+cls+'">'+tagText(t)+'</span>';
   }).join('');
-  if(v.ext) pills+='<span class="pill warn">占外系额度</span>';
-  if(v.consent) pills+='<span class="pill warn">需教授同意</span>';
-  if(v.status==='dormant') pills+='<span class="pill warn">近年未排课</span>';
+  if(v.ext) pills+='<span class="pill warn">'+esc(E('drawer.ext','占外系额度'))+'</span>';
+  if(v.consent) pills+='<span class="pill warn">'+esc(E('drawer.consent','需教授同意'))+'</span>';
+  if(v.status==='dormant') pills+='<span class="pill warn">'+esc(E('drawer.dormant','近年未排课'))+'</span>';
   dwc.innerHTML=
     '<h2>'+esc(code)+'</h2>'+
-    '<p class="en">'+esc(v.n||'')+'</p>'+
-    '<p class="meta">'+groupLabel(v.g)+' · 难度 '+diffLabel(v.d)+' · '+(v.t||'')+'</p>'+
+    '<p class="en">'+esc(isEN()?(v.n||v.zh||''):(v.zh||v.n||''))+'</p>'+
+    '<p class="meta">'+esc(groupLabel(v.g))+' · '+esc(E('drawer.difficulty','难度'))+' '+esc(diffLabel(v.d))+' · '+F(v,'t')+'</p>'+
     (pills?'<div style="margin-bottom:14px">'+pills+'</div>':'')+
-    '<div class="blk"><h5>课程内容</h5><p>'+(v.desc||'')+'</p></div>'+
-    (v.proj?'<div class="blk"><h5>项目 / 考核</h5><p>'+v.proj+'</p></div>':'')+
-    (v.pre?'<div class="blk"><h5>先修</h5><p>'+v.pre+'</p></div>':'')+
-    (v.why?'<div class="blk"><h5>为什么值得上</h5><p>'+v.why+'</p></div>':'')+
-    (v.builds?'<div class="blk"><h5>铺垫了什么 / 通往</h5><p>'+v.builds+'</p></div>':'')+
-    (v.needs?'<div class="blk"><h5>需要什么铺垫</h5><p>'+v.needs+'</p></div>':'')+
-    (v.for?'<div class="blk"><h5>最适合谁</h5><p>'+v.for+'</p></div>':'')+
-    (v.alt?'<div class="blk"><h5>替代课</h5><p>'+v.alt+'</p></div>':'')+
-    (v.warn?'<div class="blk"><h5 style="color:var(--amber)">注意</h5><p style="color:var(--amber)">'+v.warn+'</p></div>':'')+
-    (rel?'<div class="blk"><h5>同方向还有</h5><div class="rel">'+rel+'</div></div>':'')+
-    '<div class="blk offlink"><h5>官方链接</h5>'+
+    _blk(E('drawer.desc','课程内容'),F(v,'desc'))+
+    _blk(E('drawer.proj','项目 / 考核'),F(v,'proj'))+
+    _blk(E('drawer.pre','先修'),F(v,'pre'))+
+    _blk(E('drawer.why','为什么值得上'),F(v,'why'))+
+    _blk(E('drawer.builds','铺垫了什么 / 通往'),F(v,'builds'))+
+    _blk(E('drawer.needs','需要什么铺垫'),F(v,'needs'))+
+    _blk(E('drawer.forWhom','最适合谁'),F(v,'for'))+
+    _blk(E('drawer.alt','替代课'),F(v,'alt'))+
+    _blk(E('drawer.warn','注意'),F(v,'warn'),'color:var(--amber)')+
+    (rel?'<div class="blk"><h5>'+esc(E('drawer.rel','同方向还有'))+'</h5><div class="rel">'+rel+'</div></div>':'')+
+    '<div class="blk offlink"><h5>'+esc(E('drawer.links','官方链接'))+'</h5>'+
       '<div class="obtns">'+
-      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">uwaterloo.ca 官方课程页 ↗</a>'+
-      '<a class="obtn" href="'+outlineUrl(code)+'" target="_blank" rel="noopener noreferrer">outline.uwaterloo.ca 历年大纲 ↗</a>'+
-      '<a class="obtn ghost" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">去 Quest 选课 ↗</a>'+
+      '<a class="obtn" href="'+officialUrl(code)+'" target="_blank" rel="noopener noreferrer">'+esc(E('drawer.l1','uwaterloo.ca 官方课程页 ↗'))+'</a>'+
+      '<a class="obtn" href="'+outlineUrl(code)+'" target="_blank" rel="noopener noreferrer">'+esc(E('drawer.l2','outline.uwaterloo.ca 历年大纲 ↗'))+'</a>'+
+      '<a class="obtn ghost" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">'+esc(E('drawer.l3','去 Quest 选课 ↗'))+'</a>'+
       '</div>'+
-      '<p class="hint">左：Waterloo 站内搜索（课程描述）。中：outline.uwaterloo.ca 按课号直达该课历年 syllabus / 授课安排 / 讲师 / 先修。右：Quest 选课注册系统。</p></div>';
+      '<p class="hint">'+esc(E('drawer.hint','左：Waterloo 站内搜索（课程描述）。中：outline.uwaterloo.ca 按课号直达该课历年 syllabus / 授课安排 / 讲师 / 先修。右：Quest 选课注册系统。'))+'</p></div>';
   dw.classList.add('show');
 }
 function closeD(){document.getElementById('dw').classList.remove('show');}
@@ -1124,55 +1149,65 @@ document.addEventListener('click',e=>{
 /* views */
 function renderHome(){
   return ''+
-  '<section class="hero"><h1>先选路线，再选课</h1>'+
-  '<p class="lede">滑铁卢 ECE MEng（含 Co-op）选课导航。4 套方案，点进去看排课、难度与备选；课程库可按兴趣搜索。</p></section>'+
+  '<section class="hero"><h1>'+esc(E('home.h1','先选路线，再选课'))+'</h1>'+
+  '<p class="lede">'+esc(E('home.lede','滑铁卢 ECE MEng（含 Co-op）选课导航。4 套方案，点进去看排课、难度与备选；课程库可按兴趣搜索。'))+'</p></section>'+
   '<section class="sec"><div class="plans">'+
     PLANS.map(p=>'<a class="pcard" href="#/plan/'+p.id+'">'+
-      '<span class="badge">'+p.badge.join(' · ')+'</span>'+
-      '<h3>'+esc(p.name)+'</h3>'+
-      '<p class="sub">'+esc(p.sub)+'</p>'+
-      '<p class="fit"><b>适合：</b>'+(p.fit||'')+'</p></a>').join('')+
+      '<span class="badge">'+FA(p,'badge').join(' · ')+'</span>'+
+      '<h3>'+esc(F(p,'name'))+'</h3>'+
+      '<p class="sub">'+esc(F(p,'sub'))+'</p>'+
+      '<p class="fit"><b>'+esc(E('home.fit','适合：'))+'</b>'+F(p,'fit')+'</p></a>').join('')+
   '</div></section>'+
-  '<section class="sec"><h2>课程库</h2><div class="lib">'+
-    '<input class="search" placeholder="搜课号 / 关键词，如 657D、摄影、LLM" onkeydown="if(event.key===\'Enter\')location.hash=\'#/courses?q=\'+encodeURIComponent(this.value)">'+
+  '<section class="sec"><h2>'+esc(E('home.lib','课程库'))+'</h2><div class="lib">'+
+    '<input class="search" data-i18n-attr="placeholder:cp.search.ph" placeholder="搜课号 / 关键词，如 657D、摄影、LLM" onkeydown="if(event.key===\'Enter\')location.hash=\'#/courses?q=\'+encodeURIComponent(this.value)">'+
     '<div class="hot">'+HOT.map(chip).join('')+'</div>'+
-    '<div class="more"><a href="#/courses">看全部 '+Object.keys(C).length+' 门 →</a></div>'+
+    '<div class="more"><a href="#/courses">'+esc(E('home.all','看全部 %d 门 →').replace('%d',Object.keys(C).length))+'</a></div>'+
   '</div></section>'+
   '<section class="sec"><div class="more">'+
-    '<a href="#/new">今年新课 / 最前沿 →</a>'+
-    '<a href="#/map">课程地图（方向 → 单门课）→</a>'+
-    '<a href="#/coop">Co-op 排法规则 →</a>'+
+    '<a href="#/new">'+esc(E('home.m1','今年新课 / 最前沿 →'))+'</a>'+
+    '<a href="#/map">'+esc(E('home.m2','课程地图（方向 → 单门课）→'))+'</a>'+
+    '<a href="#/coop">'+esc(E('home.m3','Co-op 排法规则 →'))+'</a>'+
   '</div></section>';
 }
 function renderPlan(id){
   const p=PLANS.find(x=>x.id===id); if(!p) return renderHome();
+  const PEN=(window.UW_CP_EN&&isEN()&&window.UW_CP_EN.plans[p.id])||null;
+  const stLbl=PEN&&PEN.stats_en||null;
+  const infoEn=PEN&&PEN.info_en||null;
+  const noteEn=PEN&&PEN.note_en||null;
   return ''+
-  '<nav class="crumb"><a href="#/">首页</a> › <span>方案 '+p.id+' · '+esc(p.name)+'</span></nav>'+
-  '<div class="plan-h"><h1>'+esc(p.name)+'</h1><p class="sub">'+esc(p.sub)+'</p>'+
-    '<div class="stats">'+p.stats.map(s=>'<span><b>'+esc(s[0])+'</b><br>'+esc(s[1])+'</span>').join('')+'</div></div>'+
-  '<div class="timeline">'+p.terms.slice().sort((a,b)=>termKey(a.t)-termKey(b.t)).map(t=>{
-    if(t.k==='work') return '<div class="term work"><div class="ph">'+termRange(t.t||'工作学期')+'</div><div class="courses"><span>'+(t.note||'Co-op 工作学期')+'</span></div></div>';
-    return '<div class="term"><div class="ph">'+termRange(t.t||'')+'</div><div class="courses">'+(t.c||[]).map(chip).join('')+'</div></div>';
-  }).join('')+'</div>'+
+  '<nav class="crumb"><a href="#/">'+esc(E('plan.crumbHome','首页'))+'</a> › <span>'+esc(E('plan.crumb','方案 %s · %s').replace('%s',p.id).replace('%s',F(p,'name')))+'</span></nav>'+
+  '<div class="plan-h"><h1>'+esc(F(p,'name'))+'</h1><p class="sub">'+esc(F(p,'sub'))+'</p>'+
+    '<div class="stats">'+p.stats.map((s,i)=>'<span><b>'+esc(s[0])+'</b><br>'+esc(stLbl&&stLbl[i]?stLbl[i][0]:s[1])+'</span>').join('')+'</div></div>'+
+  '<div class="timeline">'+
+  (function(){
+    const sorted=p.terms.map((t,idx)=>({t:t,idx:idx})).sort((a,b)=>termKey(a.t.t)-termKey(b.t.t));
+    return sorted.map(o=>{
+      const t=o.t, i=o.idx;
+      const info=(infoEn&&infoEn[i])||t.info||'';
+      if(t.k==='work') return '<div class="term work"><div class="ph">'+termRange(t.t||E('plan.work','工作学期'))+'</div><div class="courses"><span>'+((noteEn&&noteEn[i])||t.note||E('plan.coopNote','Co-op 工作学期'))+'</span></div></div>';
+      return '<div class="term"><div class="ph">'+termRange(t.t||'')+'</div><div class="courses">'+(t.c||[]).map(chip).join('')+'</div></div>';
+    }).join('');
+  })()+'</div>'+
   '<div class="three">'+
-    '<div class="box"><h4>强在哪</h4><ul>'+(p.win||[]).map(w=>'<li>'+w+'</li>').join('')+'</ul></div>'+
-    '<div class="box"><h4>代价 / 风险</h4><ul>'+(p.risk||[]).map(r=>'<li>'+r+'</li>').join('')+'</ul></div>'+
-    '<div class="box"><h4>选不上怎么办</h4><ul>'+(p.swap||[]).map(s=>'<li>'+s+'</li>').join('')+'</ul></div>'+
+    '<div class="box"><h4>'+esc(E('plan.win','强在哪'))+'</h4><ul>'+FA(p,'win').map(w=>'<li>'+w+'</li>').join('')+'</ul></div>'+
+    '<div class="box"><h4>'+esc(E('plan.risk','代价 / 风险'))+'</h4><ul>'+FA(p,'risk').map(r=>'<li>'+r+'</li>').join('')+'</ul></div>'+
+    '<div class="box"><h4>'+esc(E('plan.swap','选不上怎么办'))+'</h4><ul>'+FA(p,'swap').map(s=>'<li>'+s+'</li>').join('')+'</ul></div>'+
   '</div>'+
-  '<p class="fit-note"><b>适合谁：</b>'+(p.fit||'')+'</p>';
+  '<p class="fit-note"><b>'+esc(E('plan.fit','适合谁：'))+'</b>'+F(p,'fit')+'</p>';
 }
 function renderCourses(){
   const body=GROUP_ORDER.map(g=>{
     const list=Object.keys(C).filter(c=>C[c].g===g);
     if(!list.length) return '';
-    return '<details class="group" open><summary>'+groupLabel(g)+
-      '<span class="cnt">'+list.length+' 门</span><span class="arr">›</span></summary>'+
+    return '<details class="group" open><summary>'+esc(groupLabel(g))+
+      '<span class="cnt">'+esc(E('courses.count','%d 门').replace('%d',list.length))+'</span><span class="arr">›</span></summary>'+
       '<div class="glist">'+list.map(chip).join('')+'</div></details>';
   }).join('');
   return ''+
-  '<nav class="crumb"><a href="#/">首页</a> › <span>课程库</span></nav>'+
+  '<nav class="crumb"><a href="#/">'+esc(E('plan.crumbHome','首页'))+'</a> › <span>'+esc(E('courses.crumb','课程库'))+'</span></nav>'+
   '<section class="sec" style="margin-top:18px"><input class="search" id="csSearch" '+
-    'placeholder="搜课号 / 关键词，如 657D、摄影、LLM" oninput="filterCourses(this.value)"></section>'+
+    'data-i18n-attr="placeholder:cp.search.ph" placeholder="搜课号 / 关键词，如 657D、摄影、LLM" oninput="filterCourses(this.value)"></section>'+
   '<div id="csList">'+body+'</div>';
 }
 function filterCourses(q){
@@ -1181,7 +1216,7 @@ function filterCourses(q){
     let vis=0;
     grp.querySelectorAll('.chip').forEach(ch=>{
       const code=(ch.dataset.c||'').toLowerCase(), v=C[ch.dataset.c]||{};
-      const hay=(code+' '+(v.zh||'')+' '+(v.n||'')+' '+(v.desc||'')).toLowerCase();
+      const hay=(code+' '+(v.zh||'')+' '+(v.n||'')+' '+(v.desc||'')+' '+(v.desc_en||'')).toLowerCase();
       const ok=!q||hay.indexOf(q)>=0;
       ch.style.display=ok?'':'none'; if(ok)vis++;
     });
@@ -1198,11 +1233,11 @@ function tlSvg(title,segs,marks,join){
     '<g font-family="'+TL_FONT+'">'+
     '<text x="0" y="16" font-size="15" font-weight="700" fill="#1b1f24">'+esc(title)+'</text>'+
     '<rect x="596" y="5" width="13" height="13" rx="2" fill="#FED34C" stroke="#EAAB00" stroke-width="1.5"/>'+
-    '<text x="615" y="16" font-size="11.5" fill="#6b7280">实习</text>'+
+    '<text x="615" y="16" font-size="11.5" fill="#6b7280">'+E('coop.legend.w','实习')+'</text>'+
     '<rect x="660" y="5" width="13" height="13" rx="2" fill="#ffffff" stroke="#d4d7db" stroke-width="1.5"/>'+
-    '<text x="679" y="16" font-size="11.5" fill="#6b7280">上课</text>'+
+    '<text x="679" y="16" font-size="11.5" fill="#6b7280">'+E('coop.legend.s','上课')+'</text>'+
     '<polygon points="730,5 737,11.5 730,18 723,11.5" fill="#1b1f24"/>'+
-    '<text x="744" y="16" font-size="11.5" fill="#6b7280">里程碑</text>';
+    '<text x="744" y="16" font-size="11.5" fill="#6b7280">'+E('coop.legend.m','里程碑')+'</text>';
   if(join!=null) s+='<rect x="'+(X(join)+W)+'" y="76" width="6" height="58" fill="#FED34C"/>';
   segs.forEach((g,i)=>{
     const w=g.k==='w';
@@ -1225,90 +1260,117 @@ function tlSvg(title,segs,marks,join){
   return s+'</g></svg>';
 }
 function renderCoop(){
-  const tlA=tlSvg('1 段实习 · 5 学期 · 20 个月',
+  /* 时间线：英文模式下取 UW_CP_EN.coop 的 tlA / tlB，否则用中文原文 */
+  function mkTl(cfg, zhTitle, zhSegs, zhMarks, zhJoin){
+    if(!isEN()||!cfg) return tlSvg(zhTitle, zhSegs, zhMarks, zhJoin);
+    return tlSvg(cfg.title,
+      cfg.segs.map(s=>({k:s[0],t:s[1],s:s[2]||''})),
+      cfg.marks.map(m=>({x:m[1],t:m[0]})),
+      cfg.join);
+  }
+  const tlA=mkTl(E('coop.tlA',null),'1 段实习 · 5 学期 · 20 个月',
     [{k:'s',t:'上课'},{k:'s',t:'上课'},{k:'s',t:'上课',s:'求职学期'},{k:'w',t:'实习',s:'4 个月'},{k:'s',t:'上课',s:'毕业学期'}],
     [{x:400,t:'WIL 601'},{x:482,t:'求职'},{x:845,t:'毕业'}]);
-  const tlB=tlSvg('2 段连续实习 · 5 学期 · 20 个月',
+  const tlB=mkTl(E('coop.tlB',null),'2 段连续实习 · 5 学期 · 20 个月',
     [{k:'s',t:'上课'},{k:'s',t:'上课',s:'求职学期'},{k:'w',t:'实习',s:'第 1 段'},{k:'w',t:'实习',s:'第 2 段 · 同雇主'},{k:'s',t:'上课',s:'毕业学期'}],
     [{x:226,t:'WIL 601'},{x:308,t:'求职'},{x:845,t:'毕业'}],2);
+  const KEY=[
+    ['<b>最后必须是上课学期</b>不能实习完就毕业，时间线的结尾只能是「实习 → 回来再上一学期 → 毕业」。','最后必须是上课学期','不能实习完就毕业，时间线的结尾只能是「实习 → 回来再上一学期 → 毕业」。'],
+    ['<b>WIL 601 得先修完</b>第一个 work term 之前必须修完，不计入毕业的 8 门课，但不修就没有 co-op 资格。','WIL 601 得先修完','第一个 work term 之前必须修完，不计入毕业的 8 门课，但不修就没有 co-op 资格。'],
+    ['<b>两段实习必须连着</b>要做两个 work term，必须连续、且同一雇主，中间不能插上课学期。','两段实习必须连着','要做两个 work term，必须连续、且同一雇主，中间不能插上课学期。']
+  ];
+  const keyEn=(window.UW_CP_EN&&isEN())?window.UW_CP_EN.coop.key:null;
+  const EXCEP=[
+    '<li><b>外系可以放宽到 4 门</b>：Business Leadership 方向的特殊条款（方案 4 用到），需 ECE Graduate Office 书面确认 approved 名单，否则按标准的 3 门算。</li>',
+    '<li><b>本校排不开可以跨校修</b>：OVGS 是安省校际互修通道，能解决「认证必修课正好撞 work term」的死结。但最后一学期不得注册，且开学第 2 周之后不再批准。</li>',
+    '<li><b>找不到实习不会退学</b>：官方规则是转回 regular MEng，已修学分不丢，但 co-op 身份会没有。排课时就要想好这个 Plan B。</li>'
+  ];
+  const STEPS=[
+    '<li><b>先算毕业底线</b>8 门课，其中 ≥5 门 ECE；外系（工 / 数 / 理研究生课）最多 3 门，不能选本科 400 / 500 级课。这一步决定了你至少需要几个上课学期。</li>',
+    '<li><b>再把最后一个学期钉死</b>毕业前的最后一段必须是 study term。所以不管你实习几段，结尾都得留一个上课学期——这条直接决定了整条时间线的长度。</li>',
+    '<li><b>往前放 work term</b>一段 4 个月。如果要做两段，必须连续排、同一雇主，中间不能插上课学期，否则不算完成 Co-op。</li>',
+    '<li><b>work term 前面那个学期＝求职学期</b>WaterlooWorks 提前一个学期招聘，所以实习前的那个上课学期会同时是投递、刷题、面试的高峰。别在这个学期堆满硬课。</li>',
+    '<li><b>把 WIL 601 放进求职学期</b>它必须在第一个 work term 之前完成，不计入 8 门课。四套方案里它的位置都不一样，因为它得跟着 work term 走——这是最容易被忽略、也最容易导致 co-op 资格出问题的一环。</li>',
+    '<li><b>最后回填课程</b>剩下的上课学期按每学期 2–3 门分配。注意开课学期约束：ECE 657 只在 Spring、657A 只在 Winter、ECE 653 只在 Spring。如果这些正好撞上你的 work term，认证就会缺课，要么换方案，要么走 OVGS。</li>'
+  ];
+  const RECR=[
+    ['网申投递','Aug–Oct 2026','大厂 summer intern 岗位集中开放。此时你刚落地、刚开学，要同时投递 + 刷题 + 上课。'],
+    ['面试','Oct 2026 – Jan 2027','OA + 技术面 + 行为面。注意 12 月期末考试期会撞面试，提前规划。'],
+    ['暑期实习','May–Aug 2027','实习 12–16 周。表现好直接谈 return offer 转全职，不必等第 2 段 co-op。']
+  ];
+  const RECRNOTE=[
+    '<p><b>Co-op 工作学期 ≠ 只能投 WaterlooWorks 的岗位。</b>你自己海投找到的外部 summer intern，只要提前和 Co-op Office 沟通获批，一样算正式 co-op work term——保留 co-op 身份和工签资格。</p>',
+    '<p><b>两条路可同时走：</b>WaterlooWorks 平台岗位 + 自己海投外部 summer intern，互不冲突。2026 年秋一开学就两手抓。</p>'
+  ];
+  const CEN=(window.UW_CP_EN&&isEN())?window.UW_CP_EN.coop:null;
   return ''+
-  '<nav class="crumb"><a href="#/">首页</a> › <span>Co-op 规则</span></nav>'+
+  '<nav class="crumb"><a href="#/">'+esc(E('plan.crumbHome','首页'))+'</a> › <span>'+esc(E('coop.crumb','Co-op 规则'))+'</span></nav>'+
   '<section class="sec" style="margin-top:18px">'+
-    '<h2 class="hook">Co-op 怎么排课？</h2>'+
+    '<h2 class="hook">'+esc(E('coop.h2hook','Co-op 怎么排课？'))+'</h2>'+
     '<div class="keyrow">'+
-      '<div><b>最后必须是上课学期</b>不能实习完就毕业，时间线的结尾只能是「实习 → 回来再上一学期 → 毕业」。</div>'+
-      '<div><b>WIL 601 得先修完</b>第一个 work term 之前必须修完，不计入毕业的 8 门课，但不修就没有 co-op 资格。</div>'+
-      '<div><b>两段实习必须连着</b>要做两个 work term，必须连续、且同一雇主，中间不能插上课学期。</div>'+
+      KEY.map((k,i)=>'<div><b>'+esc((keyEn&&keyEn[i]&&keyEn[i][0])||k[1])+'</b>'+((keyEn&&keyEn[i]&&keyEn[i][1])||k[2])+'</div>').join('')+
     '</div>'+
     '<div class="excep">'+
-      '<h3>先看这三个例外</h3>'+
+      '<h3>'+esc(E('coop.excep','先看这三个例外'))+'</h3>'+
       '<ul>'+
-        '<li><b>外系可以放宽到 4 门</b>：Business Leadership 方向的特殊条款（方案 4 用到），需 ECE Graduate Office 书面确认 approved 名单，否则按标准的 3 门算。</li>'+
-        '<li><b>本校排不开可以跨校修</b>：OVGS 是安省校际互修通道，能解决「认证必修课正好撞 work term」的死结。但最后一学期不得注册，且开学第 2 周之后不再批准。</li>'+
-        '<li><b>找不到实习不会退学</b>：官方规则是转回 regular MEng，已修学分不丢，但 co-op 身份会没有。排课时就要想好这个 Plan B。</li>'+
+        (CEN&&CEN.excepLi?CEN.excepLi:EXCEP).join('')+
       '</ul>'+
     '</div>'+
-    '<h2>标准排法：为什么只能这么排</h2>'+
+    '<h2>'+esc(E('coop.h2std','标准排法：为什么只能这么排'))+'</h2>'+
     '<ol class="steps">'+
-      '<li><b>先算毕业底线</b>8 门课，其中 ≥5 门 ECE；外系（工 / 数 / 理研究生课）最多 3 门，不能选本科 400 / 500 级课。这一步决定了你至少需要几个上课学期。</li>'+
-      '<li><b>再把最后一个学期钉死</b>毕业前的最后一段必须是 study term。所以不管你实习几段，结尾都得留一个上课学期——这条直接决定了整条时间线的长度。</li>'+
-      '<li><b>往前放 work term</b>一段 4 个月。如果要做两段，必须连续排、同一雇主，中间不能插上课学期，否则不算完成 Co-op。</li>'+
-      '<li><b>work term 前面那个学期＝求职学期</b>WaterlooWorks 提前一个学期招聘，所以实习前的那个上课学期会同时是投递、刷题、面试的高峰。别在这个学期堆满硬课。</li>'+
-      '<li><b>把 WIL 601 放进求职学期</b>它必须在第一个 work term 之前完成，不计入 8 门课。四套方案里它的位置都不一样，因为它得跟着 work term 走——这是最容易被忽略、也最容易导致 co-op 资格出问题的一环。</li>'+
-      '<li><b>最后回填课程</b>剩下的上课学期按每学期 2–3 门分配。注意开课学期约束：ECE 657 只在 Spring、657A 只在 Winter、ECE 653 只在 Spring。如果这些正好撞上你的 work term，认证就会缺课，要么换方案，要么走 OVGS。</li>'+
+      (CEN&&CEN.steps?CEN.steps:STEPS).join('')+
     '</ol>'+
-    '<h2 style="margin-top:30px">两种时间线</h2>'+
-    '<p class="tlhint">← 左右滑动查看完整时间线</p>'+
+    '<h2 style="margin-top:30px">'+esc(E('coop.h2tl','两种时间线'))+'</h2>'+
+    '<p class="tlhint">'+esc(E('coop.tlhint','← 左右滑动查看完整时间线'))+'</p>'+
     '<div class="tlfig">'+tlA+'</div>'+
     '<div class="tlfig">'+tlB+'</div>'+
-    '<p class="note amber">学期名按 2026 年（Sep–Dec 2026）入学举例，用于说明结构。实际学期取决于你拿到的 Co-op offer 与招聘轮次，注册前以 ECE Graduate Office 与 Quest 的官方安排为准。</p>'+
+    '<p class="note amber">'+esc(E('coop.noteAmber','学期名按 2026 年（Sep–Dec 2026）入学举例，用于说明结构。实际学期取决于你拿到的 Co-op offer 与招聘轮次，注册前以 ECE Graduate Office 与 Quest 的官方安排为准。'))+'</p>'+
     '<div class="recr">'+
-      '<h2>暑期实习招聘时间线</h2>'+
-      '<p class="recr-intro">北美大厂 summer SWE intern 的招聘比实习本身早半年。以下是关键节点——如果你想让 May–Aug 2027 变成实习期，2026 年 8 月就要开始投递。</p>'+
+      '<h2>'+esc(E('coop.recrH2','暑期实习招聘时间线'))+'</h2>'+
+      '<p class="recr-intro">'+esc(E('coop.recrIntro','北美大厂 summer SWE intern 的招聘比实习本身早半年。以下是关键节点——如果你想让 May–Aug 2027 变成实习期，2026 年 8 月就要开始投递。'))+'</p>'+
       '<div class="rtl">'+
-        '<div class="rp"><div class="bar a"></div><p class="lab">网申投递</p><p class="dt">Aug–Oct 2026</p><p class="ds">大厂 summer intern 岗位集中开放。此时你刚落地、刚开学，要同时投递 + 刷题 + 上课。</p></div>'+
-        '<div class="rp"><div class="bar b"></div><p class="lab">面试</p><p class="dt">Oct 2026 – Jan 2027</p><p class="ds">OA + 技术面 + 行为面。注意 12 月期末考试期会撞面试，提前规划。</p></div>'+
-        '<div class="rp"><div class="bar c"></div><p class="lab">暑期实习</p><p class="dt">May–Aug 2027</p><p class="ds">实习 12–16 周。表现好直接谈 return offer 转全职，不必等第 2 段 co-op。</p></div>'+
+        (CEN&&CEN.recr?CEN.recr:RECR).map((r,i)=>'<div class="rp"><div class="bar '+['a','b','c'][i]+'"></div><p class="lab">'+esc(r[0])+'</p><p class="dt">'+esc(r[1])+'</p><p class="ds">'+r[2]+'</p></div>').join('')+
       '</div>'+
       '<div class="recr-note">'+
-        '<p><b>Co-op 工作学期 ≠ 只能投 WaterlooWorks 的岗位。</b>你自己海投找到的外部 summer intern，只要提前和 Co-op Office 沟通获批，一样算正式 co-op work term——保留 co-op 身份和工签资格。</p>'+
-        '<p><b>两条路可同时走：</b>WaterlooWorks 平台岗位 + 自己海投外部 summer intern，互不冲突。2026 年秋一开学就两手抓。</p>'+
+        (CEN&&CEN.recrNote?CEN.recrNote:RECRNOTE).join('')+
       '</div>'+
       '<div class="qbtns">'+
-        '<a class="qbtn" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">去 Quest 选课注册 ↗</a>'+
-        '<a class="qbtn ghost" href="https://classes.uwaterloo.ca" target="_blank" rel="noopener noreferrer">浏览课程表 ↗</a>'+
+        '<a class="qbtn" href="https://quest.uwaterloo.ca" target="_blank" rel="noopener noreferrer">'+esc(E('coop.q1','去 Quest 选课注册 ↗'))+'</a>'+
+        '<a class="qbtn ghost" href="https://classes.uwaterloo.ca" target="_blank" rel="noopener noreferrer">'+esc(E('coop.q2','浏览课程表 ↗'))+'</a>'+
       '</div>'+
     '</div>'+
   '</section>';
 }
 function renderNew(){
   return ''+
-  '<nav class="crumb"><a href="#/">首页</a> › <span>今年新课 / 最前沿</span></nav>'+
+  '<nav class="crumb"><a href="#/">'+esc(E('plan.crumbHome','首页'))+'</a> › <span>'+esc(E('new.crumb','今年新课 / 最前沿'))+'</span></nav>'+
   '<section class="sec" style="margin-top:18px">'+
-    '<h2>最前沿的课</h2>'+
+    '<h2>'+esc(E('new.h1','最前沿的课'))+'</h2>'+
     '<div class="glist" style="margin-bottom:26px">'+FRONTIER.map(o=>chip(o.c)).join('')+'</div>'+
-    '<h2>今年课表新动向</h2>'+
+    '<h2>'+esc(E('new.h2','今年课表新动向'))+'</h2>'+
     '<div class="glist">'+NEWCOURSES.map(o=>chip(o.c)).join('')+'</div>'+
-    '<p class="note">传统核心课（ECE 657 / 657A / 650 等）常年开设，不在此列。CS 886 今年新开 4 个 LLM / 视觉语言 / 生成模型研讨班。</p>'+
+    '<p class="note">'+esc(E('new.note','传统核心课（ECE 657 / 657A / 650 等）常年开设，不在此列。CS 886 今年新开 4 个 LLM / 视觉语言 / 生成模型研讨班。'))+'</p>'+
   '</section>';
 }
 function renderMap(){
-  const body=MAP.map(m=>{
-    const cl=m.cl.map(g=>'<div class="mapcl"><h4>'+esc(g.n)+'</h4><div class="glist">'+g.c.map(chip).join('')+'</div></div>').join('');
-    return '<div class="mapdir"><h3>'+esc(m.dir)+'</h3>'+cl+'</div>';
+  const MEN=(window.UW_CP_EN&&isEN())?window.UW_CP_EN.mapDirs:null;
+  const body=MAP.map((m,mi)=>{
+    const mEn=MEN&&MEN[mi];
+    const cl=m.cl.map((g,gi)=>'<div class="mapcl"><h4>'+esc((mEn&&mEn.cl[gi])||g.n)+'</h4><div class="glist">'+g.c.map(chip).join('')+'</div></div>').join('');
+    return '<div class="mapdir"><h3>'+esc((mEn&&mEn.dir)||m.dir)+'</h3>'+cl+'</div>';
   }).join('');
   return ''+
-  '<nav class="crumb"><a href="#/">首页</a> › <span>课程地图</span></nav>'+
+  '<nav class="crumb"><a href="#/">'+esc(E('plan.crumbHome','首页'))+'</a> › <span>'+esc(E('map.crumb','课程地图'))+'</span></nav>'+
   '<section class="sec" style="margin-top:18px">'+
-    '<h2 class="hook">从大方向，拆到单门课</h2>'+
-    '<p class="lede" style="margin-bottom:18px">先看你想走哪条线（high level），再顺着「基础 → 核心 → 进阶」往下点（low level）。点任意课号看详情与先后关系。</p>'+
+    '<h2 class="hook">'+esc(E('map.h2','从大方向，拆到单门课'))+'</h2>'+
+    '<p class="lede" style="margin-bottom:18px">'+esc(E('map.lede','先看你想走哪条线（high level），再顺着「基础 → 核心 → 进阶」往下点（low level）。点任意课号看详情与先后关系。'))+'</p>'+
     body+
-    '<p class="note">方向划分基于 ECE 研究生认证与就业路线；同门课可能跨多条线。标「需教授同意」的 special topics 可由你向教授提议新开。</p>'+
+    '<p class="note">'+esc(E('map.note','方向划分基于 ECE 研究生认证与就业路线；同门课可能跨多条线。标「需教授同意」的 special topics 可由你向教授提议新开。'))+'</p>'+
   '</section>';
 }
 /* mobile nav */
 /* ===== 跨系申请指南（可扩展：往 APPLY_GROUPS 加 group 即可，目前开放 CS）===== */
-const APPLY_GROUPS=[
+var APPLY_GROUPS=[
   {key:'cs',label:'CS · 计算机科学',school:'Cheriton School of Computer Science',
    note:'CS 研究生课在 Quest 上预留给 CS 本系研究生，外系（含 ECE）无法自己注册，需走 instructor consent 特批流程。每 term 只能申请 1 门；你 ECE MEng 最多有 3 门外系名额（Business Leadership 方向可放宽到 4，需 Graduate Office 书面确认）。'}
 ];
@@ -1316,39 +1378,47 @@ let applyState={group:'cs',sel:new Set()};
 function applyCourses(gk){ return Object.keys(C).filter(k=>C[k]&&C[k].g===gk); }
 function applyEmail(code){
   const v=C[code]; if(!v) return '';
-  const title=v.n||''; const term=v.t||'';
-  return 'Subject: Permission to enroll - '+code+' ('+term+') - [你的全名], ECE MEng\n\n'+
-'Dear Prof. [教授姓],\n\n'+
+  const title=v.n||''; const term=F(v,'t');
+  const zh=isEN()?false:true;
+  const P={
+    name: zh?'[你的全名]':'[Your full name]',
+    sid: zh?'[学号]':'[Student ID]',
+    prof: zh?'[教授姓]':'[Professor last name]',
+    mail: zh?'[邮箱]':'[Email]',
+    bg: zh?'[一句话：相关课程/项目，例如 ECE 650 + 651，或你正在做的 app]':'[One line on relevant courses / projects, e.g. ECE 650 + 651, or an app you are building]'
+  };
+  return 'Subject: Permission to enroll - '+code+' ('+term+') - '+P.name+', ECE MEng\n\n'+
+'Dear Prof. '+P.prof+',\n\n'+
 'I am a Master of Engineering (MEng) student in Electrical and Computer Engineering, and I would like to enroll in your '+code+' - '+title+' ('+term+'). As an ECE student I cannot register via Quest directly, so I am writing to request a permission number.\n\n'+
-'- Full name: [你的全名]\n'+
-'- Student ID: [学号]\n'+
+'- Full name: '+P.name+'\n'+
+'- Student ID: '+P.sid+'\n'+
 '- Home department: Electrical and Computer Engineering\n'+
 '- Course: '+code+', section ['+term+']\n\n'+
-'My background includes [一句话：相关课程/项目，例如 ECE 650 + 651，或你正在做的 app]. I plan to attend the first week of lectures and would appreciate the opportunity to join if space allows.\n\n'+
+'My background includes '+P.bg+'. I plan to attend the first week of lectures and would appreciate the opportunity to join if space allows.\n\n'+
 'Thank you for your consideration.\n\n'+
 'Best,\n'+
-'[你的全名]\n'+
-'[学号] / [邮箱]';
+P.name+'\n'+
+P.sid+' / '+P.mail;
 }
 function renderApply(){
   const g=APPLY_GROUPS.find(x=>x.key===applyState.group)||APPLY_GROUPS[0];
   const codes=applyCourses(g.key);
-  const tabs=APPLY_GROUPS.map(x=>'<button class="aptab'+(x.key===applyState.group?' on':'')+'" onclick="applySetGroup(\''+x.key+'\')">'+esc(x.label)+'</button>').join('');
+  const tabs=APPLY_GROUPS.map(x=>'<button class="aptab'+(x.key===applyState.group?' on':'')+'" onclick="applySetGroup(\''+x.key+'\')">'+esc(F(x,'label'))+'</button>').join('');
   const rows=codes.map(code=>{
     const v=C[code]; if(!v) return '';
-    const title=v.zh||v.n||'';
+    const title=cname(v);
     const checked=applyState.sel.has(code)?'checked':'';
     return '<label class="approw"><input type="checkbox" class="appchk" '+checked+' onchange="applyToggle(\''+esc(code)+'\')">'+
       '<span class="dot" style="background:'+diffColor(v.d)+'"></span>'+
       '<span class="cc"><b>'+esc(code)+'</b> '+esc(title)+'</span>'+
-      '<span class="ct">'+esc(v.t||'')+'</span>'+
-      (v.consent||/consent/i.test(v.warn||'')?'<span class="ctag">需 consent</span>':'')+'</label>';
+      '<span class="ct">'+esc(F(v,'t'))+'</span>'+
+      (v.consent||/consent/i.test(v.warn||'')?'<span class="ctag">'+esc(E('applyView.consentTag','需 consent'))+'</span>':'')+'</label>';
   }).join('');
-  return '<nav class="crumb"><a href="#/">首页</a> › <span>跨系申请指南</span></nav>'+
-    '<section class="sec"><h2>跨系选课申请指南</h2>'+
-    '<p class="lede">你是 ECE 学生，想修外系的研究生课。这类课在 Quest 上不对自己开放，要走 instructor consent 特批。勾选下方课程 → 自动生成对应的申请步骤与邮件模板。目前开放 <b>CS（计算机科学）</b>；SYDE / Math / BE 等外系会陆续接入。</p>'+
+  return '<nav class="crumb"><a href="#/">'+esc(E('plan.crumbHome','首页'))+'</a> › <span>'+esc(E('applyView.crumb','跨系申请指南'))+'</span></nav>'+
+    '<section class="sec"><h2>'+esc(E('applyView.h2','跨系选课申请指南'))+'</h2>'+
+    '<p class="lede">'+E('applyView.lede','你是 ECE 学生，想修外系的研究生课。这类课在 Quest 上不对自己开放，要走 instructor consent 特批。勾选下方课程 → 自动生成对应的申请步骤与邮件模板。目前开放 <b>CS（计算机科学）</b>；SYDE / Math / BE 等外系会陆续接入。')+'</p>'+
     '<div class="aptabs">'+tabs+'</div>'+
-    '<div class="note amber">'+esc(g.note)+'</div>'+
+    '<div class="note amber">'+esc(F(g,'note'))+'</div>'+
     '<div class="applist">'+rows+'</div>'+
     '<div id="applyGuides"></div></section>';
 }
@@ -1365,21 +1435,24 @@ function applyToggle(code){
 function renderApplyGuides(){
   const g=APPLY_GROUPS.find(x=>x.key===applyState.group)||APPLY_GROUPS[0];
   const codes=[...applyState.sel];
-  if(!codes.length) return '<p class="apempty note">勾选上方课程，这里会自动生成对应的申请步骤与邮件模板。</p>';
+  if(!codes.length) return '<p class="apempty note">'+esc(E('applyView.empty','勾选上方课程，这里会自动生成对应的申请步骤与邮件模板。'))+'</p>';
+  const STEPZH=[
+    '查先修：确认 <b>%s</b> 的 prerequisite 你已满足（见课程详情的「前置」）。',
+    '开课前几周发邮件给该课 instructor（模板在下方），附：全名 / 学号 / 本系 (ECE) / 课号+section。',
+    '第一周去蹭课：名额允许时欢迎旁听，让教授确认你是认真的申请人。',
+    '第一周后拿 permission number：%s 在开学第一周后发放；用它在 Quest 注册。',
+    '截止线：drop/add 截止（开学约 3 周）之后需 Graduate Drop/Add Form（导师 + CS Graduate Officer 双签），很麻烦——尽早申请。'
+  ];
+  const STEPEN=(window.UW_CP_EN&&isEN())?window.UW_CP_EN.applyView.steps:null;
   return codes.map(code=>{
     const v=C[code]; if(!v) return '';
-    const steps=[
-      '查先修：确认 <b>'+esc(code)+'</b> 的 prerequisite 你已满足（见课程详情的「前置」）。',
-      '开课前几周发邮件给该课 instructor（模板在下方），附：全名 / 学号 / 本系 (ECE) / 课号+section。',
-      '第一周去蹭课：名额允许时欢迎旁听，让教授确认你是认真的申请人。',
-      '第一周后拿 permission number：'+esc(g.school)+' 在开学第一周后发放；用它在 Quest 注册。',
-      '截止线：drop/add 截止（开学约 3 周）之后需 Graduate Drop/Add Form（导师 + CS Graduate Officer 双签），很麻烦——尽早申请。'
-    ].map(s=>'<li>'+s+'</li>').join('');
-    const warn=(v.consent||/consent/i.test(v.warn||''))?'<p class="warn-in">⚠ 该课标「需 instructor consent」，位置有限，建议尽早发邮件、第一周务必去听课。</p>':'';
+    const src=STEPEN||STEPZH;
+    const steps=src.map(s=>'<li>'+s.replace('%s',esc(code)).replace('%s',esc(g.school))+'</li>').join('');
+    const warn=(v.consent||/consent/i.test(v.warn||''))?'<p class="warn-in">'+esc(E('applyView.consent','⚠ 该课标「需 instructor consent」，位置有限，建议尽早发邮件、第一周务必去听课。'))+'</p>':'';
     const email=applyEmail(code);
     const eid='email-'+code.replace(/\s+/g,'_');
     return '<div class="apcard"><div class="apcard-h"><span class="dot" style="background:'+diffColor(v.d)+'"></span>'+
-      '<b>'+esc(code)+'</b> '+esc(v.zh||v.n||'')+' <span class="apcard-t">'+esc(v.t||'')+'</span></div>'+
+      '<b>'+esc(code)+'</b> '+esc(cname(v))+' <span class="apcard-t">'+esc(F(v,'t'))+'</span></div>'+
       '<ol class="aplist">'+steps+'</ol>'+warn+
       '<div class="emailwrap"><div class="emailbar"><span>邮件模板（可直接复制修改）</span>'+
       '<button class="obtn ghost sm" onclick="copyApplyEmail(this,\''+esc(code)+'\')">复制</button></div>'+
@@ -1389,7 +1462,7 @@ function renderApplyGuides(){
 function copyApplyEmail(btn,code){
   const ta=document.getElementById('email-'+code.replace(/\s+/g,'_'));
   if(!ta) return;
-  const done=()=>{ const old=btn.textContent; btn.textContent='已复制 ✓'; setTimeout(()=>btn.textContent=old,1500); };
+  const done=()=>{ const old=btn.textContent; btn.textContent=E('applyView.copied','已复制 ✓'); setTimeout(()=>btn.textContent=old,1500); };
   try{ ta.focus(); ta.select(); ta.setSelectionRange(0,ta.value.length); }catch(e){}
   if(navigator.clipboard&&navigator.clipboard.writeText){
     navigator.clipboard.writeText(ta.value).then(done,()=>{ try{document.execCommand('copy');}catch(e){} done(); });
@@ -1421,6 +1494,15 @@ function route(){
 }
 window.addEventListener('hashchange',route);
 window.addEventListener('DOMContentLoaded',route);
+/* 语言切换：挂载切换按钮、应用静态词典，并在语言变化时重渲染当前视图 */
+if(window.UW_I18N){
+  try{ UW_I18N.mountToggle(); }catch(e){}
+  try{ UW_I18N.apply(document); }catch(e){}
+  if(UW_I18N.onChange) UW_I18N.onChange(function(){
+    try{ UW_I18N.apply(document); }catch(e){}
+    try{ route(); }catch(e){}
+  });
+}
 
 /* 常用站点下拉 */
 const extBtn=document.getElementById('ext-btn'),extMenu=document.getElementById('ext-menu');
@@ -1446,6 +1528,8 @@ if(extBtn&&extMenu){
 }
 
 </script>
+<script src="courses-en.js"></script>
+<script src="data-en.js"></script>
   <div class="toast" id="toast" hidden></div>
   <script>
     (function () {
@@ -1462,9 +1546,11 @@ if(extBtn&&extMenu){
         document.body.removeChild(ta); return Promise.resolve();
       }
       if (sb) sb.addEventListener('click', function () {
-        var d = { title: '滑铁卢 ECE MEng 选课导航', text: '滑铁卢 ECE MEng 选课导航', url: location.href };
+        var SH = (window.UW_CP_EN && window.UW_I18N && UW_I18N.get && UW_I18N.get() === 'en')
+          ? window.UW_CP_EN.share : null;
+        var d = { title: (SH && SH.title) || '滑铁卢 ECE MEng 选课导航', text: (SH && SH.text) || '滑铁卢 ECE MEng 选课导航', url: location.href };
         if (navigator.share) { navigator.share(d).catch(function () {}); }
-        else { copy(location.href).then(function () { toast('链接已复制，去分享吧'); }); }
+        else { copy(location.href).then(function () { toast((SH && SH.toast) || '链接已复制，去分享吧'); }); }
       });
     })();
   </script>

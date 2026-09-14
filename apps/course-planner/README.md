@@ -59,10 +59,16 @@
 
 | 文件 | 职责 |
 |------|------|
-| `index.html` | 全部 UI + 全部数据（`const C` 课程库 112 门、`PLANS` 四套方案、`MAP` 课程地图） |
+| `index.html` | 全部 UI + **中文**数据（`var C` 课程库 112 门、`PLANS` 四套方案、`MAP` 课程地图） |
+| `courses-en.js` | 112 门课程的英文字段（`*_en`），**自动生成，禁止手改** |
+| `data-en.js` | 界面与内容层英文（方案、Co-op 页、地图、申请页、抽屉标题），人工维护 |
 | `cover.svg` | 封面（`assets/gen_cover.py` 生成，禁止手改） |
 | `DEV.md` | 实现细节、数据结构、路由与样式设计 |
 | `README.md` | 本文件（使用说明 + 改动指引 + 来源） |
+
+**中英双语**：默认英文，右上角可切中文（`assets/i18n.css` + `assets/i18n.js`，`?lang=zh` 或 localStorage `uw-lang` 生效）。
+界面串（导航、页脚、常用站点）走 `window.UW_DICT['course-planner']`；长文与数据走「中文原字段 + `*_en` 英文副本」约定，由 `F(o, base)` / `FA(o, base)` / `E(path)` 三个助手按当前语言取值。
+因此：**加字段时中英必须成对** —— 只加中文不会报错，但英文模式会静默显示中文。
 
 **Hash 路由**：`#/` 首页 · `#/plan/A~D` 四套方案 · `#/courses` 课程库 · `#/map` 课程地图 · `#/coop` Co-op 规则 · `#/apply` 跨系申请导航。
 
@@ -74,19 +80,25 @@
 
 | 想改什么 | 动哪里 | 改完怎么验证 |
 |---|---|---|
-| 加 / 改一门课 | `index.html` 里的 `const C` 数组 | 课程库能搜到；点课号详情完整；课程地图归属正确 |
-| 调整某套方案 | `index.html` 里的 `PLANS` | `#/plan/X` 学期时间轴与「选不上怎么办」同步更新 |
-| 改课程地图归属 | `index.html` 里的 `MAP` | `#/map` 三层结构点击可达 |
-| 改 Co-op 规则说明 | `#/coop` 段落 | 与官方 Information Package 最新表述一致 |
-| 加一个常用站点入口 | 顶栏 `.ext-menu` 里的 `<a>` | 新窗口打开正确；移动端不被遮挡 |
+| 加 / 改一门课 | `index.html` 里的 `var C`（**中文**）+ `courses-en.js`（英文 `*_en`） | 课程库能搜到；点课号详情完整；课程地图归属正确；**两种语言都要看** |
+| 调整某套方案 | `index.html` 里的 `PLANS` + `data-en.js` 的 `plans.<id>` | `#/plan/X` 学期时间轴与「选不上怎么办」同步更新 |
+| 改课程地图归属 | `index.html` 里的 `MAP` + `data-en.js` 的 `mapDirs`（按索引对应） | `#/map` 三层结构点击可达 |
+| 改 Co-op 规则说明 | `#/coop` 段落 + `data-en.js` 的 `coop` | 与官方 Information Package 最新表述一致 |
+| 加一个常用站点入口 | 顶栏 `.ext-menu` 里的 `<a>` + `assets/i18n/course-planner.js` 的 `cp.ext.*` | 新窗口打开正确；移动端不被遮挡；英文模式无残留中文 |
 | 改样式 | 内联 `<style>` 中的对应类 | 桌面 / ≤680px 两档都要看 |
 
-**QA 门禁**：改动后必须跑
+> ⚠️ `courses-en.js` 由脚本生成（合并课程数据分片后输出）。要重新生成就改生成脚本，**不要手改产物**；否则下次生成会覆盖你的修改。
+> `data-en.js` 里有两个键名相近但含义不同的对象：`mapDirs`（课程地图结构）与 `map`（地图页文案）—— 历史上两者曾都叫 `map` 导致后者覆盖前者，改名后请勿再合并。
+
+**QA 门禁**：改动后必须**两个语言各跑一次**，均 0 失败才允许推送。
 ```bash
 NODE_PATH=C:/Users/h/.workbuddy/binaries/node/workspace/node_modules \
-  node tools/qa_course_planner.js
+  node tools/qa_course_planner.js en
+NODE_PATH=C:/Users/h/.workbuddy/binaries/node/workspace/node_modules \
+  node tools/qa_course_planner.js zh
 ```
-**0 失败**才允许推送。
+门禁会断言：无悬空课号、全部路由渲染非空、方案学分约束（≤8 门 / ECE ≥5 / 外系 ≤3，方案 D 走 BL 例外 9/4）、
+`en` 模式视图零中文残留、`zh` 模式中文内容未退化。
 
 ---
 
