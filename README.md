@@ -1,100 +1,150 @@
-# 滑铁卢大学工具箱 · UW Toolkit
+**English** | [中文](README.zh-CN.md)
 
-面向滑铁卢大学学生（以研究生为主）的轻量工具集合。**纯静态站点，无后端、免登录**，部署在 GitHub Pages。
+# UW Toolkit
 
-🌐 **在线地址**：`https://hairuoliu.github.io/waterloo-toolkit/`
-📦 **仓库**：`https://github.com/HairuoLiu/waterloo-toolkit`
+A collection of lightweight tools for University of Waterloo students (mostly graduate students). **Pure static site, no backend, no login required**, deployed on GitHub Pages.
 
-> 这是给**未来的 AI / 协作者**读的总规范文档。读完本文件，你应当能：
-> 1. 知道子 App 文件夹怎么命名、怎么重命名；
-> 2. 知道每个子 App 的「封面图」怎么做，且风格与现有封面**完全一致**；
-> 3. 知道怎么新增一个工具、怎么部署。
+🌐 **Live site**: `https://hairuoliu.github.io/waterloo-toolkit/`
+📦 **Repository**: `https://github.com/HairuoLiu/waterloo-toolkit`
 
----
-
-## 0. 现有子 App（已上线）
-
-| app-id | 名称 | 说明 |
-|--------|------|------|
-| `daily-reminder` | 研究生每日提醒 | 数据来自 UW 研究生重要日期。提供**月历视图**（默认）+ **列表视图**双切换；**按学年拆分**：顶部「选择学年」tab 把每个学年（Fall 入学为一年起点，如 2026–2027）切成独立日历/列表/提醒，互不混淆；日历按类别配色显示每日事件、跨天事件整段底色延续、点击日期弹出当日**中英双语**详情；类别筛选条（缴费/退课/考试/假期…）两类视图共用；另有「今日一件事」提醒文案 + 一键复制发群。 |
-| `course-planner` | ECE 选课导航 | 由另一位 AI 通过 `uw-toolkit-onboard` 上架规范接入的子 App（示例：ECE 课程规划/导航），证明「外部 AI 上架」流程已跑通。 |
-
-> **数据范围说明**：本工具只保留「今天及以后、且为 Fall 入学学年」的节点。当前校方研究生重要日期页面只发布到 **2027 年春季**（即 2026–2027 学年结束），因此现在只有 **2026–2027 学年** 一个 tab；等校方发布 2027 秋季（2027–2028 学年）后，重新抓取一次、给数据加 `academicYear` 字段，网页会**自动**多出对应学年 tab，无需改代码。
-> 新增子 App 时，建议延续「默认一个主视图 + 顶部类别筛选 + 详情面板」的信息组织方式，保持整站体验一致。
+> This is the **master specification** document for future AIs / collaborators. After reading this file you should be able to:
+> 1. Know how sub-app folders are named and renamed;
+> 2. Know how to make each sub-app's "cover image" so its style is **exactly consistent** with existing covers;
+> 3. Know how to add a new tool, keep the home page in sync, write that tool's `README.md`, and deploy.
 
 ---
 
-## 1. 目录结构
+## ★ Operating Rules (mandatory for future AIs)
+
+> This section is a **hard constraint**. Any AI / collaborator that **adds, renames, deletes, or substantively modifies** any sub-app must complete R1–R4, otherwise the task is considered unfinished.
+> Why the rules exist: the home page is **data-driven** (`index.html` renders cards from `apps/manifest.json`). Once the manifest, cover, and per-app docs fall out of sync, users hit mismatches like "there's a card on the home page but the page makes no sense" or "the feature is done but you can't find it from the home page".
+
+### R1 · The home page must be kept in sync (manifest = single source of truth)
+
+1. Adding / renaming / deleting a sub-app ⇒ you **must** update `apps/manifest.json`, filling in all nine fields: `id / title_zh / title_en / desc_zh / desc_en / icon / category / path / cover`.
+2. The home page **must not** hard-code any tool list; every change goes into the manifest and `index.html` renders it automatically.
+3. If an app's positioning, core usage, or data scope changes ⇒ **update `desc_zh` / `desc_en` in the manifest too**, so the card matches what the app actually does.
+4. Every `desc` must state the **core summary**: whose problem it solves and how to use it in one sentence. Vague filler like "an XX tool" is forbidden.
+5. Self-check before committing: **number of home-page cards = number of entries in `manifest.json` = number of folders under `apps/`**. Any mismatch means something was missed.
+
+### R2 · Every sub-app must have its own README (mandatory)
+
+Every `apps/<app-id>/` **must** contain a `README.md` with the six sections below, kept **consistent with the current code** (not written once and abandoned):
+
+1. **Core summary** — one-line positioning + whose problem it solves + how to use it in one sentence.
+2. **How to use** — step-by-step from the user's perspective: views / filters / search / detail panels / outbound links.
+3. **How it's designed** — file list and each file's responsibility, data structure (field names + one sample), render flow, external dependencies (incl. CDN), style conventions.
+4. **How to change it** — for the 3–5 most common changes: which files to touch and how to verify afterwards.
+5. **Fact red lines** — dates, amounts, phone numbers, emails, URLs, and course codes in the data **must be preserved verbatim and be traceable; never fabricated**. If unavailable, state "platform message / website form" explicitly. Inferences must be **labeled as inferences**.
+6. **References** — a list of official source links (with retrieval dates).
+
+> Whenever an app's behavior, data, or structure changes, its `README.md` **must be updated in the same commit**.
+
+### R3 · Discoverability
+
+- Every sub-app page must keep the site-wide topbar (home + GitHub + share); see Section 7 for the spec.
+- If an app has multiple views/routes, list the anchors or hash routes in its `README.md` so users and AIs can jump straight there.
+- Bilingual site: UI strings live in `assets/i18n/*.js` dictionaries; long-form text uses paired `lang="zh"` / `lang="en"` blocks. New strings **must be added in both languages** — missing one language is a defect.
+
+### R4 · Pre-push checklist
+
+- [ ] `apps/manifest.json` synced (including bilingual titles and descriptions)
+- [ ] `cover.svg` regenerated by `gen_cover.py`, and the `cover` field written into the manifest
+- [ ] `apps/<app-id>/README.md` exists and matches actual behavior
+- [ ] The "Existing Sub-Apps" table in this README is updated (with core summaries)
+- [ ] Local preview via `python -m http.server 8080`: cards appear, no 404s, language toggle works
+
+---
+
+## 0. Existing Sub-Apps (deployed)
+
+> Home-page cards are fully driven by `apps/manifest.json`; the table below is the **manually maintained core summary**. After adding or changing an app, update it per R1 and R2. Full details live in `apps/<app-id>/README.md`.
+
+| app-id | Name | Core summary (who it's for · what it solves · how to use it) |
+|--------|------|-------------------------------------------------------------|
+| `sop` | Waterloo Onboarding SOP | An onboarding wiki for **new students (mostly MEng / Co-op)**: four phases — pre-arrival → arrival → enrolment → academic life, each with a tickable checklist; 11 sections (key dates, Co-op job-search timeline, housing, course strategy, fee breakdown); left sidebar TOC + full-text search (hit highlighting, non-matching sections auto-hidden); the bottom "pitfall log" is driven by `data.js` — append one entry and it grows. **How to use**: walk top to bottom by phase; search by keyword or append a pitfall entry when stuck. |
+| `daily-reminder` | Grad Daily Reminder | Turns **UW graduate important dates** into a calendar / list dual view, **split by academic year** (each year gets its own calendar and reminders); top "today / this week / this month" reminders + one-click copy to paste into a group chat; category filters (payment / withdrawal / exams / holidays …) shared by both views. **How to use**: glance at "one thing today" each morning; hit copy when you need to share it. |
+| `course-planner` | ECE Course Navigator | Course planning for **ECE MEng (incl. Co-op)**: **4 tracks** (each with positioning, duration, Co-op arrangement, risks and fallback paths), a **112-course library** (click a course code for difficulty, offering term and instructor, content, project/assessment, prerequisites, alternatives, and the "leads to / requires / best for" relation fields), a **course map** (6 directions → foundation / core / advanced), plus Co-op rules and cross-department / OVGS notes. **How to use**: pick a track first, then choose courses along its term timeline. |
+| `weekday-stay` | Weekday Temporary Stay | For people based in **Toronto and nearby who spend 2–3 nights a week in Waterloo**: Top-50 long-stay candidates (Waterloo / Kitchener / Cambridge / Guelph), filterable by city and tier, with search and per-row address / phone / contact details; includes a **negotiation playbook**, an **English phone script**, and a **Call #1 → #8 calling order**. Window 2026-09-08 ~ 12-08, **27 room-nights** total. **How to use**: call top to bottom; let them quote first, then counter with the script. |
+| `locker-finder` | UW Locker Finder | **Leaflet + OpenStreetMap** real map marking locker locations campus-wide; shows free / rental / day-use, term vs day rate, whether you can bring your own padlock, the managing office and how to apply; "map / list" dual view, click a marker or card for details. **How to use**: filter by category first, then check whether the nearest one allows your own padlock. |
+| `goose-glance` | Goose Glance Job Insight | Landing page for a third-party **Chrome extension (MIT, not official UW)**: on a Waterloo Works posting page it uses **in-browser AI (WebLLM, no data upload)** to compress the long posting into an **insight card** — AI job title, 1–3 key responsibilities, internship length, location and remote/hybrid/onsite, required skills, special requirements (French / driver's license / background check / citizenship / visa / certificate) and materials to prepare. **How to use**: install the extension from the Chrome Web Store first, then open a Waterloo Works posting. |
+
+> **Data scope note (daily-reminder)**: only "today and later, Fall-intake academic year" nodes are kept. The official graduate important dates page currently publishes through **Spring 2027** (end of the 2026–2027 academic year), so there is only **one tab: 2026–2027**. Once Fall 2027 (the 2027–2028 academic year) is published, re-scrape, add an `academicYear` field, and the page **automatically** gains the year tab — no code change needed.
+> When adding a new sub-app, keep the same information organization ("one default main view + top category filter + detail panel") to preserve a consistent experience across the site.
+
+---
+
+## 1. Directory Structure
 
 ```
 waterloo-toolkit/
-├── index.html              # 主站首页：读取 apps/manifest.json 渲染工具卡片（含封面图）
-├── README.md               # 本文件（总规范，给 AI / 协作者读）
-├── STRUCTURE.md            # 子 App 命名/结构细则（本文件的精简版，可二选一阅读）
-├── .nojekyll               # 禁用 Jekyll，保证子路径资源正常加载
+├── index.html              # Main site home: reads apps/manifest.json to render tool cards (with covers)
+├── README.md               # This file (master spec, for AIs / collaborators)
+├── STRUCTURE.md            # Sub-app naming/structure details (a condensed version of this file; read either one)
+├── .nojekyll               # Disable Jekyll so sub-path resources load correctly
 ├── assets/
-│   ├── style.css           # 全站共享样式（唯一一份）
-│   └── gen_cover.py        # ★ 封面统一生成器（所有封面都由它产出，禁止手写 SVG）
+│   ├── style.css           # Shared site-wide stylesheet (the only one)
+│   └── gen_cover.py        # ★ Unified cover generator (every cover is produced by it; hand-writing SVG is forbidden)
 └── apps/
-    ├── manifest.json       # ★ 子 App 清单（首页数据源；新增/改名必改）
-    └── <app-id>/           # 每个工具一个文件夹（kebab-case）
-        ├── index.html      # 工具页面（必须）
-        ├── cover.svg       # 工具封面图（由 gen_cover.py 生成，1200×630）
-        └── …               # 其余资源（js / css / 数据）自行放置
+    ├── manifest.json       # ★ Sub-app manifest (home page data source; must edit on add/rename)
+    └── <app-id>/           # One folder per tool (kebab-case)
+        ├── index.html      # Tool page (required)
+        ├── cover.svg       # Tool cover image (generated by gen_cover.py, 1200×630)
+        └── …               # Other resources (js / css / data) placed as needed
 ```
 
 ---
 
-## 2. 子 App 命名与重命名规范
+## 2. Sub-App Naming & Renaming Spec
 
-### 2.1 命名规则
-- 每个工具一个文件夹：`apps/<app-id>/`
-- `<app-id>` 规则：
-  - **全小写 `kebab-case`**（小写 + 连字符），如 `daily-reminder`、`course-planner`、`coop-tracker`
-  - 只用 `a-z 0-9 -`，**不要**空格、中文、下划线、大写
-  - 简短、见名知意；同一工具只能有一个 id
-- 每个 `<app-id>` 文件夹**必须**含 `index.html`
-- 页面内引用共享样式用 `../../assets/style.css`（相对路径，因站点运行在子路径下）
+### 2.1 Naming Rules
+- One folder per tool: `apps/<app-id>/`
+- `<app-id>` rules:
+  - **All-lowercase `kebab-case`** (lowercase + hyphens), e.g. `daily-reminder`, `course-planner`, `coop-tracker`
+  - Use only `a-z 0-9 -`; **no** spaces, Chinese characters, underscores, or uppercase
+  - Short and self-explanatory; one tool has exactly one id
+- Every `<app-id>` folder **must** contain `index.html`
+- Reference the shared stylesheet inside the page with `../../assets/style.css` (relative path, since the site runs under a sub-path)
 
-### 2.2 新增一个子 App
-1. 在 `apps/` 下新建 `apps/<app-id>/`，放入 `index.html` 及所需资源。
-2. 打开 `apps/manifest.json`，在数组里**追加一个对象**（字段见下）。
-3. 运行 `gen_cover.py` 生成该工具的 `cover.svg`（见第 3 节）。脚本会自动把 `cover` 字段写进 manifest。
-4. 提交并推送，主站首页**自动**出现新卡片，无需改 `index.html`。
+### 2.2 Adding a New Sub-App
+1. Under `apps/`, create `apps/<app-id>/` and put in `index.html` plus needed resources.
+2. Open `apps/manifest.json` and **append one object** to the array (fields below).
+3. Run `gen_cover.py` to generate that tool's `cover.svg` (see Section 3). The script auto-writes the `cover` field into the manifest.
+4. Commit and push; the home page **automatically** shows a new card — no need to edit `index.html`.
 
-`manifest.json` 条目字段：
+`manifest.json` entry fields:
 ```json
 {
-  "id": "daily-reminder",        // = 文件夹名，全小写 kebab-case
-  "title_zh": "研究生每日提醒",    // 中文标题（卡片与封面主标题用）
+  "id": "daily-reminder",        // = folder name, all-lowercase kebab-case
+  "title_zh": "研究生每日提醒",    // Chinese title (used on card and as cover main title)
   "title_en": "Grad Daily Reminder",
   "desc_zh": "每天挑出一件最该做的事，带行动建议，可一键复制发群。",
   "desc_en": "One thing to do each day, with action tips.",
-  "icon": "📅",                   // 无封面时的兜底图标
-  "category": "日程提醒",          // 分类标签（卡片药丸 + 封面药丸 + 决定 accent 配色）
-  "path": "apps/daily-reminder/",  // 相对根的路径，以 / 结尾
-  "cover": "apps/daily-reminder/cover.svg"  // 封面图路径（gen_cover.py 自动补）
+  "icon": "📅",                   // Fallback icon when no cover exists
+  "category": "日程提醒",          // Category tag (card pill + cover pill + decides accent color)
+  "path": "apps/daily-reminder/",  // Path relative to root, ending with /
+  "cover": "apps/daily-reminder/cover.svg"  // Cover image path (auto-filled by gen_cover.py)
 }
 ```
 
-### 2.3 重命名一个已有的子 App
-1. `git mv apps/<old-id> apps/<new-id>`（保留历史）。
-2. 把新文件夹内 `index.html` 里对 `../../assets/style.css` 等相对引用保持不变（层级没变，无需改）。
-3. 编辑 `apps/manifest.json`：把该条目的 `id`、`path`、`cover` 三处同步改成 `<new-id>`。
-4. 重新运行 `gen_cover.py --id <new-id> ...`（参数里的 `--app-path` 也要改成 `apps/<new-id>`）以更新封面内的底部路径文字。
-5. 提交推送。
+### 2.3 Renaming an Existing Sub-App
+1. `git mv apps/<old-id> apps/<new-id>` (preserves history).
+2. Keep the relative references inside the new folder's `index.html` to `../../assets/style.css` unchanged (the depth hasn't changed, so no edit needed).
+3. Edit `apps/manifest.json`: sync the `id`, `path`, `cover` of that entry to `<new-id>`.
+4. Re-run `gen_cover.py --id <new-id> ...` (the `--app-path` argument must also change to `apps/<new-id>`) to update the bottom path text inside the cover.
+5. Commit and push.
 
-> ⚠️ 重命名后务必同时改 manifest 的 `id / path / cover` 三处 + 重跑 gen_cover，否则首页会 404。
+> ⚠️ After renaming, you must change all three of manifest's `id / path / cover` AND re-run gen_cover, otherwise the home page will 404.
 
 ---
 
-## 3. 封面（cover）制作规范 —— 统一风格的唯一方式
+## 3. Cover (cover) Production Spec — The Only Way to Keep a Unified Style
 
-**核心原则：所有封面都由 `assets/gen_cover.py` 生成，禁止手写 SVG、禁止私自换字体/换配色。**
-这样无论谁来加工具，整站封面风格都一致（尺寸、配色、版式、字体统一）。
+**Core principle: all covers are generated by `assets/gen_cover.py`. Hand-writing SVG is forbidden, and privately swapping fonts/colors is forbidden.**
+This way, no matter who adds a tool, the whole site's covers stay consistent (size, color, layout, font all unified).
 
-### 3.1 怎么生成
-在仓库根目录运行（参数填你这个工具的资料）：
+### 3.1 How to Generate
+Run from the repo root (fill in your tool's info):
 ```bash
 python assets/gen_cover.py \
   --id daily-reminder \
@@ -104,110 +154,110 @@ python assets/gen_cover.py \
   --desc "每天挑出一件最该做的事，带行动建议，可一键复制发群。" \
   --app-path "apps/daily-reminder"
 ```
-效果：
-- 写出 `apps/<id>/cover.svg`（1200×630）
-- **自动**在 `apps/manifest.json` 对应条目补上 `"cover": "apps/<id>/cover.svg"`
+Effect:
+- Writes `apps/<id>/cover.svg` (1200×630)
+- **Automatically** fills `"cover": "apps/<id>/cover.svg"` into the corresponding manifest entry
 
-可选参数：
-- `--accent "#d11610"`：不传则按 `category` 自动取色（见下表）。除非有强理由，否则**不要**手动指定，保持同类同色。
-- `--out "自定义路径.svg"`：一般不用，默认 `apps/<id>/cover.svg`。
+Optional arguments:
+- `--accent "#d11610"`: if omitted, the color is auto-picked from `category` (see table below). Unless there's a strong reason, do **not** set it manually — keep the same color per category.
+- `--out "custom/path.svg"`: generally unused; default `apps/<id>/cover.svg`.
 
-### 3.2 封面字段（未来 AI 照填即可）
-| 参数 | 含义 | 限制 |
-|------|------|------|
-| `emoji` | 工具图标，显示在左上角圆角徽章 | 一个 emoji |
-| `category` | 分类标签，显示在图标右侧药丸 | 自由填；决定自动配色 |
-| `title` | 工具中文标题（封面主标题） | **≤13 字/行，最多 2 行**，超出自动截断加 … |
-| `desc` | 一句话说明 | **≤26 字/行，最多 3 行**，超出自动截断加 … |
-| `app-path` | 工具在站内的路径 | 如 `apps/daily-reminder` |
-| `accent` | 主题色（徽章/药丸/装饰图形） | 不填则按 category 取 |
+### 3.2 Cover Fields (future AIs just fill these in)
+| Argument | Meaning | Limit |
+|----------|---------|-------|
+| `emoji` | Tool icon, shown in the rounded badge top-left | one emoji |
+| `category` | Category tag, shown in the pill to the right of the icon | free text; decides auto color |
+| `title` | Tool Chinese title (cover main title) | **≤13 chars/line, max 2 lines**, auto-truncated with … beyond that |
+| `desc` | One-line description | **≤26 chars/line, max 3 lines**, auto-truncated with … beyond that |
+| `app-path` | Tool's path within the site | e.g. `apps/daily-reminder` |
+| `accent` | Theme color (badge/pill/decorative shapes) | omitted → picked from category |
 
-### 3.3 自动配色表（category → accent，保持同类同色）
-| category | 颜色 |
-|----------|------|
-| 日程提醒 | `#d11610`（UW Red） |
-| 选课 / 课程 | `#2563eb` |
-| 考试 | `#6b46c1` |
-| 成绩 | `#344675` |
-| 毕业 | `#b9770e` |
-| 求职 / Co-op | `#b83280` |
-| 财务 / 缴费 | `#c0392b` |
-| 生活 | `#1f8a4c` |
-| 通用 | `#2b6cb0` |
+### 3.3 Auto Color Table (category → accent, keep same color per category)
+| category | color |
+|----------|-------|
+| 日程提醒 (Schedule Reminder) | `#d11610` (UW Red) |
+| 选课 / 课程 (Course / Courses) | `#2563eb` |
+| 考试 (Exam) | `#6b46c1` |
+| 成绩 (Grades) | `#344675` |
+| 毕业 (Graduation) | `#b9770e` |
+| 求职 / Co-op (Job / Co-op) | `#b83280` |
+| 财务 / 缴费 (Finance / Payment) | `#c0392b` |
+| 生活 (Life) | `#1f8a4c` |
+| 通用 (General) | `#2b6cb0` |
 
-不在表中的 category 默认用 `#2b6cb0`。
+Categories not in the table default to `#2b6cb0`.
 
-### 3.4 封面版式（模板定死的，不要改）
-- **尺寸**：1200 × 630（社交分享/OG 标准尺寸，也适合卡片缩略图）
-- **背景**：浅灰 `#f6f7fb` + 细点阵纹理
-- **左上角**：圆角徽章（accent 渐变填充）内放 `emoji`；右侧小药丸放 `category`
-- **主标题**：左下，58px 粗体 `#1f2430`
-- **说明**：标题下，27px `#6b7280`
-- **右侧装饰**：accent 半透明大圆 + 一个白色「模拟小卡片」（带几条色条），制造图文并茂质感
-- **底栏**：分隔线 + 左「🎓 滑铁卢大学工具箱」+ 右 `waterloo-toolkit/<app-path>`（等宽灰字，便于一眼定位）
-- **字体**：与全站一致（`-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif`）
+### 3.4 Cover Layout (fixed by template, do not change)
+- **Size**: 1200 × 630 (social-share / OG standard size, also good for card thumbnails)
+- **Background**: light gray `#f6f7fb` + fine dot-matrix texture
+- **Top-left**: rounded badge (accent gradient fill) containing the `emoji`; a small pill to its right holds `category`
+- **Main title**: bottom-left, 58px bold `#1f2430`
+- **Description**: below the title, 27px `#6b7280`
+- **Right decoration**: an accent translucent large circle + a white "mock small card" (with a few colored bars) for a rich visual feel
+- **Bottom bar**: divider + left "🎓 滑铁卢大学工具箱" + right `waterloo-toolkit/<app-path>` (monospace gray text, easy to locate at a glance)
+- **Font**: consistent with the whole site (`-apple-system, "PingFang SC", "Microsoft YaHei", sans-serif`)
 
-### 3.5 风格红线（违反即破坏统一性，禁止）
-- ❌ 不要手写/改 `cover.svg` 的 XML，永远用 `gen_cover.py` 生成。
-- ❌ 不要改 `gen_cover.py` 里的尺寸、字体、固定色（`INK/MUTED/LINE/BG/BRAND`）。
-- ❌ 不要给某个工具私自指定与类别不符的 `accent`（同类必须同色）。
-- ❌ 不要把封面做成 PNG/JPG——统一用 SVG（矢量、清晰、可直接进 git、体积小）。
-- ❌ 标题/说明不要塞太多字，保持「一眼看懂」：标题 ≤13 字/行、说明 ≤26 字/行。
+### 3.5 Style Red Lines (violating breaks consistency — forbidden)
+- ❌ Do not hand-write/edit `cover.svg`'s XML; always generate with `gen_cover.py`.
+- ❌ Do not change the size, font, or fixed colors (`INK/MUTED/LINE/BG/BRAND`) inside `gen_cover.py`.
+- ❌ Do not privately assign an `accent` to a tool that conflicts with its category (same category must share the same color).
+- ❌ Do not make covers as PNG/JPG — keep them SVG (vector, crisp, git-friendly, small).
+- ❌ Do not cram too much text into title/description; keep it "understandable at a glance": title ≤13 chars/line, description ≤26 chars/line.
 
 ---
 
-## 4. 给未来 AI 的快速指引（TL;DR）
+## 4. Quick Guide for Future AIs (TL;DR)
 
-> 用户说「在工具箱里加个 XXX」时，照做：
-> 1. `mkdir apps/<xxx-id>`（kebab-case）→ 写 `index.html`（引用 `../../assets/style.css`）。
-> 2. 在 `apps/manifest.json` 数组追加一条（含 `id/title_zh/title_en/desc_zh/desc_en/icon/category/path`）。
-> 3. `python assets/gen_cover.py --id <xxx-id> --emoji … --category … --title … --desc … --app-path apps/<xxx-id>`（自动写 cover + 改 manifest）。
-> 4. 本地 `python -m http.server 8080` 预览（直接双击 index.html 会因 fetch 限制读不到 manifest）。
-> 5. `git add -A && git commit && git push` → GitHub Pages 自动更新。
+> When the user says "add an XXX to the toolkit", do this:
+> 1. `mkdir apps/<xxx-id>` (kebab-case) → write `index.html` (reference `../../assets/style.css`).
+> 2. Append one entry to the `apps/manifest.json` array (with `id/title_zh/title_en/desc_zh/desc_en/icon/category/path`).
+> 3. `python assets/gen_cover.py --id <xxx-id> --emoji … --category … --title … --desc … --app-path apps/<xxx-id>` (auto-writes cover + edits manifest).
+> 4. Preview locally with `python -m http.server 8080` (double-clicking index.html directly fails to read the manifest due to fetch restrictions).
+> 5. `git add -A && git commit && git push` → GitHub Pages auto-updates.
 >
-> 重命名时：`git mv` 改文件夹 → 同步 manifest 的 `id/path/cover` → 重跑 `gen_cover.py`。
+> When renaming: `git mv` to rename the folder → sync manifest's `id/path/cover` → re-run `gen_cover.py`.
 
 ---
 
-## 5. 本地预览
+## 5. Local Preview
 
 ```bash
 cd waterloo-toolkit
 python -m http.server 8080
-# 浏览器打开 http://localhost:8080
+# Open http://localhost:8080 in the browser
 ```
 
-> 直接双击 `index.html` 打开会因 `fetch` 本地文件受限而无法加载清单，请用本地服务器预览。
+> Double-clicking `index.html` directly fails to load the manifest due to `fetch` local-file restrictions; please use a local server to preview.
 
-## 6. 部署
+## 6. Deployment
 
-推送到 `master` 分支即自动生效（GitHub Pages 源已设为 `master` / `/`）。
-（仓库已含 `.nojekyll`，禁用 Jekyll。）
+Pushing to the `master` branch takes effect automatically (GitHub Pages source is set to `master` / `/`).
+(The repo already contains `.nojekyll`, which disables Jekyll.)
 
 ---
 
-## 7. 顶栏（Topbar）规范 —— 全站统一
+## 7. Topbar Spec — Site-Wide Unified
 
-> 和封面一样，顶栏也是「整站一致性」的硬性规范：**每个页面（主站 + 每个子 App）都必须包含同一套顶栏**，用户在任何页面都能一键回首页、看源码、分享。
+> Like the cover, the topbar is a hard spec for "site-wide consistency": **every page (main site + every sub-app) must contain the same topbar**, so users can return home, view source, and share from any page with one click.
 
-**强制项**
-1. 结构：左侧 `brand`（含返回首页链接），右侧 `.top-actions`。
-2. 右上角**必须同时有**两个图标按钮，中间用分隔线隔开：
-   - **GitHub 源码链接**（新窗口打开）
-   - **分享按钮** `#share-btn`
-3. 样式**只能**用 `assets/style.css` 里现成的 `.topbar` / `.top-actions` / `.icon-btn`，禁止子 App 自创一套顶栏 CSS。
-4. 分享行为：`navigator.share` 优先；不支持时回退为「复制当前链接 + toast 提示」。
-5. GitHub 链接：子 App 指向 `https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/<app-id>`；主站指向仓库根。
-6. **导航菜单（如有）移动端必须左对齐**：若子 App 需要顶部导航（如 course-planner 的 首页/课程库/Co-op规则/课程地图/今年新课），统一用 `<nav class="topbar-nav">` 放在 `.topbar` 内、**作为 `.brand` 与 `.top-actions` 的同级兄弟**。桌面端导航与右上角操作区相邻（靠右）；**移动端（≤680px）导航必须换行到第二行并左对齐**，绝不允许把导航堆在右上角挤成一团。GitHub/分享按钮在移动端仍保持在右上角。
+**Mandatory items**
+1. Structure: left `brand` (contains the link back to home), right `.top-actions`.
+2. The top-right **must simultaneously have** two icon buttons, separated by a divider in the middle:
+   - **GitHub source link** (opens in a new window)
+   - **Share button** `#share-btn`
+3. Styling **may only** use the existing `.topbar` / `.top-actions` / `.icon-btn` from `assets/style.css`; sub-apps must not invent their own topbar CSS.
+4. Share behavior: `navigator.share` first; fall back to "copy current link + toast" when unsupported.
+5. GitHub link: for a sub-app, point to `https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/<app-id>`; for the main site, point to the repo root.
+6. **Navigation menu (if any) must be left-aligned on mobile**: if a sub-app needs a top nav (e.g. course-planner's Home/Course Library/Co-op Rules/Course Map/New This Year), use `<nav class="topbar-nav">` placed inside `.topbar`, **as a sibling of `.brand` and `.top-actions`**. On desktop the nav sits next to the top-right actions (to the right); **on mobile (≤680px) the nav must wrap to a second line and left-align** — never pile the nav into the top-right corner. The GitHub/share buttons stay top-right on mobile too.
 
-**子 App 标准顶栏 HTML（含可选导航）**
+**Standard sub-app topbar HTML (with optional nav)**
 ```html
 <header class="topbar">
   <a class="brand" href="../../index.html">
-    <span class="uw-logo" aria-hidden="true"><!-- 可选：UW 金色 logo SVG --></span>
+    <span class="uw-logo" aria-hidden="true"><!-- optional: UW gold logo SVG --></span>
     <span class="brand-text">工具中文名</span>
   </a>
-  <!-- 可选：顶部导航菜单（移动端自动换行到第二行左对齐） -->
+  <!-- optional: top navigation menu (auto-wraps to a second line, left-aligned on mobile) -->
   <nav class="topbar-nav">
     <a href="#/">首页</a>
     <a href="#/list">列表</a>
@@ -215,12 +265,12 @@ python -m http.server 8080
   <div class="top-actions">
     <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/<app-id>"
        target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码"><!-- GitHub SVG --></a>
-    <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面"><!-- 分享 SVG --></button>
+    <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面"><!-- Share SVG --></button>
   </div>
 </header>
 ```
 
-**分享按钮 JS（每个页面都要有，并含 `#toast` 容器）**
+**Share button JS (every page needs this, including the `#toast` container)**
 ```html
 <div class="toast" id="toast" hidden></div>
 <script>
@@ -236,4 +286,4 @@ python -m http.server 8080
   })();
 </script>
 ```
-> 现状：`daily-reminder`、`course-planner`、主站 `index.html` 均已落地此规范；新增子 App 直接复用上面两段即可，无需重写样式。
+> Status: `daily-reminder`, `course-planner`, and the main `index.html` have already implemented this spec; new sub-apps can directly reuse the two snippets above without rewriting styles.
