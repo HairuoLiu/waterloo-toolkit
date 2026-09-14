@@ -1,0 +1,80 @@
+/* ============================================================
+   内联双语（长文正文用）
+   ------------------------------------------------------------
+   并列写法：<span lang="zh">中文</span><span lang="en">English</span>
+   由 <html data-lang> 决定显示哪一个；两者都保留在 DOM 里，
+   因此全文搜索 / 目录锚点 / 打印都不会丢内容。
+   ============================================================ */
+html[data-lang="en"] [lang="zh"],
+html[data-lang="zh"] [lang="en"] {
+  display: none !important;
+}
+
+/* 语言切换按钮样式
+   ------------------------------------------------------------
+   独立文件（不与 style.css 合并，降低并行合并冲突）。
+   引入：<link rel="stylesheet" href="assets/i18n.css">
+   变量全部复用 style.css 的 --line / --ink / --muted / --brand*
+   基调：与 .icon-btn 同级、同高（38px）、圆角 10px、金线点睛。
+   ============================================================ */
+
+.uw-lang-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--muted);
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition: background .14s ease, color .14s ease, border-color .14s ease;
+}
+.uw-lang-toggle:hover {
+  background: #f0f1f6;
+  border-color: var(--brand-deep);
+  color: var(--brand-deep);
+  text-decoration: none;
+}
+.uw-lang-toggle:focus-visible {
+  outline: 2px solid var(--brand-deep);
+  outline-offset: 1px;
+}
+
+/* 分隔符 */
+.uw-lang-toggle .uw-lang-sep {
+  color: var(--line);
+  font-weight: 400;
+  user-select: none;
+}
+
+/* 语言选项：当前语言高亮（金底黑字），另一语言静默 */
+.uw-lang-toggle .uw-lang-opt {
+  padding: 2px 4px;
+  border-radius: 6px;
+  color: var(--muted);
+  transition: background .14s ease, color .14s ease;
+}
+.uw-lang-toggle .uw-lang-opt.is-active {
+  background: var(--brand);
+  color: var(--brand-ink);
+}
+
+/* 顶栏内与 .icon-btn 之间加一条细分隔线（与 .top-actions 的现有分隔风格一致） */
+.top-actions .uw-lang-toggle + .icon-btn,
+.top-actions .icon-btn + .uw-lang-toggle {
+  margin-left: 6px;
+  padding-left: 12px;
+  border-left: 1px solid var(--line);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .uw-lang-toggle { transition: none; }
+}
