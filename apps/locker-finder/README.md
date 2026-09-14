@@ -121,3 +121,27 @@ window.LOCKERS = [
 3. Leaflet — `https://leafletjs.com/` · OpenStreetMap — `https://www.openstreetmap.org/`
 
 > 最后整理：2026-09-14。数据快照 2026-08-27。
+
+---
+
+## 七、双语架构（默认英文 · 右上角切中文）
+
+站点已全站双语：默认**英文**，右上角按钮切到**中文**（状态存 `localStorage['uw-lang']`，也支持 `?lang=zh` 深链）。
+
+| 层 | 本 App 的做法 |
+|---|---|
+| 运行时 | `assets/i18n.js` → `window.UW_I18N`（`get/set/t/pick/apply/onChange/mountToggle`） |
+| 界面串 | `assets/i18n/locker-finder.js` 挂 `window.UW_DICT['locker-finder'] = { en:{...}, zh:{...} }`，HTML 用 `data-i18n` / `data-i18n-attr` |
+| 长文正文 | `lang="zh"` / `lang="en"` 并列块 + `assets/i18n.css` 的 `html[data-lang="en"] [lang="zh"]{display:none}` 切换 |
+| 数据层 | 并列双语字段；取值顺序 **当前语言 → 无后缀原字段 → 另一语言**（写反会让中文模式显示英文） |
+
+**改文案动哪里**：界面短句 → 改 `assets/i18n/locker-finder.js` 的 `en` / `zh` 两段（**必须成对**，缺一语言即视为缺陷）；长段正文 → 改 HTML 里对应 `lang="en"` / `lang="zh"` 块。
+
+**改完怎么验证**（推送前必跑）：
+```bash
+export NODE_PATH=C:/Users/h/.workbuddy/binaries/node/workspace/node_modules
+I18N_ROOT=<仓库根目录>/ node i18n-work/_leak_check.js _repo/apps/locker-finder locker-finder en   # en 模式可见区域必须零中文
+I18N_ROOT=<仓库根目录>/ node i18n-work/_leak_check.js _repo/apps/locker-finder locker-finder zh   # zh 模式不得残留英文界面文案
+```
+
+**本 App 特点**：数据层 `data.js` 的 11 条储物柜记录用 `*_en` 并列字段（名称 / 类别 / 租期 / 价格 / 备注），`app.js` 按当前语言取值；界面串走 `assets/i18n/locker-finder.js`。新增一条柜子记录时，**中英字段必须成对填写**。
