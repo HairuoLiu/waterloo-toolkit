@@ -281,46 +281,51 @@ a{color:inherit;text-decoration:none}
 }
 
 /* =============================================================
- * 顶栏重构补丁：修复 681–919px 区间文字溢出 / 挤压
- * 三档断点：桌面 ≥920 单行紧凑 · 中等 681–919 导航下沉二行 · 小屏 ≤680 收口
- * 纯 CSS，无 JS；兼容 data-i18n 与 UW_I18N.mountToggle() 注入的语言切换按钮
+ * 顶栏布局（2026-09-14 重写）
+ * 根因：站点默认英文，英文顶栏文案（如 "Cross-Dept Applications"）远长于中文；
+ *       在 920px 容器（内容宽 880px）内，单行 flex 永远放不下
+ *       「品牌 + 6 个导航 + 操作区」（英文约 1230px），导航溢出并与相邻元素重叠。
+ * 方案：顶栏恒为两行 —— 第 1 行「品牌 + 操作区」；第 2 行「整行导航」（可再折行）。
+ *       这样导航独占整行，中英文都能一行放下，任何视口都不溢出/不重叠。
+ *       纯 CSS、无 JS，兼容 data-i18n 与 UW_I18N.mountToggle() 语言按钮。
  * ============================================================= */
 
-/* 1. 基础保护：lhs / top-actions 不压缩，nav 为唯一弹性区，文字全部 nowrap */
-.top .lhs{flex:0 0 auto;min-width:0}
-.top .brand{white-space:nowrap}
-.top .back{white-space:nowrap}
-.top .top-actions{flex:0 0 auto;min-width:0;gap:6px}
-.top .nav{flex:1 1 auto;min-width:0;margin-left:auto;justify-content:flex-end}
+/* 1. 容器允许换行、高度自适应；lhs 只收不放，避免把操作区挤出容器 */
+.top .wrap{display:flex;align-items:center;flex-wrap:wrap;height:auto;
+  padding-top:8px;padding-bottom:8px;gap:8px 16px}
+.top .lhs{order:1;flex:0 1 auto;min-width:0}
+.top .brand,.top .back{white-space:nowrap}
+.top .top-actions{order:2;flex:0 0 auto;margin-left:auto;flex-wrap:wrap;
+  justify-content:flex-end;row-gap:6px}
+
+/* 2. 导航恒占独立整行、左对齐，自身可再折行 —— 杜绝横向溢出与重叠 */
+.top .nav{order:3;flex:1 1 100%;min-width:0;margin-left:0;
+  justify-content:flex-start;flex-wrap:wrap;gap:6px 18px;align-items:center;
+  padding-top:8px;border-top:1px solid var(--line)}
 .top .nav a{white-space:nowrap}
 
-/* 2. 桌面档 ≥920：收紧间距，释放 ~40px 容纳语言切换按钮 */
+/* 3. 桌面 ≥920：收紧间距，视觉更紧凑 */
 @media(min-width:920px){
-  .top .wrap{gap:12px}
-  .top .nav{gap:10px}
+  .top .wrap{gap:8px 12px}
   .top .lhs{gap:8px}
+  .top .nav{gap:6px 10px}
 }
 
-/* 3. 中等档 681–919：nav 整块下沉到第二行左对齐（核心修复） */
+/* 4. 中等 681–919：隐藏返回链接，保证「品牌 + 操作区」稳定同处第一行 */
 @media(max-width:919px){
-  .top .wrap{height:auto;padding:8px 16px;flex-wrap:wrap;gap:8px 16px}
-  .top .lhs{order:1;flex:1 1 auto}
-  .top .top-actions{order:2;margin-left:auto}
-  .top .nav{order:3;flex-basis:100%;margin-left:0;justify-content:flex-start;
-    padding-top:8px;margin-top:6px;border-top:1px solid var(--line);flex-wrap:wrap;gap:14px}
   .top .back{display:none}
-  .top .ext-btn{height:34px;padding:0 10px}
-  .top .ext-btn .txt{display:none}
 }
 
-/* 4. 小屏 ≤680：沿用既有移动行为，并防操作区溢出 */
+/* 5. 小屏 ≤680：缩小图标与间距 */
 @media(max-width:680px){
   .top .icon-btn{width:34px;height:34px}
-  .top .top-actions{flex-wrap:wrap;justify-content:flex-end;row-gap:6px}
+  .top .ext-btn{height:34px;padding:0 10px}
+  .top .ext-btn .txt{display:none}
+  .top .nav{gap:8px 14px;margin-top:2px}
   .top .ext-menu{min-width:240px;max-width:calc(100vw - 32px)}
 }
 
-/* 5. 下拉菜单防溢出视口左缘 */
+/* 6. 下拉菜单防溢出视口左缘 */
 .top .ext-menu{right:0;left:auto;max-width:min(300px,calc(100vw - 24px))}
 </style>
   <!-- SEO: canonical + hreflang（zh 变体 = ?lang=zh，客户端切换；x-default 指向英文） -->
