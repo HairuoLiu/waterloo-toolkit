@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>滑铁卢入学 SOP · 滑铁卢工具箱</title>
-  <meta name="description" content="滑铁卢大学新生入学全流程 SOP Wiki：行前 → 抵达 → 注册 → 学术生活四阶段清单，附持续更新的踩坑记录。支持左侧目录与全文搜索。" />
+  <title data-i18n="sop.title">Waterloo Onboarding SOP · UW Toolkit</title>
+  <meta name="description" data-i18n-attr="content:sop.desc" content="A full-process SOP wiki for new University of Waterloo students: from before departure to arrival, enrolment and academic life, with a continuously updated pitfalls log." />
   <link rel="stylesheet" href="../../assets/style.css" />
+  <link rel="stylesheet" href="../../assets/i18n.css" />
   <style>
     /* 仅 SOP 专属组件；其余复用 assets/style.css 全站设计语言 */
     .pill-row { display:flex; flex-wrap:wrap; gap:8px; margin:10px 0 0; }
@@ -144,20 +145,20 @@
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="../../index.html" aria-label="返回滑铁卢工具箱">
+    <a class="brand" href="../../index.html" data-i18n-attr="aria-label:sop.back" aria-label="Back to UW Toolkit">
       <span class="uw-logo" aria-hidden="true">
         <svg viewBox="0 0 32 32" width="28" height="28">
           <rect x="1" y="1" width="30" height="30" rx="8" fill="#FED34C"/>
           <path d="M9 22 L13 10 L16 18 L19 10 L23 22" fill="none" stroke="#1f2430" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"/>
         </svg>
       </span>
-      <span class="brand-text">滑铁卢入学 SOP</span>
+      <span class="brand-text" data-i18n="sop.brand">Waterloo Onboarding SOP</span>
     </a>
     <div class="top-actions">
-      <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/sop" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
+      <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit/tree/master/apps/sop" target="_blank" rel="noopener" data-i18n-attr="aria-label:sop.nav.github,title:sop.nav.github" aria-label="View source on GitHub" title="View source on GitHub">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
       </a>
-      <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面">
+      <button class="icon-btn" id="share-btn" data-i18n-attr="aria-label:sop.share.aria,title:sop.share.aria" aria-label="Share this page" title="Share this page">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
       </button>
     </div>
@@ -171,57 +172,77 @@
           <span class="s-icon" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="16.5" y1="16.5" x2="21" y2="21"/></svg>
           </span>
-          <input id="sop-search" type="text" placeholder="搜索全文…（按 /）" autocomplete="off" aria-label="搜索 SOP 全文" />
-          <button class="s-clear" id="sop-clear" hidden aria-label="清除搜索">×</button>
+          <input id="sop-search" type="text" data-i18n-attr="placeholder:sop.search.ph,aria-label:sop.search.aria" placeholder="Search full text… (press /)" autocomplete="off" aria-label="Search SOP full text" />
+          <button class="s-clear" id="sop-clear" hidden data-i18n-attr="aria-label:sop.search.clear" aria-label="Clear search">×</button>
         </div>
         <p class="s-status" id="sop-status" hidden></p>
-        <div class="side-label">目录</div>
+        <div class="side-label" data-i18n="sop.toc.label">Contents</div>
         <nav class="side-toc" id="side-toc"></nav>
-        <div class="side-label">贡献</div>
+        <div class="side-label" data-i18n="sop.contrib.label">Contribute</div>
         <div class="side-foot">
-          <a href="https://github.com/HairuoLiu/waterloo-toolkit/blob/master/apps/sop/AGENT_GUIDE.md" target="_blank" rel="noopener">🤖 给 AI 的贡献规范 →</a>
+          <a href="https://github.com/HairuoLiu/waterloo-toolkit/blob/master/apps/sop/AGENT_GUIDE.md" target="_blank" rel="noopener" data-i18n="sop.contrib.link">🤖 AI contribution guide →</a>
         </div>
       </aside>
 
       <!-- ===== 右侧：正文 ===== -->
       <div class="sop-main">
-        <section class="hero" id="top" data-toc="开篇 · 这是什么">
-          <h1>滑铁卢大学 · 新生入学 SOP（全攻略 Wiki）</h1>
-          <p class="sub">面向滑铁卢大学新生（以研究生 MEng / Co-op 为主）的入学全流程指南：从出国前到落地、注册、学术与日常生活，每一步该做什么、怎么设置。这是本工具箱里<b>最重要的一篇</b>——它不是一个一次性的页面，而会随你遇到的真实问题不断长大。</p>
+        <section class="hero" id="top" data-toc="开篇 · 这是什么" data-toc-key="sop.toc.hero">
+          <h1 data-i18n="sop.hero.h1">University of Waterloo · New Student Onboarding SOP (Full Wiki Guide)</h1>
+          <p class="sub">
+            <span lang="en">A full onboarding walkthrough for new University of Waterloo students (mainly graduate MEng / Co-op): what to do and how to set it up at every step — before departure, on arrival, enrolment, and academic &amp; daily life. This is <b>the single most important page</b> in this toolkit — not a one-off page, but one that keeps growing as you hit real problems.</span>
+            <span lang="zh">面向滑铁卢大学新生（以研究生 MEng / Co-op 为主）的入学全流程指南：从出国前到落地、注册、学术与日常生活，每一步该做什么、怎么设置。这是本工具箱里<b>最重要的一篇</b>——它不是一个一次性的页面，而会随你遇到的真实问题不断长大。</span>
+          </p>
           <div class="pill-row">
-            <span class="pill">🧭 四阶段：行前 → 抵达 → 注册 → 学术生活</span>
-            <span class="pill">📌 每一步附清单，可逐项打勾</span>
-            <span class="pill">🔄 踩坑记录持续更新（你随时追加）</span>
-            <span class="pill">🔍 左侧目录 + 全文搜索</span>
-            <span class="pill">编制 2026-09-02</span>
+            <span class="pill"><span lang="en">🧭 Four phases: before departure → arrival → enrolment → academic life</span><span lang="zh">🧭 四阶段：行前 → 抵达 → 注册 → 学术生活</span></span>
+            <span class="pill"><span lang="en">📌 Every step comes with a checklist you can tick off</span><span lang="zh">📌 每一步附清单，可逐项打勾</span></span>
+            <span class="pill"><span lang="en">🔄 Pitfalls log updated continuously (add yours anytime)</span><span lang="zh">🔄 踩坑记录持续更新（你随时追加）</span></span>
+            <span class="pill"><span lang="en">🔍 Sidebar contents + full-text search</span><span lang="zh">🔍 左侧目录 + 全文搜索</span></span>
+            <span class="pill"><span lang="en">Compiled 2026-09-02</span><span lang="zh">编制 2026-09-02</span></span>
           </div>
           <div class="box-callout">
-            <b>这是一篇「活的 Wiki」：</b> 页面底部的 <a href="#log">踩坑记录 / 更新日志</a> 由一个数据文件驱动——你之后在不同时间段遇到的问题，直接往里追加一条即可（格式见该区说明），页面会自动渲染。建议把这里当成你的「入学作战笔记」。</a>
+            <b><span lang="en">This is a living wiki:</span><span lang="zh">这是一篇「活的 Wiki」：</span></b>
+            <span lang="en"> the </span><span lang="zh">页面底部的 </span><a href="#log"><span lang="en">Pitfalls log / update history</span><span lang="zh">踩坑记录 / 更新日志</span></a>
+            <span lang="en"> at the bottom is driven by a data file — when you run into a problem later, just append one entry (format explained in that section) and the page renders it automatically. Treat this as your onboarding battle notebook.</span>
+            <span lang="zh"> 由一个数据文件驱动——你之后在不同时间段遇到的问题，直接往里追加一条即可（格式见该区说明），页面会自动渲染。建议把这里当成你的「入学作战笔记」。</span>
           </div>
         </section>
 
         <!-- ① 总览 -->
-        <section id="overview" data-toc="总览 · 四个阶段">
-          <h2>① 总览：四个阶段</h2>
-          <p class="sub">入学不是一件事，而是四条前后衔接的时间线。先建立全局感，再逐段展开。</p>
+        <section id="overview" data-toc="总览 · 四个阶段" data-toc-key="sop.toc.overview">
+          <h2 data-i18n="sop.h.overview">① Overview: Four phases</h2>
+          <p class="sub">
+            <span lang="en">Onboarding is not one task but four linked timelines. Get the whole picture first, then work through them one by one.</span>
+            <span lang="zh">入学不是一件事，而是四条前后衔接的时间线。先建立全局感，再逐段展开。</span>
+          </p>
           <div class="two">
-            <div class="phase"><div class="num">1</div><div><h3>行前准备</h3><p>出国前 1–3 个月：录取、学签/签证、资金、机票、住宿、证件备份。</p></div></div>
-            <div class="phase"><div class="num">2</div><div><h3>抵达滑铁卢</h3><p>落地 1–2 周内：入境、手机卡、银行、SIN、医保 UHIP、Photo ID。</p></div></div>
-            <div class="phase"><div class="num">3</div><div><h3>入学注册</h3><p>开学前—开学初：WatIAM、Quest 选课、Co-op、缴费、学生卡、Orientation。</p></div></div>
-            <div class="phase"><div class="num">4</div><div><h3>学术与日常生活</h3><p>持续：课程节奏、Co-op 周期、校园资源、交通、税务、踩坑记录。</p></div></div>
+            <div class="phase" lang="en"><div class="num">1</div><div><h3>Before departure</h3><p>1–3 months out: admission, study permit / visa, funds, flights, housing, document backups.</p></div></div>
+            <div class="phase" lang="zh"><div class="num">1</div><div><h3>行前准备</h3><p>出国前 1–3 个月：录取、学签/签证、资金、机票、住宿、证件备份。</p></div></div>
+            <div class="phase" lang="en"><div class="num">2</div><div><h3>Arriving in Waterloo</h3><p>First 1–2 weeks: border entry, phone plan, bank, SIN, UHIP health insurance, Photo ID.</p></div></div>
+            <div class="phase" lang="zh"><div class="num">2</div><div><h3>抵达滑铁卢</h3><p>落地 1–2 周内：入境、手机卡、银行、SIN、医保 UHIP、Photo ID。</p></div></div>
+            <div class="phase" lang="en"><div class="num">3</div><div><h3>Enrolment</h3><p>Before / at term start: WatIAM, Quest course selection, Co-op, fees, student card, Orientation.</p></div></div>
+            <div class="phase" lang="zh"><div class="num">3</div><div><h3>入学注册</h3><p>开学前—开学初：WatIAM、Quest 选课、Co-op、缴费、学生卡、Orientation。</p></div></div>
+            <div class="phase" lang="en"><div class="num">4</div><div><h3>Academic &amp; daily life</h3><p>Ongoing: course pace, Co-op cycle, campus resources, transit, taxes, pitfalls log.</p></div></div>
+            <div class="phase" lang="zh"><div class="num">4</div><div><h3>学术与日常生活</h3><p>持续：课程节奏、Co-op 周期、校园资源、交通、税务、踩坑记录。</p></div></div>
           </div>
         </section>
 
         <!-- ② 阶段一 行前 -->
-        <section id="pre" data-toc="阶段一 · 行前准备">
-          <h2>② 阶段一 · 行前准备（出国前 1–3 个月）</h2>
+        <section id="pre" data-toc="阶段一 · 行前准备" data-toc-key="sop.toc.pre">
+          <h2 data-i18n="sop.h.pre">② Phase 1 · Before departure (1–3 months prior)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：出国前 1–3 个月</span>
-            <span class="meta-chip">🎯 建议落地：早于开课 1–2 周（2026 秋季 9/9 开课）</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: 1–3 months before departure</span><span lang="zh">⏰ 时间窗口：出国前 1–3 个月</span></span>
+            <span class="meta-chip"><span lang="en">🎯 Land 1–2 weeks before classes (Fall 2026 starts 9/9)</span><span lang="zh">🎯 建议落地：早于开课 1–2 周（2026 秋季 9/9 开课）</span></span>
           </div>
           <div class="needs">
-            <b>📎 材料清单（电子版 + 打印各一份）</b>
-            <ul>
+            <b data-i18n="sop.needs.pre">📎 Documents (one digital copy + one printed copy each)</b>
+            <ul lang="en">
+              <li>Passport (must be valid for the whole length of your studies)</li>
+              <li>LOA / letter of acceptance, tuition deposit receipt</li>
+              <li>Proof of funds: CAD bank statement or GIC certificate</li>
+              <li>Degrees &amp; transcripts, vaccination records</li>
+              <li>Home driver's licence + certified translation (optional; useful for the G1 test or Photo ID)</li>
+            </ul>
+            <ul lang="zh">
               <li>护照（有效期须覆盖整个学业长度）</li>
               <li>LOA / 录取信、学费首付凭证</li>
               <li>资金证明：加元存款证明或 GIC 凭证</li>
@@ -229,7 +250,16 @@
               <li>本国驾照 + 国际翻译认证件（可选，落地考 G1 或办 Photo ID 用得上）</li>
             </ul>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li>Confirm your <b>admission and LOA (Letter of Acceptance)</b>; check that program / entry term / Co-op option match your actual plan.</li>
+            <li>Apply for a <b>Study Permit</b> and (if applicable) an entry visa; prepare <b>proof of funds</b> (CAD deposit / GIC).</li>
+            <li>Set up the <b>GIC</b> (if your program requires it) and the tuition deposit; keep every receipt and certificate (you may need them at the border / when opening accounts).</li>
+            <li>Book flights: arrive <b>1–2 weeks</b> before term start to leave buffer for errands.</li>
+            <li>Arrange housing: on-campus residence / off-campus rental / temporary stay — see this toolkit's <a href="../weekday-stay/">weekday temporary stay</a> and <a href="../locker-finder/">locker map</a>.</li>
+            <li>Make <b>cloud backups of all documents</b>: passport, LOA, proof of funds, vaccination records, degree files (clear names, two copies).</li>
+            <li>Set up an international credit card / carry a small amount of <b>CAD cash</b> for arrival emergencies.</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li>确认 <b>录取与 LOA（Letter of Acceptance）</b>，核对专业 / 入学季 / Co-op 选项是否与你实际计划一致。</li>
             <li>申请 <b>学习许可（Study Permit）</b> 与（如适用）入境签证；准备 <b>资金证明</b>（加元存款 / GIC）。</li>
             <li>办理 <b>GIC</b>（如项目要求）与学费首付，保留所有收据与凭证（后续入境 / 开户可能用到）。</li>
@@ -238,31 +268,49 @@
             <li>整理 <b>证件电子版云端备份</b>：护照、录取信、资金证明、疫苗记录、学历文件（命名清晰、双份存储）。</li>
             <li>开通国际信用卡 / 准备少量 <b>加元现金</b> 落地应急。</li>
           </ul>
-          <div class="box-warn"><b>关键提醒：</b> 学签有效期务必覆盖整个学业长度；资金与 GIC 材料是入境与本地开户的常见核查项，提前整理好。</div>
+          <div class="box-warn"><b><span lang="en">Key reminder:</span><span lang="zh">关键提醒：</span></b>
+            <span lang="en"> your study permit must be valid for the whole length of your program; funds and GIC paperwork are commonly checked at the border and when opening local accounts — get them organised early.</span>
+            <span lang="zh"> 学签有效期务必覆盖整个学业长度；资金与 GIC 材料是入境与本地开户的常见核查项，提前整理好。</span>
+          </div>
           <div class="link-row">
-            <a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html" target="_blank" rel="noopener">IRCC · 学习许可 ↗</a>
-            <a href="https://uwaterloo.ca/important-dates/graduate" target="_blank" rel="noopener">UW 研究生重要日期 ↗</a>
-            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener">UW Finance · 学费与杂费 ↗</a>
+            <a href="https://www.canada.ca/en/immigration-refugees-citizenship/services/study-canada/study-permit.html" target="_blank" rel="noopener"><span lang="en">IRCC · Study Permit ↗</span><span lang="zh">IRCC · 学习许可 ↗</span></a>
+            <a href="https://uwaterloo.ca/important-dates/graduate" target="_blank" rel="noopener"><span lang="en">UW Graduate Important Dates ↗</span><span lang="zh">UW 研究生重要日期 ↗</span></a>
+            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener"><span lang="en">UW Finance · Tuition &amp; fees ↗</span><span lang="zh">UW Finance · 学费与杂费 ↗</span></a>
           </div>
         </section>
 
         <!-- ③ 阶段二 抵达 -->
-        <section id="arrive" data-toc="阶段二 · 抵达滑铁卢">
-          <h2>③ 阶段二 · 抵达滑铁卢（落地 1–2 周内）</h2>
+        <section id="arrive" data-toc="阶段二 · 抵达滑铁卢" data-toc-key="sop.toc.arrive">
+          <h2 data-i18n="sop.h.arrive">③ Phase 2 · Arriving in Waterloo (within 1–2 weeks)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：落地后 1–2 周内</span>
-            <span class="meta-chip">🎓 研究生迎新周：2026-09-07 ~ 09-10</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: within 1–2 weeks of landing</span><span lang="zh">⏰ 时间窗口：落地后 1–2 周内</span></span>
+            <span class="meta-chip"><span lang="en">🎓 Graduate orientation week: 2026-09-07 ~ 09-10</span><span lang="zh">🎓 研究生迎新周：2026-09-07 ~ 09-10</span></span>
           </div>
           <div class="needs">
-            <b>📎 材料清单（开户 / 办证反复要用到）</b>
-            <ul>
+            <b data-i18n="sop.needs.arrive">📎 Documents (reused constantly for accounts &amp; IDs)</b>
+            <ul lang="en">
+              <li>Passport + Study Permit (issued at the border — check the name spelling and expiry on the spot)</li>
+              <li>Proof of address: lease, or a utility / phone bill showing your name and address</li>
+              <li>UW LOA (frequently requested when opening a bank account or applying for a SIN)</li>
+              <li>A little CAD cash (taxi / meals on day one)</li>
+            </ul>
+            <ul lang="zh">
               <li>护照 + Study Permit（入境当场领取，务必核对姓名拼写与有效期）</li>
               <li>住址证明：租房合同，或含本人姓名与地址的水电 / 话费账单</li>
               <li>UW 录取信 / LOA（办银行卡、办 SIN 常被要求出示）</li>
               <li>加元现金少量（落地首日打车、餐费应急）</li>
             </ul>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li><b>Border entry:</b> go through with passport / study permit / LOA and collect your Study Permit — <b>check the expiry and name spelling on the spot</b>.</li>
+            <li><b>Phone plan:</b> Bell / Rogers / Telus or a budget brand (Public Mobile / Fido / Chatr); can be set up right after landing — pick a plan with data.</li>
+            <li><b>Bank account:</b> RBC / TD / Scotiabank / BMO / CIBC; international student accounts are often fee-free — bring passport + study permit + proof of address.</li>
+            <li><b>SIN (Social Insurance Number):</b> required to work and to file taxes; apply online or in person at Service Canada and keep it safe.</li>
+            <li><b>UHIP health insurance:</b> the mandatory international health plan shared by 22 Ontario public universities — <b>$948/year for 2026–27 (3 instalments, $316 per term)</b>, charged automatically to your student account, no separate enrolment; coverage cap CAD 1,000,000/year. It only takes effect once your account shows <b>"Fees Arranged"</b> — so paying fees is not something to leave to the last minute.</li>
+            <li><b>Photo ID / driver's licence:</b> with no local licence you can take the Ontario G1 test, or get an Ontario Photo ID with passport + proof of address.</li>
+            <li>Off-campus renters: set up <b>internet / utilities</b> (leases usually require the tenant to arrange these).</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li><b>机场入境：</b> 持护照 / 学签 / LOA 走入境通道，当场领取 Study Permit——<b>当场核对有效期与姓名拼写</b>。</li>
             <li><b>手机卡：</b> Bell / Rogers / Telus 或廉价品牌（Public Mobile / Fido / Chatr），落地即可办，选含流量的套餐。</li>
             <li><b>银行开户：</b> RBC / TD / Scotiabank / BMO / CIBC；国际学生账户多免月费，带护照 + 学签 + 住址证明。</li>
@@ -271,32 +319,50 @@
             <li><b>Photo ID / 驾照：</b> 如无本国驾照，可考 Ontario G1；或用护照 + 住址证明办 Ontario Photo ID。</li>
             <li>校外租房者：办理 <b>网络 / 水电</b> 开户（租赁合同通常要求租客自行申请）。</li>
           </ul>
-          <div class="box-good"><b>优先级建议：</b> 入境拿学签 → 手机 → 银行+SIN → UHIP → Photo ID，是落地头几天最高杠杆的五件事。</div>
+          <div class="box-good"><b><span lang="en">Priority order:</span><span lang="zh">优先级建议：</span></b>
+            <span lang="en"> collect study permit at the border → phone → bank + SIN → UHIP → Photo ID. Those are the five highest-leverage things in your first few days.</span>
+            <span lang="zh"> 入境拿学签 → 手机 → 银行+SIN → UHIP → Photo ID，是落地头几天最高杠杆的五件事。</span>
+          </div>
           <div class="link-row">
-            <a href="https://uhip.ca/" target="_blank" rel="noopener">UHIP 官网 ↗</a>
-            <a href="https://www.canada.ca/en/employment-social-development/services/sin.html" target="_blank" rel="noopener">Service Canada · 申请 SIN ↗</a>
-            <a href="https://www.ontario.ca/page/ontario-photo-id" target="_blank" rel="noopener">ServiceOntario · Photo ID ↗</a>
+            <a href="https://uhip.ca/" target="_blank" rel="noopener"><span lang="en">UHIP official site ↗</span><span lang="zh">UHIP 官网 ↗</span></a>
+            <a href="https://www.canada.ca/en/employment-social-development/services/sin.html" target="_blank" rel="noopener"><span lang="en">Service Canada · Apply for a SIN ↗</span><span lang="zh">Service Canada · 申请 SIN ↗</span></a>
+            <a href="https://www.ontario.ca/page/ontario-photo-id" target="_blank" rel="noopener"><span lang="en">ServiceOntario · Photo ID ↗</span><span lang="zh">ServiceOntario · Photo ID ↗</span></a>
           </div>
         </section>
 
         <!-- ④ 阶段三 注册 -->
-        <section id="enroll" data-toc="阶段三 · 入学注册">
-          <h2>④ 阶段三 · 入学注册（开学前—开学初）</h2>
+        <section id="enroll" data-toc="阶段三 · 入学注册" data-toc-key="sop.toc.enroll">
+          <h2 data-i18n="sop.h.enroll">④ Phase 3 · Enrolment (before–early term)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：8 月下旬 – 9 月中</span>
-            <span class="meta-chip">🚨 09-23 NFA 冻结生效</span>
-            <span class="meta-chip">🚨 10-31 Fees Arranged 截止</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: late August – mid September</span><span lang="zh">⏰ 时间窗口：8 月下旬 – 9 月中</span></span>
+            <span class="meta-chip"><span lang="en">🚨 09-23 NFA freeze takes effect</span><span lang="zh">🚨 09-23 NFA 冻结生效</span></span>
+            <span class="meta-chip"><span lang="en">🚨 10-31 Fees Arranged deadline</span><span lang="zh">🚨 10-31 Fees Arranged 截止</span></span>
           </div>
           <div class="needs">
-            <b>📎 材料 / 前置条件</b>
-            <ul>
+            <b data-i18n="sop.needs.enroll">📎 Documents / prerequisites</b>
+            <ul lang="en">
+              <li>UW ID (the 8-digit student number on your LOA) — required to activate WatIAM</li>
+              <li>WatIAM account + @uwaterloo.ca email — the single entry point to every university system</li>
+              <li>WatCard student card: building access, library, on-campus spending, transit pass</li>
+              <li>Co-op students also need a Waterloo Works profile (resume + PD course requirements)</li>
+            </ul>
+            <ul lang="zh">
               <li>UW ID（录取信上的 8 位学号）—— 激活 WatIAM 必需</li>
               <li>WatIAM 账号与 @uwaterloo.ca 邮箱 —— 所有学校系统的统一入口</li>
               <li>WatCard 学生卡：门禁、图书馆、校内消费、公交一卡通</li>
               <li>Co-op 学生另需 Waterloo Works 档案（简历 + PD 课程要求）</li>
             </ul>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li>Activate your <b>WatIAM account</b> and UW email (@uwaterloo.ca) — the entry point to all university systems.</li>
+            <li>Use <b>Quest</b> to complete course registration: enrolling, adding / dropping, checking your timetable and prerequisites.</li>
+            <li>Co-op students: complete your profile in <b>Waterloo Works</b> and understand the PD (Professional Development) course requirements and timeline.</li>
+            <li>Pay <b>tuition</b> (Finance account): <b>from 9/23 accounts without a payment arrangement are frozen with an NFA (which directly limits course selection), and 10/31 is the last day to arrange "Fees Arranged"</b>; watch the CAD exchange rate and keep receipts.</li>
+            <li>Collect / activate your <b>student card (WatCard)</b> — building access, library and on-campus spending in one.</li>
+            <li>Attend <b>Orientation / department welcome events</b>, join student groups and build your information channels.</li>
+            <li>Get to know campus: library, IST (IT services), writing / English support, health centre.</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li>激活 <b>WatIAM 账号</b> 与 UW 邮箱（@uwaterloo.ca），这是所有学校系统的入口。</li>
             <li>用 <b>Quest</b> 完成课程注册：选课、加退课、查看 timetable 与 prerequisites。</li>
             <li>Co-op 学生：在 <b>Waterloo Works</b> 完善 profile、了解 PD 课程（Professional Development）要求与时间线。</li>
@@ -305,22 +371,33 @@
             <li>参加 <b>Orientation / 院系迎新</b>，加入学生群与社团，建立信息渠道。</li>
             <li>熟悉 campus：图书馆、IST（IT 服务）、写作 / 英语辅导、健康中心。</li>
           </ul>
-          <div class="box-callout"><b>Co-op 时间线：</b> 滑铁卢的 study term 与 job search 高度交错，选课与求职要并行规划，避免学期中才发现投递窗口已过。</div>
+          <div class="box-callout"><b><span lang="en">Co-op timeline:</span><span lang="zh">Co-op 时间线：</span></b>
+            <span lang="en"> Waterloo's study terms and job search overlap heavily — plan course selection and recruiting together, or you may only discover the application window has closed mid-term.</span>
+            <span lang="zh"> 滑铁卢的 study term 与 job search 高度交错，选课与求职要并行规划，避免学期中才发现投递窗口已过。</span>
+          </div>
           <div class="link-row">
-            <a href="https://quest.uwaterloo.ca/" target="_blank" rel="noopener">Quest · 选课与账单 ↗</a>
-            <a href="https://uwaterloo.ca/watcard/" target="_blank" rel="noopener">WatCard 学生卡 ↗</a>
-            <a href="https://waterlooworks.uwaterloo.ca/" target="_blank" rel="noopener">Waterloo Works · Co-op ↗</a>
+            <a href="https://quest.uwaterloo.ca/" target="_blank" rel="noopener"><span lang="en">Quest · Courses &amp; billing ↗</span><span lang="zh">Quest · 选课与账单 ↗</span></a>
+            <a href="https://uwaterloo.ca/watcard/" target="_blank" rel="noopener"><span lang="en">WatCard student card ↗</span><span lang="zh">WatCard 学生卡 ↗</span></a>
+            <a href="https://waterlooworks.uwaterloo.ca/" target="_blank" rel="noopener"><span lang="en">Waterloo Works · Co-op ↗</span><span lang="zh">Waterloo Works · Co-op ↗</span></a>
           </div>
         </section>
 
         <!-- ⑤ 阶段四 学术生活 -->
-        <section id="life" data-toc="阶段四 · 学术与日常生活">
-          <h2>⑤ 阶段四 · 学术与日常生活（持续）</h2>
+        <section id="life" data-toc="阶段四 · 学术与日常生活" data-toc-key="sop.toc.life">
+          <h2 data-i18n="sop.h.life">⑤ Phase 4 · Academic &amp; daily life (ongoing)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：贯穿整个学业</span>
-            <span class="meta-chip">🚌 U-Pass：全日制本硕自动含，刷 WatCard 乘车</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: throughout your studies</span><span lang="zh">⏰ 时间窗口：贯穿整个学业</span></span>
+            <span class="meta-chip"><span lang="en">🚌 U-Pass: automatic for full-time students, tap your WatCard</span><span lang="zh">🚌 U-Pass：全日制本硕自动含，刷 WatCard 乘车</span></span>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li><b>Course pace:</b> Waterloo terms are short (~13 weeks) and fast — build a weekly plan early instead of cramming before midterms.</li>
+            <li><b>Co-op cycle:</b> keep an eye on the job-search and study-term timeline, and prepare your resume / interviews early.</li>
+            <li><b>Campus resources:</b> library, tutoring, counselling, career centre, health centre — all included in your tuition.</li>
+            <li><b>Transit:</b> full-time undergraduate and graduate students <b>automatically receive the GRT U-Pass</b> (already included in incidental fees) and can <b>tap their WatCard for unlimited rides on GRT buses and the ION light rail</b>; without the card you pay a $3.75 cash fare and must have exact change. For Toronto commuting, GO Transit is an option.</li>
+            <li><b>Taxes:</b> file with your SIN and tuition receipt (<b>T2202</b>, usually downloadable from your student account by late February); international students can also get part of their tax back.</li>
+            <li>Append any problem you hit to this page's <a href="#log">pitfalls log</a> so it becomes more and more your own onboarding encyclopaedia.</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li><b>课程节奏：</b> 滑铁卢 term 短（约 13 周）、进度快，尽早建立每周计划，不要等 midterm 前才突击。</li>
             <li><b>Co-op 周期：</b> 关注 job search 与 study term 的时间线，提前准备简历 / 面试。</li>
             <li><b>校园资源：</b> 图书馆、tutoring、心理咨询、职业中心、健康中心——都是已含在学费里的权益。</li>
@@ -329,18 +406,42 @@
             <li>把遇到的问题随时追加到本页 <a href="#log">踩坑记录</a>，让它越来越像「你自己的入学百科」。</li>
           </ul>
           <div class="link-row">
-            <a href="https://uwaterloo.ca/sustainability/transportation" target="_blank" rel="noopener">UW 交通与 U-Pass ↗</a>
-            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener">UW Finance · T2202 与账单 ↗</a>
-            <a href="../daily-reminder/">本工具箱 · 研究生每日提醒 →</a>
+            <a href="https://uwaterloo.ca/sustainability/transportation" target="_blank" rel="noopener"><span lang="en">UW Transportation &amp; U-Pass ↗</span><span lang="zh">UW 交通与 U-Pass ↗</span></a>
+            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener"><span lang="en">UW Finance · T2202 &amp; billing ↗</span><span lang="zh">UW Finance · T2202 与账单 ↗</span></a>
+            <a href="../daily-reminder/"><span lang="en">This toolkit · Graduate daily reminders →</span><span lang="zh">本工具箱 · 研究生每日提醒 →</span></a>
           </div>
         </section>
 
         <!-- ⑥ 重要日期速查（2026 秋季） -->
-        <section id="dates" data-toc="重要日期速查 · 2026 秋季">
-          <h2>⑥ 重要日期速查 · 2026 秋季学期</h2>
-          <p class="sub">下表与本工具箱 <a href="../daily-reminder/">研究生每日提醒</a> 同源，均整理自 UW 官方「研究生重要日期」页。<b>具体以学校当年公布为准。</b></p>
+        <section id="dates" data-toc="重要日期速查 · 2026 秋季" data-toc-key="sop.toc.dates">
+          <h2 data-i18n="sop.h.dates">⑥ Key dates at a glance · Fall 2026</h2>
+          <p class="sub">
+            <span lang="en">The table below shares its source with this toolkit's <a href="../daily-reminder/">Graduate daily reminders</a> — both are compiled from UW's official Graduate Important Dates page. <b>Always confirm against what the university publishes for the current year.</b></span>
+            <span lang="zh">下表与本工具箱 <a href="../daily-reminder/">研究生每日提醒</a> 同源，均整理自 UW 官方「研究生重要日期」页。<b>具体以学校当年公布为准。</b></span>
+          </p>
           <div class="table-scroll">
-            <table>
+            <table lang="en">
+              <thead><tr><th>Date</th><th>Event</th><th>Category</th></tr></thead>
+              <tbody>
+                <tr><td>09-07 ~ 09-10</td><td>Graduate orientation week</td><td><span class="cat cat-迎新">Orientation</span></td></tr>
+                <tr><td>09-08</td><td>Graduate Orientation</td><td><span class="cat cat-迎新">Orientation</span></td></tr>
+                <tr><td>09-09</td><td>Classes begin · first day of term</td><td><span class="cat cat-上课">Classes</span></td></tr>
+                <tr><td>09-23</td><td>Not Financially Arranged (NFA) freeze takes effect — affects later course selection</td><td><span class="cat cat-缴费">Payment</span></td></tr>
+                <tr><td>09-29</td><td>100% tuition refund deadline</td><td><span class="cat cat-退费">Refund</span></td></tr>
+                <tr><td>10-01 ~ 11-24</td><td>Course drop period recorded as WD (Withdrawn on transcript, no credit)</td><td><span class="cat cat-退课">Course Drop</span></td></tr>
+                <tr><td>10-02</td><td>Final exam schedule published (viewable in Quest)</td><td><span class="cat cat-考试">Exam</span></td></tr>
+                <tr><td>10-10 ~ 10-18</td><td>Reading Week (no classes)</td><td><span class="cat cat-假期">Holiday</span></td></tr>
+                <tr><td>10-12</td><td>Thanksgiving</td><td><span class="cat cat-假期">Holiday</span></td></tr>
+                <tr><td>10-23</td><td>50% tuition refund deadline</td><td><span class="cat cat-退费">Refund</span></td></tr>
+                <tr><td>10-31</td><td>Final deadline to arrange "Fees Arranged"</td><td><span class="cat cat-缴费">Payment</span></td></tr>
+                <tr><td>12-08</td><td>Classes end · end of term</td><td><span class="cat cat-上课">Classes</span></td></tr>
+                <tr><td>12-10 ~ 12-23</td><td>Final examination period</td><td><span class="cat cat-考试">Exam</span></td></tr>
+                <tr><td>12-13</td><td><b>Final exams are also scheduled on Sunday</b> — confirm whether you have a session</td><td><span class="cat cat-考试">Exam</span></td></tr>
+                <tr><td>12-24</td><td>Grades begin to appear in Quest</td><td><span class="cat cat-成绩">Grades</span></td></tr>
+                <tr><td>12-24 ~ 12-31</td><td>University closed for the holidays (offices shut, nothing can be processed)</td><td><span class="cat cat-假期">Holiday</span></td></tr>
+              </tbody>
+            </table>
+            <table lang="zh">
               <thead><tr><th>日期</th><th>事项</th><th>类别</th></tr></thead>
               <tbody>
                 <tr><td>09-07 ~ 09-10</td><td>研究生迎新指导周</td><td><span class="cat cat-迎新">迎新</span></td></tr>
@@ -362,26 +463,42 @@
               </tbody>
             </table>
           </div>
-          <div class="box-warn"><b>最容易被忽略的三条：</b> ① <b>9/23</b> 未安排缴费会触发 NFA 冻结，直接影响选课；② <b>10/31</b> 是办理 Fees Arranged 的最后期限；③ 期末考期<b>含周日场次</b>（12/13），别默认周末没考试。</div>
+          <div class="box-warn"><b><span lang="en">The three most easily missed:</span><span lang="zh">最容易被忽略的三条：</span></b>
+            <span lang="en"> ① <b>9/23</b> — no payment arrangement triggers an NFA freeze that directly limits course selection; ② <b>10/31</b> — the last day to arrange "Fees Arranged"; ③ the exam period <b>includes a Sunday session</b> (12/13), so don't assume weekends are free.</span>
+            <span lang="zh"> ① <b>9/23</b> 未安排缴费会触发 NFA 冻结，直接影响选课；② <b>10/31</b> 是办理 Fees Arranged 的最后期限；③ 期末考期<b>含周日场次</b>（12/13），别默认周末没考试。</span>
+          </div>
         </section>
 
         <!-- ⑦ Co-op 求职时间线 -->
-        <section id="coop" data-toc="Co-op 求职时间线">
-          <h2>⑦ Co-op 求职时间线（ECE MEng Co-op）</h2>
+        <section id="coop" data-toc="Co-op 求职时间线" data-toc-key="sop.toc.coop">
+          <h2 data-i18n="sop.h.coop">⑦ Co-op job-search timeline (ECE MEng Co-op)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：贯穿 16–20 个月学制</span>
-            <span class="meta-chip">🎯 首个工签前必须完成 WIL 601</span>
-            <span class="meta-chip">🔁 学制首尾都必须是 study term</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: across the 16–20 month program</span><span lang="zh">⏰ 时间窗口：贯穿 16–20 个月学制</span></span>
+            <span class="meta-chip"><span lang="en">🎯 WIL 601 must be completed before the first work term</span><span lang="zh">🎯 首个工签前必须完成 WIL 601</span></span>
+            <span class="meta-chip"><span lang="en">🔁 The program must start and end with a study term</span><span lang="zh">🔁 学制首尾都必须是 study term</span></span>
           </div>
           <div class="needs">
-            <b>📎 求职准备（工签前备齐）</b>
-            <ul>
+            <b data-i18n="sop.needs.coop">📎 Job-search preparation (ready before the first work term)</b>
+            <ul lang="en">
+              <li>Waterloo Works profile: resume + cover-letter templates + uploaded transcript</li>
+              <li><b>WIL 601 Career Foundations</b> completed (required in the study term before the first work term)</li>
+              <li>Work Term Report template, submitted at the end of the term</li>
+            </ul>
+            <ul lang="zh">
               <li>Waterloo Works 档案：简历 + 求职信模板 + 已上传成绩单</li>
               <li>完成 <b>WIL 601 Career Foundations</b>（首个工签前的 study term 必修）</li>
               <li>工签报告（Work Term Report）模板，期末提交</li>
             </ul>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li><b>Program structure:</b> ECE MEng Co-op requires <b>8 courses</b> (at least 5 within ECE, at most 3 from the Faculties of Engineering / Math / Science), over <b>16–20 months</b>. Minimum 1 work term, maximum 2 consecutive work terms (same employer).</li>
+            <li><b>Start / end constraint:</b> the program <b>must begin and end with a study term</b> — the final term cannot be a work term. If you don't secure a work term you are moved into the regular MEng program.</li>
+            <li><b>Recruiting rhythm:</b> apply for the next work term through <b>Waterloo Works</b> during a study term; interviews are usually at the Tatham Centre on campus or online. Roles cover Canada and overseas (including the US TN visa route).</li>
+            <li><b>WIL 601:</b> must be completed in the <b>study term before your first work term</b>; it is the gateway into the job-search process.</li>
+            <li><b>Work Term Report (WTR):</b> after each work term it must be submitted <b>before the end of the first week of the next term</b> (e.g. a Spring work term → report due before the first week of Fall).</li>
+            <li><b>Co-op term dates:</b> work terms start with the Fall (Sep–Dec) / Winter (Jan–Apr) / Spring (May–Aug) terms; the exact dates depend on your employer. This toolkit's Daily Reminders includes work-term start dates.</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li><b>学制结构：</b> ECE MEng Co-op 需修满 <b>8 门课</b>（其中 ≥5 门在 ECE 系内，最多 3 门来自工程 / 数学 / 科学学院），学制 <b>16–20 个月</b>。最少 1 个工签、最多 2 个连续工签（同一雇主）。</li>
             <li><b>首尾约束：</b> 学制<b>必须以 study term 开始、以 study term 结束</b>——最后一个 term 不能是工签。没拿到工签会被转入 regular MEng 项目。</li>
             <li><b>求职节奏：</b> 在 study term 内通过 <b>Waterloo Works</b> 投递下一阶段工签岗位，面试通常在校内 Tatham Centre 或线上；岗位覆盖加拿大本地与海外（含美国 TN 签证通道）。</li>
@@ -389,32 +506,49 @@
             <li><b>工签报告（WTR）：</b> 每个工签结束后，须于<b>下一 term 第一周结束前</b>提交（如 Spring 工签 → 报告在 Fall 第一周前交）。</li>
             <li><b>Co-op 学期节点：</b> 工签跟随 Fall（9–12 月）/ Winter（1–4 月）/ Spring（5–8 月）学期开始；具体以雇主安排为准。本工具箱「每日提醒」含 Co-op 实习学期开始日。</li>
           </ul>
-          <div class="box-warn"><b>关键提醒：</b> 工签是<b>高度竞争</b>的求职过程，不是学校保证分配。申请数量不足或面试表现不专业会被移出求职流程；务必早准备简历、多投递、保持与 Co-operative Education 办公室的沟通。</div>
+          <div class="box-warn"><b><span lang="en">Key reminder:</span><span lang="zh">关键提醒：</span></b>
+            <span lang="en"> the work term is a <b>highly competitive</b> job search, not something the university allocates. Apply to too few roles or interview unprofessionally and you can be removed from the process; prepare your resume early, apply widely, and stay in touch with the Co-operative Education office.</span>
+            <span lang="zh"> 工签是<b>高度竞争</b>的求职过程，不是学校保证分配。申请数量不足或面试表现不专业会被移出求职流程；务必早准备简历、多投递、保持与 Co-operative Education 办公室的沟通。</span>
+          </div>
           <div class="link-row">
-            <a href="https://waterlooworks.uwaterloo.ca/" target="_blank" rel="noopener">Waterloo Works · 求职系统 ↗</a>
-            <a href="https://uwaterloo.ca/co-operative-education/" target="_blank" rel="noopener">Co-operative Education ↗</a>
-            <a href="https://uwaterloo.ca/electrical-computer-engineering/graduate-studies" target="_blank" rel="noopener">ECE 研究生项目 ↗</a>
-            <a href="../daily-reminder/">本工具箱 · 研究生每日提醒 →</a>
+            <a href="https://waterlooworks.uwaterloo.ca/" target="_blank" rel="noopener"><span lang="en">Waterloo Works · job system ↗</span><span lang="zh">Waterloo Works · 求职系统 ↗</span></a>
+            <a href="https://uwaterloo.ca/co-operative-education/" target="_blank" rel="noopener"><span lang="en">Co-operative Education ↗</span><span lang="zh">Co-operative Education ↗</span></a>
+            <a href="https://uwaterloo.ca/electrical-computer-engineering/graduate-studies" target="_blank" rel="noopener"><span lang="en">ECE graduate programs ↗</span><span lang="zh">ECE 研究生项目 ↗</span></a>
+            <a href="../daily-reminder/"><span lang="en">This toolkit · Graduate daily reminders →</span><span lang="zh">本工具箱 · 研究生每日提醒 →</span></a>
           </div>
         </section>
 
         <!-- ⑧ 住宿与租房指南 -->
-        <section id="housing" data-toc="住宿与租房指南">
-          <h2>⑧ 住宿与租房指南（滑铁卢 / 基奇纳）</h2>
+        <section id="housing" data-toc="住宿与租房指南" data-toc-key="sop.toc.housing">
+          <h2 data-i18n="sop.h.housing">⑧ Housing &amp; rental guide (Waterloo / Kitchener)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：落地前 1–2 个月开始看房</span>
-            <span class="meta-chip">💡 Co-op 每 4 个月有大量转租（sublet）</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: start looking 1–2 months before you land</span><span lang="zh">⏰ 时间窗口：落地前 1–2 个月开始看房</span></span>
+            <span class="meta-chip"><span lang="en">💡 Co-op creates a large sublet market every 4 months</span><span lang="zh">💡 Co-op 每 4 个月有大量转租（sublet）</span></span>
           </div>
           <div class="needs">
-            <b>📎 签约 / 入住材料</b>
-            <ul>
+            <b data-i18n="sop.needs.housing">📎 Signing / move-in documents</b>
+            <ul lang="en">
+              <li>Standard Form of Lease (the Ontario statutory template)</li>
+              <li>Last month's rent deposit (the only deposit allowed — see the red lines below)</li>
+              <li>Letter of acceptance / student card (some landlords or buildings ask for proof of enrolment)</li>
+              <li>Key deposit (limited to the actual cost of cutting keys)</li>
+            </ul>
+            <ul lang="zh">
               <li>标准租约（Standard Form of Lease，安省法定模板）</li>
               <li>最后一个月房租押金（仅此一项，见下方红线）</li>
               <li>录取信 / 学生证（部分房东或公寓要求 proof of enrollment）</li>
               <li>钥匙押金（仅限实际配匙成本）</li>
             </ul>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li><b>On-campus residence:</b> traditional residence about $950–1,150/month (with meal plan), suite-style $1,100–1,300/month; graduate spots are limited, so apply early.</li>
+            <li><b>Private student buildings:</b> Icon / Sage / King Street Towers and similar, about $1,000–1,400/month, 5–10 minutes' walk to campus, mostly furnished.</li>
+            <li><b>Off-campus shared housing:</b> a room in a 3-bedroom house/townhouse about <b>$700–1,000/month</b>; 1-bedroom apartment $1,700–2,100/month; 2-bedroom $2,100–2,600/month (2026 KW market — confirm against live listings).</li>
+            <li><b>Sublet advantage:</b> Waterloo co-op students leave for work terms every 4 months, creating plenty of furnished sublets — find below-market short leases through the <b>UW Off-Campus Housing</b> board and community groups.</li>
+            <li><b>Check rent control before signing:</b> units first occupied after 2018-11-15 are <b>not subject to the rent increase guideline</b> (landlords may price freely and raise rent beyond the 2.1% cap) — ask directly before signing.</li>
+            <li><b>Notice to vacate:</b> usually <b>60 days</b> written notice (Form N9); during a fixed lease the landlord generally cannot raise the rent.</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li><b>校内宿舍：</b> 传统宿舍约 $950–1,150/月（含餐），套间式 $1,100–1,300/月；研究生名额有限，建议尽早申请。</li>
             <li><b>私营学生公寓：</b> Icon / Sage / King Street Towers 等，约 $1,000–1,400/月，步行 5–10 分钟到校园，多为带家具。</li>
             <li><b>校外合租：</b> 3 卧 house/townhouse 单间约 <b>$700–1,000/月</b>；1 卧公寓 $1,700–2,100/月；2 卧 $2,100–2,600/月（2026 年 KW 行情，具体以实时挂牌为准）。</li>
@@ -422,30 +556,46 @@
             <li><b>签约前核实租金管制：</b> 2018-11-15 之后首次入住的单位<b>不受租金指导线约束</b>（房东可自由定价、涨租不受 2.1% 上限限制），签约前直接问清。</li>
             <li><b>退租通知：</b> 通常需提前 <b>60 天</b> 书面通知（Form N9）；租约期内房东一般不能涨租。</li>
           </ul>
-          <div class="box-warn"><b>安省租房红线（Residential Tenancies Act, 2006）：</b> 房东<b>只能收「最后一个月房租」押金，且不超过一个月房租</b>；<b>不能收 damage / pet / 安全押金</b>（这些在安省违法）。钥匙押金仅限实际配匙成本。房东须每年按指导线利率（2026 约 2.1%）支付押金利息。不得强制要求 post-dated cheque。</div>
+          <div class="box-warn"><b><span lang="en">Ontario rental red lines (Residential Tenancies Act, 2006):</span><span lang="zh">安省租房红线（Residential Tenancies Act, 2006）：</span></b>
+            <span lang="en"> a landlord <b>may only collect a "last month's rent" deposit, and it may not exceed one month's rent</b>; <b>damage / pet / security deposits cannot be charged</b> (they are illegal in Ontario). A key deposit is limited to the actual cost of cutting keys. Landlords must pay interest on the deposit each year at the guideline rate (about 2.1% in 2026). Post-dated cheques cannot be required.</span>
+            <span lang="zh"> 房东<b>只能收「最后一个月房租」押金，且不超过一个月房租</b>；<b>不能收 damage / pet / 安全押金</b>（这些在安省违法）。钥匙押金仅限实际配匙成本。房东须每年按指导线利率（2026 约 2.1%）支付押金利息。不得强制要求 post-dated cheque。</span>
+          </div>
           <div class="link-row">
-            <a href="https://uwaterloo.ca/off-campus-housing/" target="_blank" rel="noopener">UW Off-Campus Housing ↗</a>
-            <a href="https://www.ontario.ca/page/residential-tenancies-act-2006" target="_blank" rel="noopener">安省 Residential Tenancies Act ↗</a>
-            <a href="https://tribunalsontario.ca/ltb/" target="_blank" rel="noopener">Landlord and Tenant Board ↗</a>
+            <a href="https://uwaterloo.ca/off-campus-housing/" target="_blank" rel="noopener"><span lang="en">UW Off-Campus Housing ↗</span><span lang="zh">UW Off-Campus Housing ↗</span></a>
+            <a href="https://www.ontario.ca/page/residential-tenancies-act-2006" target="_blank" rel="noopener"><span lang="en">Ontario Residential Tenancies Act ↗</span><span lang="zh">安省 Residential Tenancies Act ↗</span></a>
+            <a href="https://tribunalsontario.ca/ltb/" target="_blank" rel="noopener"><span lang="en">Landlord and Tenant Board ↗</span><span lang="zh">Landlord and Tenant Board ↗</span></a>
           </div>
         </section>
 
         <!-- ⑨ 选课策略 -->
-        <section id="courses" data-toc="选课策略">
-          <h2>⑨ 选课策略（ECE MEng Co-op）</h2>
+        <section id="courses" data-toc="选课策略" data-toc-key="sop.toc.courses">
+          <h2 data-i18n="sop.h.courses">⑨ Course-planning strategy (ECE MEng Co-op)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：开学前选课，study term 修课</span>
-            <span class="meta-chip">🚨 未 Fees Arranged 第 3 周被退课</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: select courses before term start, take them in study terms</span><span lang="zh">⏰ 时间窗口：开学前选课，study term 修课</span></span>
+            <span class="meta-chip"><span lang="en">🚨 Dropped in week 3 if fees are not arranged</span><span lang="zh">🚨 未 Fees Arranged 第 3 周被退课</span></span>
           </div>
           <div class="needs">
-            <b>📎 选课前准备</b>
-            <ul>
+            <b data-i18n="sop.needs.courses">📎 Before selecting courses</b>
+            <ul lang="en">
+              <li>Quest account activated and able to log in</li>
+              <li>Your program plan: how the 8 courses are distributed</li>
+              <li>Co-op sequence: confirmed study / work term layout</li>
+            </ul>
+            <ul lang="zh">
               <li>Quest 账号已激活，能登录选课</li>
               <li>个人培养计划（program plan）：8 门课的分布</li>
               <li>Co-op sequence：确认 study / work term 排布</li>
             </ul>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li><b>Credit structure:</b> <b>8 courses</b> in total (0.5 credit each), of which <b>at least 5 must be within ECE</b>, and at most 3 may come from the Faculties of Engineering / Math / Science; you need ≥65% in each course and a ≥70% cumulative average to stay in the program.</li>
+            <li><b>Align with Co-op:</b> courses can only be taken in study terms — when planning the sequence, <b>leave enough study terms to finish all 8 courses plus a final study term</b> (the program must both start and end with a study term).</li>
+            <li><b>Select early:</b> lock in your courses as soon as Quest opens — popular courses fill up first; watch the prerequisites.</li>
+            <li><b>Linked to payment:</b> graduate students who have not arranged fees <b>are dropped by the system at the end of week 3</b>; and from 9/23 an NFA freeze blocks course-selection actions (see "Phase 3 · Enrolment" and "Key dates at a glance").</li>
+            <li><b>Specialization:</b> optional specializations have different required-course counts — check the relevant course list before selecting; specializations are not guaranteed and depend on what runs.</li>
+            <li><b>Overall cap:</b> the whole degree allows at most 10 courses (including failures and audits); once you have completed 8 you cannot take extra courses.</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li><b>学分结构：</b> 共需 <b>8 门课</b>（每门 0.5 学分），其中 <b>≥5 门在 ECE 系内</b>，最多 3 门可来自工程 / 数学 / 科学学院；单科 ≥65%、累计均分 ≥70% 才能留项目。</li>
             <li><b>与 Co-op 对齐：</b> 课程只能在 study term 修；规划 sequence 时<b>预留足够 study term 修完 8 门课 + 一个收尾 study term</b>（首尾都必须是 study term）。</li>
             <li><b>尽早选课：</b> Quest 选课期开放后尽早锁定，热门课先满；注意 prerequisites。</li>
@@ -453,30 +603,46 @@
             <li><b>方向（Specialization）：</b> 可选专攻方向，各方向必修课数量不同，选课前先查对应课程清单；方向不保证、视开课情况而定。</li>
             <li><b>总量上限：</b> 整个学位最多修 10 门课（含不及格与 audit），修满 8 门后不可再修额外课。</li>
           </ul>
-          <div class="box-good"><b>优先级建议：</b> 先把 WIL 601 与第 1 个 study term 的课排好，确保能顺利进入求职；再按 prerequisites 与兴趣铺开剩余课程，避免最后一学期凑不齐学分。</div>
+          <div class="box-good"><b><span lang="en">Priority order:</span><span lang="zh">优先级建议：</span></b>
+            <span lang="en"> sort out WIL 601 and your first study term's courses first so you can enter recruiting smoothly; then spread the remaining courses according to prerequisites and interest, so you don't end up short of credits in your final term.</span>
+            <span lang="zh"> 先把 WIL 601 与第 1 个 study term 的课排好，确保能顺利进入求职；再按 prerequisites 与兴趣铺开剩余课程，避免最后一学期凑不齐学分。</span>
+          </div>
           <div class="link-row">
-            <a href="../course-planner/" target="_blank" rel="noopener">📚 ECE 选课导航（交互式规划工具）↗</a>
-            <a href="https://quest.uwaterloo.ca/" target="_blank" rel="noopener">Quest · 选课与账单 ↗</a>
-            <a href="https://uwaterloo.ca/electrical-computer-engineering/graduate-studies/current-students" target="_blank" rel="noopener">ECE 研究生 · 课程与培养计划 ↗</a>
+            <a href="../course-planner/" target="_blank" rel="noopener"><span lang="en">📚 ECE Course Navigator (interactive planner) ↗</span><span lang="zh">📚 ECE 选课导航（交互式规划工具）↗</span></a>
+            <a href="https://quest.uwaterloo.ca/" target="_blank" rel="noopener"><span lang="en">Quest · Courses &amp; billing ↗</span><span lang="zh">Quest · 选课与账单 ↗</span></a>
+            <a href="https://uwaterloo.ca/electrical-computer-engineering/graduate-studies/current-students" target="_blank" rel="noopener"><span lang="en">ECE graduate · courses &amp; program plans ↗</span><span lang="zh">ECE 研究生 · 课程与培养计划 ↗</span></a>
           </div>
         </section>
 
         <!-- ⑩ 研究生杂费明细 -->
-        <section id="fees" data-toc="研究生杂费明细">
-          <h2>⑩ 研究生杂费明细（MEng · 国际生参考）</h2>
+        <section id="fees" data-toc="研究生杂费明细" data-toc-key="sop.toc.fees">
+          <h2 data-i18n="sop.h.fees">⑩ Graduate fee breakdown (MEng · int'l reference)</h2>
           <div class="meta-row">
-            <span class="meta-chip">⏰ 时间窗口：每学期初缴费</span>
-            <span class="meta-chip">🚨 10-31 Fees Arranged 截止</span>
+            <span class="meta-chip"><span lang="en">⏰ Window: fees due at the start of each term</span><span lang="zh">⏰ 时间窗口：每学期初缴费</span></span>
+            <span class="meta-chip"><span lang="en">🚨 10-31 Fees Arranged deadline</span><span lang="zh">🚨 10-31 Fees Arranged 截止</span></span>
           </div>
           <div class="needs">
-            <b>📎 缴费相关</b>
-            <ul>
+            <b data-i18n="sop.needs.fees">📎 Payment essentials</b>
+            <ul lang="en">
+              <li>Quest statement (tuition + incidental fee breakdown)</li>
+              <li>Promissory Note (instalment / deferred payment request)</li>
+              <li>A CAD account (allow 3–5 business days for cross-border transfers to land)</li>
+            </ul>
+            <ul lang="zh">
               <li>Quest 账单（学费 + 杂费明细）</li>
               <li>Promissory Note（分期 / 暂缓缴费申请）</li>
               <li>加元账户（跨境汇款预留 3–5 个工作日到账）</li>
             </ul>
           </div>
-          <ul class="check-list">
+          <ul class="check-list" lang="en">
+            <li><b>Tuition:</b> international ECE MEng students are charged <b>per course</b>; the whole degree (8 courses) is roughly <b>CAD 50,000–60,000</b> (varies with the year and exchange rate — <b>treat the official Tuition Estimator as authoritative</b>). MEng has no scholarships and no supervisor funding; it is self-funded.</li>
+            <li><b>UHIP health insurance:</b> $948/year (3 instalments, $316 per term), charged automatically; effective only once the account shows "Fees Arranged" (see "Phase 2 · Arrival").</li>
+            <li><b>U-Pass (GRT transit):</b> automatic for full-time students, included in incidental fees, tap your WatCard to ride (see "Phase 4 · Academic life").</li>
+            <li><b>Other incidental fees:</b> student services, athletics / clubs, facilities and so on are charged each term — see your Quest statement.</li>
+            <li><b>Refund dates:</b> 100% refund deadline <b>9/29</b>, 50% refund deadline <b>10/23</b>; NFA freeze from 9/23 and the 10/31 Fees Arranged deadline (see "Key dates at a glance").</li>
+            <li><b>Offset with Co-op income:</b> work terms are paid and can significantly offset living costs (engineering monthly salaries commonly CAD 3,500–5,000), though a work term may still carry a small amount of tuition.</li>
+          </ul>
+          <ul class="check-list" lang="zh">
             <li><b>学费（Tuition）：</b> ECE MEng 国际生按<b>每门课</b>计费，整段学位（8 门）约 <b>CAD 50,000–60,000</b>（随年份与汇率波动，<b>以官方 Tuition Estimator 为准</b>）。MEng 无奖学金、无导师资助，需自费。</li>
             <li><b>UHIP 医保：</b> $948/年（分 3 期，每学期 $316），自动计入账户；须账户变 "Fees Arranged" 后生效（详见「阶段二 · 抵达」）。</li>
             <li><b>U-Pass（GRT 公交）：</b> 全日制本硕自动含，已含在 incidental fees，刷 WatCard 乘车（详见「阶段四 · 学术生活」）。</li>
@@ -484,26 +650,39 @@
             <li><b>退费节点：</b> 100% 退费截止 <b>9/29</b>，50% 退费截止 <b>10/23</b>；9/23 起 NFA 冻结、10/31 Fees Arranged 最后期限（详见「重要日期速查」）。</li>
             <li><b>Co-op 收入对冲：</b> 工签为带薪，可显著抵消生活成本（工程类月薪常见 CAD 3,500–5,000），但工签 term 仍可能计少量学费。</li>
           </ul>
-          <div class="box-callout"><b>预算口径：</b> 总支出 ≈ 学费 + 杂费 + 生活费（KW 合租 + 自炊约 CAD 15,000–22,000/年）。国际生学签需证明「首年学费 + 约 CAD 20,000 生活费」的资金能力。</div>
+          <div class="box-callout"><b><span lang="en">Budget basis:</span><span lang="zh">预算口径：</span></b>
+            <span lang="en"> total spend ≈ tuition + incidental fees + living costs (shared housing in KW with home cooking, about CAD 15,000–22,000/year). For a study permit, international students must show they can fund first-year tuition plus roughly CAD 20,000 of living costs.</span>
+            <span lang="zh"> 总支出 ≈ 学费 + 杂费 + 生活费（KW 合租 + 自炊约 CAD 15,000–22,000/年）。国际生学签需证明「首年学费 + 约 CAD 20,000 生活费」的资金能力。</span>
+          </div>
           <div class="link-row">
-            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener">UW Finance · 学费与杂费 ↗</a>
-            <a href="https://uwaterloo.ca/finance/tuition-fee-estimator" target="_blank" rel="noopener">Tuition Estimator ↗</a>
-            <a href="https://uhip.ca/" target="_blank" rel="noopener">UHIP 官网 ↗</a>
+            <a href="https://uwaterloo.ca/finance/" target="_blank" rel="noopener"><span lang="en">UW Finance · tuition &amp; fees ↗</span><span lang="zh">UW Finance · 学费与杂费 ↗</span></a>
+            <a href="https://uwaterloo.ca/finance/tuition-fee-estimator" target="_blank" rel="noopener"><span lang="en">Tuition Estimator ↗</span><span lang="zh">Tuition Estimator ↗</span></a>
+            <a href="https://uhip.ca/" target="_blank" rel="noopener"><span lang="en">UHIP official site ↗</span><span lang="zh">UHIP 官网 ↗</span></a>
           </div>
         </section>
 
         <!-- ⑪ 踩坑记录 / 更新日志 -->
-        <section id="log" data-toc="踩坑记录 / 更新日志">
-          <h2>⑪ 踩坑记录 / 更新日志</h2>
-          <p class="sub">这是本页「活」的部分——由 <code>apps/sop/data.js</code> 里的 <code>window.SOP_LOG</code> 数组驱动。你之后在不同时间段遇到的问题，直接往数组里追加一条对象即可，无需改 HTML。</p>
-          <div id="sop-log"><p class="muted">加载中…</p></div>
-          <p class="log-hint">追加格式（复制一条改内容，加在数组里）：<br>
-          <code>{ date:"YYYY-MM-DD", tag:"分类", title:"一句话", body:"详情，可多句" }</code><br>
-          📖 完整字段说明、新增章节的做法与红线见 <a href="https://github.com/HairuoLiu/waterloo-toolkit/blob/master/apps/sop/AGENT_GUIDE.md" target="_blank" rel="noopener">AGENT_GUIDE.md（给 AI 的贡献规范）</a>。</p>
+        <section id="log" data-toc="踩坑记录 / 更新日志" data-toc-key="sop.toc.log">
+          <h2 data-i18n="sop.h.log">⑪ Pitfalls log / update history</h2>
+          <p class="sub">
+            <span lang="en">This is the "living" part of the page — driven by the <code>window.SOP_LOG</code> array in <code>apps/sop/data.js</code>. When you hit a problem later, just append an object to the array; no HTML changes needed.</span>
+            <span lang="zh">这是本页「活」的部分——由 <code>apps/sop/data.js</code> 里的 <code>window.SOP_LOG</code> 数组驱动。你之后在不同时间段遇到的问题，直接往数组里追加一条对象即可，无需改 HTML。</span>
+          </p>
+          <div id="sop-log"><p class="muted">Loading…</p></div>
+          <p class="log-hint">
+            <span lang="en">Append format (copy one entry, change the content, add it to the array):<br>
+            <code>{ date:"YYYY-MM-DD", tag:"category", title:"one-line title", body:"details, multiple sentences allowed" }</code><br>
+            📖 Full field reference, how to add a section, and the red lines are in <a href="https://github.com/HairuoLiu/waterloo-toolkit/blob/master/apps/sop/AGENT_GUIDE.md" target="_blank" rel="noopener">AGENT_GUIDE.md (AI contribution guide)</a>.</span>
+            <span lang="zh">追加格式（复制一条改内容，加在数组里）：<br>
+            <code>{ date:"YYYY-MM-DD", tag:"分类", title:"一句话", body:"详情，可多句" }</code><br>
+            📖 完整字段说明、新增章节的做法与红线见 <a href="https://github.com/HairuoLiu/waterloo-toolkit/blob/master/apps/sop/AGENT_GUIDE.md" target="_blank" rel="noopener">AGENT_GUIDE.md（给 AI 的贡献规范）</a>。</span>
+          </p>
         </section>
 
         <footer class="foot">
-          <p>滑铁卢入学 SOP · 编制 2026-09-02 · 本页为持续更新的活 Wiki（数据见 apps/sop/data.js）<br>
+          <p lang="en">Waterloo Onboarding SOP · compiled 2026-09-02 · this page is a continuously updated living wiki (data in apps/sop/data.js)<br>
+          Content is general onboarding guidance; always defer to what the university (uwaterloo.ca) and the immigration authority (IRCC) publish for the current year. Hit a new pitfall? Add it to the pitfalls log.</p>
+          <p lang="zh">滑铁卢入学 SOP · 编制 2026-09-02 · 本页为持续更新的活 Wiki（数据见 apps/sop/data.js）<br>
           内容为通用入学流程指引，具体以学校（uwaterloo.ca）与移民局（IRCC）当年官方要求为准。遇到新坑，欢迎追加到「踩坑记录」。</p>
         </footer>
       </div>
@@ -512,6 +691,9 @@
 
   <div class="toast" id="toast" hidden></div>
 
+  <script src="../../assets/i18n.js"></script>
+  <script src="../../assets/i18n/sop.js"></script>
+  <script>UW_I18N.mountToggle(); UW_I18N.apply(document);</script>
   <script src="data.js"></script>
   <script src="app.js"></script>
 </body>

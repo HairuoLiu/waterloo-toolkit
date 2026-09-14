@@ -29,20 +29,37 @@
   /* 缓存当前语言 */
   var current = detectLang();
 
-  /* ---------- 安全包装：localStorage ---------- */
-  function lsGet() {
-    try { return window.localStorage.getItem(STORAGE_KEY); }
+  /* ---------- 安全包装：localStorage ----------
+     说明：浏览器里 window.localStorage 与裸 localStorage 等价；但在测试桩 /
+     部分嵌入环境里只有裸全局能用，因此两者都取，优先 window。 */
+  function store() {
+    try { return (window && window.localStorage) ? window.localStorage : null; }
     catch (e) { return null; }
   }
+  function lsGet() {
+    try {
+      var s = store();
+      if (s) return s.getItem(STORAGE_KEY);
+      if (typeof localStorage !== 'undefined' && localStorage) return localStorage.getItem(STORAGE_KEY);
+    } catch (e) {}
+    return null;
+  }
   function lsSet(v) {
-    try { window.localStorage.setItem(STORAGE_KEY, v); }
-    catch (e) { /* 被禁用时静默 */ }
+    try {
+      var s = store();
+      if (s) { s.setItem(STORAGE_KEY, v); return; }
+      if (typeof localStorage !== 'undefined' && localStorage) localStorage.setItem(STORAGE_KEY, v);
+    } catch (e) { /* 被禁用时静默 */ }
   }
 
   /* ---------- 语言判定：URL ?lang= → localStorage → 默认 en ---------- */
   function queryLang() {
     try {
-      var p = new URLSearchParams(window.location.search);
+      var search = '';
+      if (window && window.location && window.location.search) search = window.location.search;
+      else if (typeof location !== 'undefined' && location && location.search) search = location.search;
+      if (!search) return null;
+      var p = new URLSearchParams(search);
       var v = p.get('lang');
       if (v === 'en' || v === 'zh') return v;
     } catch (e) {}
@@ -106,14 +123,19 @@
     return key;
   }
 
-  /* 双语数据字段取值：当前语言字段 → 另一语言字段 → 空串
-     约定字段名：field_en / field_zh（与 manifest.json 的 title_zh/title_en 一致） */
+  /* 双语数据字段取值：当前语言字段 → 无后缀原字段 → 另一语言字段 → 空串
+     两种历史约定都支持：
+       ① field_en / field_zh 都齐（manifest.json 风格）
+       ② 原字段为默认语言（多为中文）+ field_en（data.js 风格，如 sop 的 tag/title/body）
+     第 ② 种下若直接跳到「另一语言」，中文模式会错误显示英文，因此无后缀字段必须插在中间。 */
   function pick(obj, field) {
     if (!obj || typeof obj !== 'object') return '';
     var curKey = current === 'en' ? field + '_en' : field + '_zh';
     var othKey = current === 'en' ? field + '_zh' : field + '_en';
     var cur = obj[curKey];
     if (cur != null && String(cur) !== '') return cur;
+    var plain = obj[field];
+    if (plain != null && String(plain) !== '') return plain;
     var oth = obj[othKey];
     if (oth != null && String(oth) !== '') return oth;
     return '';

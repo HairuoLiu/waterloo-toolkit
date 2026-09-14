@@ -1,82 +1,141 @@
-// 滑铁卢入学 SOP · Wiki 版交互
+// 滑铁卢入学 SOP · Wiki 版交互（i18n 版）
 // 1) 渲染「踩坑记录」  2) 生成左侧目录  3) 全文搜索 + 命中高亮
 // 4) 滚动联动高亮当前章节  5) 全站统一的分享/复制
+// 6) 双语：界面串走 UW_I18N.t；数据字段走 pick(obj, base)（base_zh / base_en）；
+//    正文用内联 <span lang="zh|en"> 并列，搜索时自动跳过「另一语言」的分支。
 // 注：刻意不用 TreeWalker —— 手写递归遍历文本节点，保证在 linkedom 等 DOM 实现里也能跑。
 (function () {
   'use strict';
 
-  function $(id) { return document.getElementById(id); }
+  /* ============ 0. i18n 助手 ============ */
   function lower(s) { return String(s || '').toLowerCase(); }
   function hidden(el, v) {
     if (!el) return;
     if (v) { el.setAttribute('hidden', ''); el.style.display = 'none'; }
     else { el.removeAttribute('hidden'); el.style.display = ''; }
   }
+  function T(key, fallback) {
+    if (window.UW_I18N && UW_I18N.t) return UW_I18N.t(key, fallback);
+    return (fallback != null) ? fallback : key;
+  }
+  function curLang() {
+    return (window.UW_I18N && UW_I18N.get) ? UW_I18N.get() : 'en';
+  }
+  // 双语数据字段取值，顺序：当前语言 → 无后缀原字段 → 另一语言。
+  // 注意「无后缀原字段」必须排在「另一语言」之前：本仓库 data.js 多为
+  // 「原字段=中文 + *_en=英文」的约定，否则中文模式会错误地显示英文。
+  // 优先复用运行时的 UW_I18N.pick（保证与全站行为一致）。
+  function pick(o, base) {
+    if (!o) return '';
+    if (window.UW_I18N && UW_I18N.pick) return UW_I18N.pick(o, base);
+    var cur = o[base + '_' + curLang()];
+    var plain = o[base];
+    var oth = o[base + (curLang() === 'en' ? '_zh' : '_en')];
+    if (cur != null && cur !== '') return cur;
+    if (plain != null && plain !== '') return plain;
+    if (oth != null && oth !== '') return oth;
+    return '';
+  }
+  function fmt(s, a, b) {
+    var parts = [a, b], i = 0;
+    return String(s).replace(/%[sd]/g, function () {
+      var v = parts[i++];
+      return (v == null) ? '' : String(v);
+    });
+  }
+  // 语言归一：'zh-CN' / 'zh' → 'zh'；'en' / 'en-US' → 'en'；其它 → ''
+  function normLang(v) {
+    var s = String(v || '').toLowerCase();
+    if (s.indexOf('zh') === 0) return 'zh';
+    if (s.indexOf('en') === 0) return 'en';
+    return '';
+  }
 
   /* ============ 1. 渲染踩坑记录 ============ */
-  var box = $('sop-log');
-  if (box) {
+  function renderLog() {
+    var box = document.getElementById('sop-log');
+    if (!box) return;
     var log = window.SOP_LOG || [];
     if (!log.length) {
-      box.innerHTML = '<p class="muted">还没有记录，遇到问题时来这里追加一条即可。</p>';
-    } else {
-      box.innerHTML = log.map(function (e) {
-        return '<div class="log-item">' +
-          '<div class="log-meta"><span class="log-date">' + (e.date || '') + '</span>' +
-          (e.tag ? '<span class="log-tag">' + e.tag + '</span>' : '') + '</div>' +
-          '<div class="log-title">' + (e.title || '') + '</div>' +
-          '<div class="log-body">' + String(e.body || '').replace(/\n/g, '<br>') + '</div>' +
-        '</div>';
-      }).join('');
+      box.innerHTML = '<p class="muted">' + T('sop.log.empty', 'No entries yet.') + '</p>';
+      return;
     }
+    box.innerHTML = log.map(function (e) {
+      return '<div class="log-item">' +
+        '<div class="log-meta"><span class="log-date">' + (e.date || '') + '</span>' +
+        (pick(e, 'tag') ? '<span class="log-tag">' + pick(e, 'tag') + '</span>' : '') + '</div>' +
+        '<div class="log-title">' + pick(e, 'title') + '</div>' +
+        '<div class="log-body">' + String(pick(e, 'body')).replace(/\n/g, '<br>') + '</div>' +
+      '</div>';
+    }).join('');
   }
 
   /* ============ 2. 生成左侧目录 ============ */
   // 只有带 data-toc 的 <section> 才会被收进目录 —— 新增章节时必须加这个属性。
+  // 双语标签：优先用 data-toc-key（对应词典 key），回退到 data-toc 原文。
   var secs = [].slice.call(document.querySelectorAll('.sop-main section[data-toc]'));
-  var toc = $('side-toc');
+  var toc = document.getElementById('side-toc');
   var links = [];
 
-  secs.forEach(function (s, i) {
-    var a = document.createElement('a');
-    a.href = '#' + s.id;
-    a.setAttribute('data-target', s.id);
+  function tocLabel(s) {
+    var key = s.getAttribute('data-toc-key');
+    var fallback = s.getAttribute('data-toc') || s.id;
+    return key ? T(key, fallback) : fallback;
+  }
 
-    var num = document.createElement('span');
-    num.className = 't-num';
-    num.textContent = String(i + 1);
+  function renderToc() {
+    if (!toc) return;
+    toc.innerHTML = '';
+    links = [];
+    secs.forEach(function (s, i) {
+      var a = document.createElement('a');
+      a.href = '#' + s.id;
+      a.setAttribute('data-target', s.id);
 
-    var lab = document.createElement('span');
-    lab.className = 't-label';
-    lab.textContent = s.getAttribute('data-toc') || s.id;
+      var num = document.createElement('span');
+      num.className = 't-num';
+      num.textContent = String(i + 1);
 
-    a.appendChild(num);
-    a.appendChild(lab);
-    toc.appendChild(a);
-    links.push(a);
+      var lab = document.createElement('span');
+      lab.className = 't-label';
+      lab.textContent = tocLabel(s);
 
-    // 搜索状态下点目录：先清空搜索，避免目标章节仍被隐藏导致跳不过去
-    a.addEventListener('click', function () {
-      var inp = $('sop-search');
-      if (inp && inp.value.trim()) { inp.value = ''; runSearch(); }
+      a.appendChild(num);
+      a.appendChild(lab);
+      toc.appendChild(a);
+      links.push(a);
+
+      // 搜索状态下点目录：先清空搜索，避免目标章节仍被隐藏导致跳不过去
+      a.addEventListener('click', function () {
+        var inp = document.getElementById('sop-search');
+        if (inp && inp.value.trim()) { inp.value = ''; runSearch(); }
+      });
     });
-  });
+  }
+  renderToc();
+  renderLog();   // ★ 初始化必须渲染踩坑记录（否则首屏只显示占位「Loading…」）
 
   /* ============ 3. 全文搜索 + 命中高亮 ============ */
-  var input = $('sop-search');
-  var clearBtn = $('sop-clear');
-  var status = $('sop-status');
+  var input = document.getElementById('sop-search');
+  var clearBtn = document.getElementById('sop-clear');
+  var status = document.getElementById('sop-status');
 
-  // 收集 root 下所有文本节点（手写递归，避免依赖 TreeWalker）
+  // 收集 root 下所有文本节点（手写递归，避免依赖 TreeWalker）。
+  // 双语正文里「另一语言」的分支整枝跳过，避免英文模式把中文段落的命中数也算进去。
   function textNodes(root) {
     var out = [];
+    var cur = curLang();
     (function walk(node) {
       var cs = node.childNodes;
       if (!cs) return;
       for (var i = 0; i < cs.length; i++) {
         var n = cs[i];
         if (n.nodeType === 3) out.push(n);
-        else if (n.nodeType === 1) walk(n);
+        else if (n.nodeType === 1) {
+          var l = n.getAttribute ? normLang(n.getAttribute('lang')) : '';
+          if (l && l !== cur) continue;   // 另一语言的分支：跳过
+          walk(n);
+        }
       }
     })(root);
     return out;
@@ -132,9 +191,12 @@
     return n;
   }
 
+  var lastQuery = '';
+
   function runSearch() {
     var q = (input.value || '').trim();
     var needle = lower(q);
+    lastQuery = needle;
     hidden(clearBtn, !q);
 
     if (!needle) { resetSearch(); return; }
@@ -147,6 +209,7 @@
       if (has) hitSecs++;
 
       var a = links[idx];
+      if (!a) return;
       var badge = a.querySelector('.t-count');
       if (has) {
         if (!badge) {
@@ -166,9 +229,9 @@
 
     var total = visibleMarks();
     hidden(status, false);
-    status.textContent = total
-      ? '🔍 ' + total + ' 处匹配 · ' + hitSecs + ' 个章节'
-      : '无匹配内容';
+status.textContent = total
+    ? fmt(T('sop.status.hits', '🔍 %d matches · %d sections'), total, hitSecs)
+    : T('sop.status.none', 'No matches');
     spy();
   }
 
@@ -251,7 +314,7 @@
 
   /* ============ 5. 分享 / 复制链接（全站统一行为） ============ */
   function toast(m) {
-    var t = $('toast'); if (!t) return;
+    var t = document.getElementById('toast'); if (!t) return;
     t.textContent = m;
     hidden(t, false);
     if (toast._t) clearTimeout(toast._t);
@@ -267,10 +330,19 @@
     document.body.removeChild(ta);
     return Promise.resolve();
   }
-  var sb = $('share-btn');
+  var sb = document.getElementById('share-btn');
   if (sb) sb.addEventListener('click', function () {
     var d = { title: document.title, text: document.title, url: location.href };
     if (navigator.share) { navigator.share(d).catch(function () {}); }
-    else { copy(location.href).then(function () { toast('链接已复制，去分享吧'); }); }
+    else { copy(location.href).then(function () { toast(T('sop.toast.share', 'Link copied')); }); }
   });
+
+  /* ============ 6. 语言切换：重渲染目录标签与踩坑记录，并保持搜索结果 ============ */
+  function relocalize() {
+    renderToc();
+    renderLog();
+    if (input && input.value.trim()) runSearch();
+    else { resetSearch(); spy(); }
+  }
+  if (window.UW_I18N && UW_I18N.onChange) UW_I18N.onChange(relocalize);
 })();

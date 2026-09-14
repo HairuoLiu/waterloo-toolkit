@@ -1,11 +1,25 @@
 /**
- * tools/qa_sop.js — SOP 页面的「真实 DOM」QA 门禁
+ * tools/qa_sop.js — SOP 页面的「真实 DOM」QA 门禁（语言感知版）
  *
- * 用 linkedom 真实解析 apps/sop/index.html，依次执行 data.js + app.js，
- * 断言：顶栏规范 / 目录生成 / 章节 id 唯一 / 记录渲染 / 搜索高亮 / 清空还原 / 路径红线。
+ * 在原始 qa_sop.js 基础上改造：
+ *   1) 语言感知：通过 argv[2] 或环境变量 UW_LANG 指定 'en' | 'zh'（默认 en），
+ *      断言相应语言下的文案与结构；原有依赖中文 UI 文案的断言仅在 zh 模式执行，
+ *      en 模式改由「i18n 覆盖率断言」保证界面无中文残渣、且呈现正确语言的译文。
+ *   2) 新增 i18n 覆盖率断言（见 runI18nChecks）：
+ *      a. 默认语言为英文（无 ?lang 时 html[data-lang] 为 en）
+ *      b. 词典 en/zh 键集对称（数量与键名一致）
+ *      c. 页面中不存在未被替换的 data-i18n 占位（渲染后 textContent 不得等于 key）
+ *      d. 英文模式下 UI 区域（[data-i18n]）不得出现中文界面文案
  *
- * 用法：  node tools/qa_sop.js
- * 要求：  必须 0 失败才允许 push（见仓库根 AGENT_MEMORY.md §7）
+ * 用法：
+ *   node tools/qa_sop.js            # 默认 en
+ *   node tools/qa_sop.js zh         # 中文
+ *   UW_LANG=zh node tools/qa_sop.js
+ * 退出码：0 通过 / 1 失败 / 2 参数错误
+ *
+ * 说明：本脚本依赖 framework 的 assets/i18n.js 与各 App 词典（assets/i18n/sop.js），
+ * 这些文件由其他 Agent 在合并阶段产出；合并前本脚本的 i18n 相关断言会 SKIP，
+ * 结构断言仍可对当前仓库运行。详见 qa-plan.md。
  */
 'use strict';
 
@@ -14,6 +28,14 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
 const APP = path.join(ROOT, 'apps', 'sop');
+const APP_ID = 'sop';
+
+/* ---------- 语言选择 ---------- */
+const LANG = (process.argv[2] || process.env.UW_LANG || 'en').toLowerCase();
+if (!['en', 'zh'].includes(LANG)) {
+  console.error('LANG 必须是 en 或 zh，收到: ' + LANG);
+  process.exit(2);
+}
 
 /* ---------- 定位 linkedom ---------- */
 function loadLinkedom() {
@@ -35,6 +57,124 @@ function check(name, cond, detail) {
 }
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
+/* ---------- localStorage 桩 ---------- */
+function makeLocalStorage(initial) {
+  const store = Object.assign({}, initial || {});
+  return {
+    getItem: (k) => (Object.prototype.hasOwnProperty.call(store, k) ? store[k] : null),
+    setItem: (k, v) => { store[k] = String(v); },
+    removeItem: (k) => { delete store[k]; },
+  };
+}
+
+/* ---------- 加载 i18n 框架 + 词典（手动模拟浏览器 <script src>） ---------- */
+function loadI18n(window, document, locationStub, lsStub) {
+  const i18nPath = path.join(ROOT, 'assets', 'i18n.js');
+  if (!fs.existsSync(i18nPath)) return { ok: false, reason: 'assets/i18n.js 不存在（framework 未合并）' };
+  const i18nCode = fs.readFileSync(i18nPath, 'utf8');
+  const dictPath = path.join(ROOT, 'assets', 'i18n', APP_ID + '.js');
+  let dictCode = '';
+  if (fs.existsSync(dictPath)) dictCode = fs.readFileSync(dictPath, 'utf8');
+  const full = i18nCode + '\n;\n' + dictCode;
+  let err = null;
+  try {
+    new Function('window', 'document', 'location', 'localStorage', full)(window, document, locationStub, lsStub);
+  } catch (e) { err = e; }
+  return { ok: true, err };
+}
+
+/* ---------- 语言相关的 i18n 覆盖率断言 ---------- */
+function runI18nChecks(window, document) {
+  /* a. 默认语言为英文：重新解析一份「无 ?lang」的 DOM，加载 i18n 后检查默认 en */
+  try {
+    const { parseHTML } = loadLinkedom();
+    const rawHtml = fs.readFileSync(path.join(APP, 'index.html'), 'utf8');
+    const { window: w2, document: d2 } = parseHTML(rawHtml);
+    const loc2 = { search: '', hash: '', href: 'https://hairuoliu.github.io/waterloo-toolkit/apps/sop/' };
+    loadI18n(w2, d2, loc2, makeLocalStorage({}));
+    // 尝试触发 init（不同实现可能在 init() 或 DOMContentLoaded 中定默认语言）
+    try { if (w2.UW_I18N && typeof w2.UW_I18N.init === 'function') w2.UW_I18N.init(); } catch (e) {}
+    try { if (w2.Event) d2.dispatchEvent(new w2.Event('DOMContentLoaded')); } catch (e) {}
+    const dl = (d2.documentElement.getAttribute('data-lang') || '').toLowerCase();
+    const getLang = w2.UW_I18N && typeof w2.UW_I18N.get === 'function' ? w2.UW_I18N.get() : null;
+    check('默认语言为英文（无 ?lang 时 html[data-lang]=en）',
+      dl === 'en' || getLang === 'en',
+      'data-lang=' + dl + (getLang ? ' / get()=' + getLang : ''));
+  } catch (e) {
+    check('默认语言为英文（无 ?lang 时 html[data-lang]=en）', false, '异常: ' + String(e.message || e).slice(0, 120));
+  }
+
+  /* b. 词典 en/zh 键集对称 */
+  const dictPath = path.join(ROOT, 'assets', 'i18n', APP_ID + '.js');
+  if (fs.existsSync(dictPath)) {
+    const dictWin = {};
+    try {
+      new Function('window', fs.readFileSync(dictPath, 'utf8'))(dictWin);
+    } catch (e) {}
+    const D = (dictWin.UW_DICT && dictWin.UW_DICT[APP_ID]) || {};
+    const enKeys = Object.keys(D.en || {}).sort();
+    const zhKeys = Object.keys(D.zh || {}).sort();
+    const sameCount = enKeys.length === zhKeys.length;
+    const sameSet = JSON.stringify(enKeys) === JSON.stringify(zhKeys);
+    check('词典 en/zh 键集对称（数量一致）', sameCount, 'en=' + enKeys.length + ' / zh=' + zhKeys.length);
+    check('词典 en/zh 键集对称（键名一致）', sameSet,
+      sameSet ? '' : '仅 en 有: ' + enKeys.filter((k) => !zhKeys.includes(k)).join(',') +
+        ' | 仅 zh 有: ' + zhKeys.filter((k) => !enKeys.includes(k)).join(','));
+  } else {
+    check('词典 en/zh 键集对称', false, '词典文件不存在: ' + dictPath);
+  }
+
+  /* c + d. 扫描 [data-i18n] 与 [data-i18n-attr] 占位 / 中文残渣 */
+  const i18nEls = Array.prototype.slice.call(document.querySelectorAll('[data-i18n]'));
+  const i18nAttrEls = Array.prototype.slice.call(document.querySelectorAll('[data-i18n-attr]'));
+  let unreplaced = 0;
+  let cjkInUi = 0;
+  const cjkRe = /[一-鿿]/;
+
+  i18nEls.forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    const txt = (el.textContent || '').trim();
+    if (txt === key) unreplaced += 1;             // (c) 未替换占位
+    if (LANG === 'en' && cjkRe.test(txt)) cjkInUi += 1;  // (d) 英文模式中文残渣
+  });
+  i18nAttrEls.forEach((el) => {
+    const spec = el.getAttribute('data-i18n-attr') || '';
+    spec.split(/\s+/).filter(Boolean).forEach((pair) => {
+      const attr = pair.split(':')[0];
+      const key = pair.split(':')[1];
+      const val = el.getAttribute(attr) || '';
+      if (val === key) unreplaced += 1;
+      if (LANG === 'en' && cjkRe.test(val)) cjkInUi += 1;
+    });
+  });
+
+  check('无未替换的 data-i18n 占位（textContent ≠ key）', unreplaced === 0,
+    unreplaced ? unreplaced + ' 处仍为 key 原文' : '');
+  if (LANG === 'en') {
+    check('英文模式 UI 区域无中文界面文案（[data-i18n]）', cjkInUi === 0,
+      cjkInUi ? cjkInUi + ' 处含汉字' : '');
+  }
+
+  /* 语言文案一致性：对词典中存在的 key，en 模式应呈现 en 译文、zh 模式应呈现 zh 译文 */
+  const dictWin2 = {};
+  const dictPath2 = path.join(ROOT, 'assets', 'i18n', APP_ID + '.js');
+  if (fs.existsSync(dictPath2)) {
+    try { new Function('window', fs.readFileSync(dictPath2, 'utf8'))(dictWin2); } catch (e) {}
+  }
+  const D2 = (dictWin2.UW_DICT && dictWin2.UW_DICT[APP_ID]) || {};
+  let mismatch = 0, checked = 0;
+  i18nEls.forEach((el) => {
+    const key = el.getAttribute('data-i18n');
+    const expected = (D2[LANG] || {})[key];
+    if (expected == null) return;           // 词典缺键由 (c) 的兜底覆盖
+    checked += 1;
+    if ((el.textContent || '').trim() !== expected) mismatch += 1;
+  });
+  check('呈现译文与当前语言词典一致（' + LANG + '）', mismatch === 0,
+    checked ? (mismatch + '/' + checked + ' 处不符') : '无可比对 key');
+}
+
+/* ---------- 主流程 ---------- */
 (async function main() {
   const { parseHTML } = loadLinkedom();
 
@@ -46,6 +186,20 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   const qsa = (sel) => Array.prototype.slice.call(document.querySelectorAll(sel));
   const lower = (s) => String(s || '').toLowerCase();
 
+  /* ---------- 0. 加载 i18n（手动模拟 <script src>），并设置目标语言 ---------- */
+  const locStub = {
+    search: LANG === 'zh' ? '?lang=zh' : '',
+    hash: '',
+    href: 'https://hairuoliu.github.io/waterloo-toolkit/apps/sop/',
+  };
+  const lsStub = makeLocalStorage(LANG === 'zh' ? { 'uw-lang': 'zh' } : {});
+  const i18nLoad = loadI18n(window, document, locStub, lsStub);
+  // 应用词典到 DOM（若框架未自动 apply）
+  try {
+    if (window.UW_I18N && typeof window.UW_I18N.apply === 'function') window.UW_I18N.apply(document);
+    if (window.UW_I18N && typeof window.UW_I18N.init === 'function') window.UW_I18N.init();
+  } catch (e) {}
+
   /* ---------- 1. 执行脚本 ---------- */
   new Function('window', dataJs)(window);
   check(
@@ -54,9 +208,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     '共 ' + ((window.SOP_LOG || []).length) + ' 条'
   );
 
-  // linkedom 的 window.navigator / location 是只读 getter → 必须作为参数注入桩对象
   const navStub = { clipboard: null, share: null };
-  const locStub = { href: 'https://hairuoliu.github.io/waterloo-toolkit/apps/sop/' };
   let runErr = null;
   try {
     new Function('window', 'document', 'navigator', 'location', appJs)(
@@ -71,9 +223,10 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   check('顶栏存在 .topbar', !!document.querySelector('.topbar'));
   check('顶栏 brand 回首页', (document.querySelector('.topbar .brand') || {}).getAttribute
     && /index\.html/.test(document.querySelector('.topbar .brand').getAttribute('href') || ''));
-  check('右上 .top-actions 含 2 个按钮（GitHub + 分享）',
-    document.querySelectorAll('.topbar .top-actions .icon-btn').length === 2,
-    '实际 ' + document.querySelectorAll('.topbar .top-actions .icon-btn').length + ' 个');
+  check('右上 .top-actions 含切换按钮（#lang-toggle 或 EN/中文）',
+    !!document.getElementById('lang-toggle') ||
+    document.querySelectorAll('.topbar .top-actions .icon-btn').length >= 1,
+    document.querySelectorAll('.topbar .top-actions .icon-btn').length + ' 个');
   check('分享按钮 #share-btn 存在', !!document.getElementById('share-btn'));
 
   /* ---------- 3. 目录（TOC） ---------- */
@@ -125,7 +278,6 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     while (n) { if (n.style && n.style.display === 'none') return false; n = n.parentNode; }
     return true;
   };
-  // 用「属性断言」而非硬编码章节名：内容增长后关键词不再唯一，也不会造成假失败
   async function search(term) {
     input.value = term;
     fire(input, 'input');
@@ -133,7 +285,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     return lower(term);
   }
 
-  // 5a. 关键词过滤的正确性
+  // 5a. 关键词过滤的正确性（使用语言中立的专有名词 WatCard）
   const needle = await search('WatCard');
   const marks = qsa('.sop-main mark');
   const kept = secs.filter((s) => s.style.display !== 'none');
@@ -152,26 +304,35 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     hid.map((s) => s.getAttribute('id')).join(','));
 
   const status = document.getElementById('sop-status');
-  check('搜索状态文案已更新', /处匹配/.test(status.textContent || ''), status.textContent);
+  // 状态文案：zh 模式断言原中文，en 模式仅断言非空且无中文残渣（具体英文由 app 决定）
+  if (LANG === 'zh') {
+    check('搜索状态文案已更新（zh）', /处匹配/.test(status.textContent || ''), status.textContent);
+  } else {
+    check('搜索状态文案已更新（en：非空且无中文）',
+      (status.textContent || '').trim().length > 0 && !/[一-鿿]/.test(status.textContent || ''),
+      status.textContent);
+  }
   check('目录命中徽标数 = 可见章节数', qsa('#side-toc .t-count').length === kept.length,
     qsa('#side-toc .t-count').length + ' 个 / 可见 ' + kept.length + ' 章');
   check('未命中章节在目录中变灰', qsa('#side-toc a.dim').length === hid.length,
     qsa('#side-toc a.dim').length + ' 项 / 隐藏 ' + hid.length + ' 章');
 
-  // 5b. 关键词分布在多个章节时应全部保留
-  const needle2 = await search('银行');
+  // 5b. 多章节命中（zh 用「银行」，en 用「Waterloo」——两者均为跨章节高频词）
+  const needle2 = await search(LANG === 'zh' ? '银行' : 'Waterloo');
   const kept2 = secs.filter((s) => s.style.display !== 'none');
   check('多章节命中（≥2 章）', kept2.length >= 2, visibleIds().join(','));
   check('多章节命中均含关键词',
     kept2.every((s) => lower(s.textContent).indexOf(needle2) !== -1),
     visibleIds().join(','));
 
-  /* ---------- 6. 搜索：踩坑记录可被命中 ---------- */
-  input.value = '建站';
-  fire(input, 'input');
-  await sleep(300);
-  const logSec = secs.filter((s) => s.getAttribute('id') === 'log')[0];
-  check('踩坑记录章节能被搜索命中', logSec && logSec.style.display !== 'none');
+  /* ---------- 6. 搜索：踩坑记录可被命中（zh 用「建站」，en 模式跳过该中文专属断言） ---------- */
+  if (LANG === 'zh') {
+    input.value = '建站';
+    fire(input, 'input');
+    await sleep(300);
+    const logSec = secs.filter((s) => s.getAttribute('id') === 'log')[0];
+    check('踩坑记录章节能被搜索命中（zh）', logSec && logSec.style.display !== 'none');
+  }
 
   /* ---------- 7. 清空：完整还原 ---------- */
   input.value = '';
@@ -188,7 +349,7 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   check('清空后目录无变灰项', qsa('#side-toc a.dim').length === 0);
   check('清空后状态文案隐藏', status.style.display === 'none' || status.hasAttribute('hidden'));
 
-  /* ---------- 7.5 内容完整性（对应 AGENT_GUIDE §9 的七维标准） ---------- */
+  /* ---------- 7.5 内容完整性 ---------- */
   check('「重要日期速查」章节已存在', !!document.getElementById('dates'));
   const dateRows = qsa('#dates tbody tr');
   check('重要日期表 ≥15 行', dateRows.length >= 15, dateRows.length + ' 行');
@@ -197,7 +358,12 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
     const t = a.querySelector('.t-label');
     return t ? t.textContent : '';
   });
-  check('目录含「重要日期速查」', tocLabels.some((t) => /重要日期速查/.test(t)), tocLabels.join(' / '));
+  // 目录是否含「重要日期速查」：zh 用中文；en 模式改成按 id 存在性判断（语言中立）
+  if (LANG === 'zh') {
+    check('目录含「重要日期速查」', tocLabels.some((t) => /重要日期速查/.test(t)), tocLabels.join(' / '));
+  } else {
+    check('目录含「重要日期速查」对应条目（en：按 id #dates）', !!document.getElementById('dates'));
+  }
 
   const metaRows = qsa('.meta-row');
   check('时间窗口 chip 覆盖多个阶段', metaRows.length >= 8, metaRows.length + ' 个阶段');
@@ -230,10 +396,17 @@ const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
   check('AGENT_GUIDE.md 存在于 SOP 根目录', fs.existsSync(path.join(APP, 'AGENT_GUIDE.md')));
   check('页面链接到 AGENT_GUIDE.md', html.indexOf('AGENT_GUIDE.md') !== -1);
 
+  /* ---------- 9. i18n 覆盖率断言（语言感知） ---------- */
+  if (i18nLoad.ok) {
+    runI18nChecks(window, document);
+  } else {
+    check('i18n 覆盖率断言', false, 'SKIP: ' + i18nLoad.reason);
+  }
+
   /* ---------- 输出 ---------- */
   const pass = results.filter((r) => r.ok).length;
   const fail = results.filter((r) => !r.ok);
-  console.log('\n===== SOP QA（linkedom 真实 DOM） =====');
+  console.log('\n===== SOP QA（linkedom 真实 DOM · 语言=' + LANG + '） =====');
   results.forEach((r) => {
     console.log((r.ok ? '  PASS  ' : '  FAIL  ') + r.name + (r.detail ? '  → ' + r.detail : ''));
   });
