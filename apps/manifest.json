@@ -7,6 +7,7 @@
     "desc_en": "Step-by-step Waterloo onboarding SOP wiki: pre-arrival, arrival, enrollment, academic life + a living pitfall log.",
     "icon": "🧭",
     "category": "新生攻略",
+    "category_en": "Onboarding",
     "path": "apps/sop/",
     "cover": "apps/sop/cover.svg",
     "featured": true,
@@ -20,6 +21,7 @@
     "desc_en": "One thing to do each day, with action tips. Copy-ready for group chat.",
     "icon": "📅",
     "category": "日程提醒",
+    "category_en": "Schedule",
     "path": "apps/daily-reminder/",
     "cover": "apps/daily-reminder/cover.svg"
   },
@@ -31,6 +33,7 @@
     "desc_en": "Plan ECE MEng courses & co-op: 4 tracks, 112 courses, a course map.",
     "icon": "📚",
     "category": "选课",
+    "category_en": "Courses",
     "path": "apps/course-planner/",
     "cover": "apps/course-planner/cover.svg"
   },
@@ -42,6 +45,7 @@
     "desc_en": "Top-50 weekday temporary stays near Waterloo for Toronto commuters + negotiation playbook.",
     "icon": "🏠",
     "category": "生活",
+    "category_en": "Campus Life",
     "path": "apps/weekday-stay/",
     "cover": "apps/weekday-stay/cover.svg"
   },
@@ -53,6 +57,7 @@
     "desc_en": "Campus locker map: location, price, term vs day-use, own padlock.",
     "icon": "🔒",
     "category": "生活",
+    "category_en": "Campus Life",
     "path": "apps/locker-finder/",
     "cover": "apps/locker-finder/cover.svg"
   },
@@ -64,6 +69,7 @@
     "desc_en": "AI-powered glance at Waterloo Works postings — a Chrome extension (install in browser).",
     "icon": "🔎",
     "category": "求职辅助",
+    "category_en": "Job Search",
     "path": "apps/goose-glance/",
     "cover": "apps/goose-glance/cover.svg"
   }

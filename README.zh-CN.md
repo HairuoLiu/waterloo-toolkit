@@ -21,7 +21,8 @@
 
 ### R1 · 首页必须同步（清单 = 首页的唯一真相源）
 
-1. 新增 / 改名 / 删除子 App ⇒ **必须**同步 `apps/manifest.json`，且 `id / title_zh / title_en / desc_zh / desc_en / icon / category / path / cover` 九个字段都要填对。
+1. 新增 / 改名 / 删除子 App ⇒ **必须**同步 `apps/manifest.json`，且 `id / title_zh / title_en / desc_zh / desc_en / icon / category / category_en / path / cover` **十个**字段都要填对。
+   - `category_en` 为必填：站点**默认英文**，首页 `catOf()` 先读 `category_en`。漏填会在英文界面上静默回退成中文。
 2. 首页**不得**硬编码任何工具列表；所有改动落到 manifest，由 `index.html` 自动渲染。
 3. 改了 App 的功能定位、核心用法或数据范围 ⇒ **必须同时更新 manifest 的 `desc_zh` / `desc_en`**，让首页卡片的描述与真实能力一致。
 4. 每条 `desc` 都要讲清**核心概要**：解决谁的什么问题、怎么用一句话说完。禁止只写「XX 工具」这种空话。
@@ -50,6 +51,7 @@
 
 - [ ] `apps/manifest.json` 已同步（含双语标题与描述）
 - [ ] `cover.svg` 由 `gen_cover.py` 重新生成，且 `cover` 字段已写入 manifest
+- [ ] 封面**语言中立**：`--title` 传 `title_en`、`--category` 传 `category_en`，封面内**零中文**（站点默认英文）
 - [ ] `apps/<app-id>/README.md` 存在，且与实际行为一致
 - [ ] 本 README 的「现有子 App」表格已更新（含核心概要）
 - [ ] 本地 `python -m http.server 8080` 预览：首页卡片出现、无 404、中英切换正常
@@ -116,12 +118,13 @@ waterloo-toolkit/
 ```json
 {
   "id": "daily-reminder",        // = 文件夹名，全小写 kebab-case
-  "title_zh": "研究生每日提醒",    // 中文标题（卡片与封面主标题用）
-  "title_en": "Grad Daily Reminder",
+  "title_zh": "研究生每日提醒",    // 中文标题（中文模式卡片用）
+  "title_en": "Grad Daily Reminder",  // 英文标题（默认显示；同时是封面主标题）
   "desc_zh": "每天挑出一件最该做的事，带行动建议，可一键复制发群。",
   "desc_en": "One thing to do each day, with action tips.",
   "icon": "📅",                   // 无封面时的兜底图标
-  "category": "日程提醒",          // 分类标签（卡片药丸 + 封面药丸 + 决定 accent 配色）
+  "category": "日程提醒",          // 分类标签（中文模式卡片药丸）
+  "category_en": "Schedule",      // ★ 英文分类（默认显示；同时是封面药丸）
   "path": "apps/daily-reminder/",  // 相对根的路径，以 / 结尾
   "cover": "apps/daily-reminder/cover.svg"  // 封面图路径（gen_cover.py 自动补）
 }
@@ -149,11 +152,13 @@ waterloo-toolkit/
 python assets/gen_cover.py \
   --id daily-reminder \
   --emoji "📅" \
-  --category "日程提醒" \
-  --title "研究生每日提醒" \
-  --desc "每天挑出一件最该做的事，带行动建议，可一键复制发群。" \
+  --category "Reminders" \
+  --title "Daily Reminder" \
+  --desc "One thing that matters most each day, with an action tip." \
   --app-path "apps/daily-reminder"
 ```
+
+> ⚠️ **封面必须语言中立：只用英文。** 站点默认英文，封面的 `category` / `title` / `desc` 一律传 manifest 里的 **英文值**（`category_en` / `title_en` / 一句英文概述）。中文封面放在英文卡片上会显得破损。脚本内置护栏：检测到输出含中文会打印 `[warn]`。
 效果：
 - 写出 `apps/<id>/cover.svg`（1200×630）
 - **自动**在 `apps/manifest.json` 对应条目补上 `"cover": "apps/<id>/cover.svg"`
@@ -166,8 +171,8 @@ python assets/gen_cover.py \
 | 参数 | 含义 | 限制 |
 |------|------|------|
 | `emoji` | 工具图标，显示在左上角圆角徽章 | 一个 emoji |
-| `category` | 分类标签，显示在图标右侧药丸 | 自由填；决定自动配色 |
-| `title` | 工具中文标题（封面主标题） | **≤13 字/行，最多 2 行**，超出自动截断加 … |
+| `category` | 分类标签，显示在图标右侧药丸 | **只能英文**（`category_en`）；决定自动配色 |
+| `title` | 工具**英文**标题（封面主标题） | **只能英文**（`title_en`）；≤20 字符/行，最多 2 行，超出自动截断加 … |
 | `desc` | 一句话说明 | **≤26 字/行，最多 3 行**，超出自动截断加 … |
 | `app-path` | 工具在站内的路径 | 如 `apps/daily-reminder` |
 | `accent` | 主题色（徽章/药丸/装饰图形） | 不填则按 category 取 |
@@ -210,8 +215,8 @@ python assets/gen_cover.py \
 
 > 用户说「在工具箱里加个 XXX」时，照做：
 > 1. `mkdir apps/<xxx-id>`（kebab-case）→ 写 `index.html`（引用 `../../assets/style.css`）。
-> 2. 在 `apps/manifest.json` 数组追加一条（含 `id/title_zh/title_en/desc_zh/desc_en/icon/category/path`）。
-> 3. `python assets/gen_cover.py --id <xxx-id> --emoji … --category … --title … --desc … --app-path apps/<xxx-id>`（自动写 cover + 改 manifest）。
+> 2. 在 `apps/manifest.json` 数组追加一条（含 `id/title_zh/title_en/desc_zh/desc_en/icon/category/category_en/path`）。
+> 3. `python assets/gen_cover.py --id <xxx-id> --emoji … --category <category_en> --title <title_en> --desc <一句英文> --app-path apps/<xxx-id>`（自动写 cover + 改 manifest）。
 > 4. 本地 `python -m http.server 8080` 预览（直接双击 index.html 会因 fetch 限制读不到 manifest）。
 > 5. `git add -A && git commit && git push` → GitHub Pages 自动更新。
 >

@@ -9,31 +9,31 @@
     </pattern>
   </defs>
 
-  <!-- 背景 -->
+  <!-- background -->
   <rect width="1200" height="630" fill="#f6f7fb"/>
   <rect width="1200" height="630" fill="url(#dots)" opacity="0.5"/>
 
-  <!-- 顶部 kicker -->
+  <!-- top kicker -->
   <text x="62" y="74" font-size="20" font-weight="700" letter-spacing="2" fill="#d11610">UW TOOLKIT</text>
 
-  <!-- 图标 + 分类 -->
+  <!-- icon + category -->
 
   <rect x="60" y="150" width="130" height="130" rx="30" fill="url(#accGrad)"/>
   <text x="125" y="218" font-size="76" text-anchor="middle" dominant-baseline="central">🔒</text>
 
-  <rect x="218" y="172" width="88" height="46" rx="23" fill="#1f8a4c" opacity="0.12"/>
-  <text x="262.0" y="200" font-size="23" font-weight="600" fill="#1f8a4c" text-anchor="middle" dominant-baseline="central">生活</text>
+  <rect x="218" y="172" width="114" height="46" rx="23" fill="#1f8a4c" opacity="0.12"/>
+  <text x="275.0" y="200" font-size="23" font-weight="600" fill="#1f8a4c" text-anchor="middle" dominant-baseline="central">Living</text>
 
-  <!-- 标题 -->
+  <!-- title -->
 
-  <text x="60" y="340" font-size="58" font-weight="800" fill="#1f2430">UW 储物柜地图</text>
+  <text x="60" y="340" font-size="58" font-weight="800" fill="#1f2430">Locker Finder</text>
 
-  <!-- 描述 -->
+  <!-- description -->
 
-  <text x="60" y="442" font-size="27" fill="#6b7280">全校储物柜位置与详情：免费/租赁、学期/日租、自带挂</text>
-  <text x="60" y="484" font-size="27" fill="#6b7280">锁。</text>
+  <text x="60" y="442" font-size="27" fill="#6b7280">Campus locker map: free or rental, term or</text>
+  <text x="60" y="484" font-size="27" fill="#6b7280">daily, bring-your-own lock.</text>
 
-  <!-- 右侧装饰 -->
+  <!-- right-side decoration -->
 
   <circle cx="1075" cy="120" r="170" fill="#1f8a4c" opacity="0.10"/>
   <circle cx="1130" cy="250" r="70" fill="#1f8a4c" opacity="0.08"/>
@@ -42,8 +42,8 @@
   <rect x="952" y="430" width="196" height="14" rx="7" fill="#e6e8ef"/>
   <rect x="952" y="458" width="120" height="14" rx="7" fill="#e6e8ef"/>
 
-  <!-- 底栏 -->
+  <!-- footer -->
   <line x1="60" y1="572" x2="1140" y2="572" stroke="#e6e8ef"/>
-  <text x="60" y="610" font-size="22" font-weight="700" fill="#1f2430">🎓 滑铁卢大学工具箱</text>
+  <text x="60" y="610" font-size="22" font-weight="700" fill="#1f2430">🎓 UW Toolkit</text>
   <text x="1140" y="610" font-size="19" fill="#6b7280" text-anchor="end" font-family="monospace">waterloo-toolkit/locker-finder</text>
 </svg>
