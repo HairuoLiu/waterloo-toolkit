@@ -1,0 +1,7 @@
+# UW Toolkit (GitHub Pages project site)
+User-agent: *
+Allow: /
+
+# 说明：不屏蔽 assets/ —— 页面引用的 CSS/JS（style.css、i18n.js 等）
+# 若被屏蔽会妨碍 Google 渲染页面，进而影响收录质量。
+Sitemap: https://hairuoliu.github.io/waterloo-toolkit/sitemap.xml
