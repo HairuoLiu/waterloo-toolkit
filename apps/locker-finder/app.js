@@ -3,15 +3,39 @@
  * - 「地图 / 列表」Tab 整页切换
  * - 列表卡片点击 → 复用全站 .detail-backdrop / .cal-detail 详情模态
  * 无框架、无 fetch（数据内联于 data.js）。
+ * 双语：界面文案走 data-i18n + UW_I18N.t；数据走 lfPick（并行 _en 字段）。
  */
 (function () {
   "use strict";
+
+  var I18N = window.UW_I18N;
+  function t(key, fallback) {
+    if (I18N && I18N.t) return I18N.t(key, fallback);
+    return fallback == null ? key : fallback;
+  }
+  // 双语数据取值：优先当前语言字段，回退另一语言字段，再回退无后缀字段
+  function lfPick(d, base) {
+    var lang = (I18N && I18N.get) ? I18N.get() : "zh";
+    var a = d[base + "_" + lang];
+    if (a != null) return a;
+    if (lang === "en") {
+      if (d[base + "_zh"] != null) return d[base + "_zh"];
+    } else {
+      if (d[base + "_en"] != null) return d[base + "_en"];
+    }
+    if (d[base] != null) return d[base];
+    if (d[base + "_en"] != null) return d[base + "_en"];
+    if (d[base + "_zh"] != null) return d[base + "_zh"];
+    return "";
+  }
+
   var DATA = (window.LOCKERS || []).slice();
 
   var CAT_COLOR = { "免费": "#1f8a4c", "租赁": "#EAAB00", "日租": "#0ea5e9" };
-  var REC_LABEL = { best: "首选", good: "推荐", fallback: "备选" };
+  var REC_KEY = { best: "lf.rec.best", good: "lf.rec.good", fallback: "lf.rec.fallback" };
 
   var state = { cat: "all", view: "map" };
+  var curDetailId = null;
 
   var catWrap = document.getElementById("cat-chips");
   var mapView = document.getElementById("mapView");
@@ -36,7 +60,7 @@
       var b = document.createElement("button");
       b.className = "chip" + (state.cat === c ? " active" : "");
       b.type = "button";
-      b.textContent = c === "all" ? "全部" : c;
+      b.textContent = c === "all" ? t("lf.cat.all", "All") : t("lf.cat." + ({ "免费": "free", "租赁": "rent", "日租": "day" }[c]), c);
       b.addEventListener("click", function () {
         state.cat = c;
         renderChips();
@@ -61,15 +85,15 @@
   }
   function popupHtml(d) {
     var apply = d.apply_url
-      ? '<a href="' + esc(d.apply_url) + '" target="_blank" rel="noopener">' + esc(d.apply_text) + " ↗</a>"
-      : esc(d.apply_text);
+      ? '<a href="' + esc(d.apply_url) + '" target="_blank" rel="noopener">' + esc(lfPick(d, "apply_text")) + " ↗</a>"
+      : esc(lfPick(d, "apply_text"));
     return '' +
-      '<h3>' + esc(d.name_zh) + '</h3>' +
-      '<div class="pop-meta">' + esc(d.building_full) + ' · ' + esc(d.floor) + '</div>' +
-      '<div class="pop-meta">💰 <b>' + esc(d.price) + '</b> ｜ 🔑 ' + esc(d.ownLock) + '</div>' +
-      '<div class="pop-meta">🏛 ' + esc(d.provider) + ' ｜ ' + esc(d.who) + '</div>' +
+      '<h3>' + esc(lfPick(d, "name")) + '</h3>' +
+      '<div class="pop-meta">' + esc(lfPick(d, "building_full")) + ' · ' + esc(lfPick(d, "floor")) + '</div>' +
+      '<div class="pop-meta">💰 <b>' + esc(lfPick(d, "price")) + '</b> ｜ 🔑 ' + esc(lfPick(d, "ownLock")) + '</div>' +
+      '<div class="pop-meta">🏛 ' + esc(lfPick(d, "provider")) + ' ｜ ' + esc(lfPick(d, "who")) + '</div>' +
       '<div class="pop-meta">📝 ' + apply + '</div>' +
-      '<div class="pop-meta">' + esc(d.notes_zh) + '</div>';
+      '<div class="pop-meta">' + esc(lfPick(d, "notes")) + '</div>';
   }
   function renderMarkers() {
     if (!markersLayer) return;
@@ -80,7 +104,7 @@
       var m = L.circleMarker(d.coord, {
         radius: 9, color: "#fff", weight: 2, fillColor: color, fillOpacity: 1
       }).bindPopup(popupHtml(d), { maxWidth: 280 });
-      m.bindTooltip(d.name_zh, { direction: "top", offset: [0, -6] });
+      m.bindTooltip(lfPick(d, "name"), { direction: "top", offset: [0, -6] });
       m.addTo(markersLayer);
     });
   }
@@ -89,20 +113,20 @@
   function renderList() {
     cardsWrap.innerHTML = "";
     var list = DATA.filter(matches);
-    if (!list.length) { cardsWrap.innerHTML = '<p class="muted">该分类下暂无储物柜。</p>'; return; }
+    if (!list.length) { cardsWrap.innerHTML = '<p class="muted">' + t("lf.empty", "该分类下暂无储物柜。") + '</p>'; return; }
     var order = { best: 0, good: 1, fallback: 2 };
     list.sort(function (a, b) { return order[a.recommend] - order[b.recommend]; });
     list.forEach(function (d) {
       var div = document.createElement("div");
       div.className = "lcard " + d.recommend;
       div.innerHTML =
-        '<h3>' + esc(d.name_zh) + '</h3>' +
+        '<h3>' + esc(lfPick(d, "name")) + '</h3>' +
         '<div class="meta">' +
-          '<span class="tag-cat tag-' + catClass(d.cat) + '">' + esc(d.cat) + ' · ' + esc(d.term) + '</span>' +
-          '<span class="tag-rec ' + d.recommend + '">' + REC_LABEL[d.recommend] + '</span>' +
+          '<span class="tag-cat tag-' + catClass(d.cat) + '">' + esc(lfPick(d, "cat")) + ' · ' + esc(lfPick(d, "term")) + '</span>' +
+          '<span class="tag-rec ' + d.recommend + '">' + esc(t(REC_KEY[d.recommend], d.recommend)) + '</span>' +
         '</div>' +
-        '<div class="meta"><span>' + esc(d.building_full) + '</span></div>' +
-        '<div class="meta"><span>💰 ' + esc(d.price) + '</span><span>🔑 ' + esc(d.ownLock) + '</span></div>';
+        '<div class="meta"><span>' + esc(lfPick(d, "building_full")) + '</span></div>' +
+        '<div class="meta"><span>💰 ' + esc(lfPick(d, "price")) + '</span><span>🔑 ' + esc(lfPick(d, "ownLock")) + '</span></div>';
       div.addEventListener("click", function () { openDetail(d.id); });
       cardsWrap.appendChild(div);
     });
@@ -113,25 +137,26 @@
   var modal = document.getElementById("cal-detail");
   var closeBtn = document.getElementById("detail-close");
   function openDetail(id) {
+    curDetailId = id;
     var d = DATA.filter(function (x) { return x.id === id; })[0];
     if (!d) return;
     var applyHtml = d.apply_url
-      ? '<a href="' + esc(d.apply_url) + '" target="_blank" rel="noopener">' + esc(d.apply_text) + ' ↗</a>'
-      : '<span class="muted">' + esc(d.apply_text) + '</span>';
-      modal.innerHTML =
-      '<div class="cal-detail-head">' + esc(d.name_zh) +
-        ' <span class="tag-cat tag-' + catClass(d.cat) + '">' + esc(d.cat) + '</span>' +
+      ? '<a href="' + esc(d.apply_url) + '" target="_blank" rel="noopener">' + esc(lfPick(d, "apply_text")) + ' ↗</a>'
+      : '<span class="muted">' + esc(lfPick(d, "apply_text")) + '</span>';
+    modal.innerHTML =
+      '<div class="cal-detail-head">' + esc(lfPick(d, "name")) +
+        ' <span class="tag-cat tag-' + catClass(d.cat) + '">' + esc(lfPick(d, "cat")) + '</span>' +
         ' <span class="muted" style="font-weight:400;font-size:13px">' + esc(d.name_en) + '</span></div>' +
-      '<div class="cal-detail-item"><div class="zh">🏢 楼栋</div><div class="en">' + esc(d.building_full) + '（' + esc(d.building) + '）· ' + esc(d.floor) + '</div></div>' +
-      '<div class="cal-detail-item"><div class="zh">💰 价格</div><div class="en">' + esc(d.price) + ' ／ ' + esc(d.price_en) + '</div></div>' +
-      '<div class="cal-detail-item"><div class="zh">🔑 挂锁</div><div class="en">' + esc(d.ownLock) + '</div></div>' +
-      '<div class="cal-detail-item"><div class="zh">🏛 管理方 / 资格</div><div class="en">' + esc(d.provider) + ' ｜ ' + esc(d.who) + '</div></div>' +
-      '<div class="cal-detail-item"><div class="zh">📝 申请方式</div><div class="en">' + applyHtml + '</div></div>' +
-      '<div class="cal-detail-item"><div class="zh">💡 备注</div><div class="en">' + esc(d.notes_zh) + '</div></div>';
+      '<div class="cal-detail-item"><div class="zh">' + esc(t("lf.detail.building", "🏢 楼栋")) + '</div><div class="en">' + esc(lfPick(d, "building_full")) + '（' + esc(d.building) + '）· ' + esc(lfPick(d, "floor")) + '</div></div>' +
+      '<div class="cal-detail-item"><div class="zh">' + esc(t("lf.detail.price", "💰 价格")) + '</div><div class="en">' + esc(lfPick(d, "price")) + ' ／ ' + esc(lfPick(d, "price_en")) + '</div></div>' +
+      '<div class="cal-detail-item"><div class="zh">' + esc(t("lf.detail.lock", "🔑 挂锁")) + '</div><div class="en">' + esc(lfPick(d, "ownLock")) + '</div></div>' +
+      '<div class="cal-detail-item"><div class="zh">' + esc(t("lf.detail.provider", "🏛 管理方 / 资格")) + '</div><div class="en">' + esc(lfPick(d, "provider")) + ' ｜ ' + esc(lfPick(d, "who")) + '</div></div>' +
+      '<div class="cal-detail-item"><div class="zh">' + esc(t("lf.detail.apply", "📝 申请方式")) + '</div><div class="en">' + applyHtml + '</div></div>' +
+      '<div class="cal-detail-item"><div class="zh">' + esc(t("lf.detail.notes", "💡 备注")) + '</div><div class="en">' + esc(lfPick(d, "notes")) + '</div></div>';
     backdrop.classList.add("open");
     document.body.style.overflow = "hidden";
   }
-  function closeDetail() { backdrop.classList.remove("open"); document.body.style.overflow = ""; }
+  function closeDetail() { backdrop.classList.remove("open"); document.body.style.overflow = ""; curDetailId = null; }
   if (closeBtn) closeBtn.addEventListener("click", closeDetail);
   if (backdrop) backdrop.addEventListener("click", function (e) { if (e.target === backdrop) closeDetail(); });
   document.addEventListener("keydown", function (e) { if (e.key === "Escape") closeDetail(); });
@@ -149,6 +174,15 @@
   }
   if (tabMap) tabMap.addEventListener("click", function () { setView("map"); });
   if (tabList) tabList.addEventListener("click", function () { setView("list"); });
+
+  // ---------- 语言切换：重渲染界面 ----------
+  function renderAll() {
+    renderChips();
+    if (state.view === "map") renderMarkers();
+    else renderList();
+    if (curDetailId) openDetail(curDetailId);
+  }
+  if (I18N && I18N.onChange) I18N.onChange(renderAll);
 
   // ---------- init ----------
   renderChips();
