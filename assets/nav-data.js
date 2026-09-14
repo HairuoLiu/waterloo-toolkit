@@ -8,6 +8,11 @@
    新增链接：在对应 categories[].items 里加一条即可，
    icon 从下面的 ICONS 里选（或新增一个 24×24 描边 SVG）。
    链接可达性最后校验：2026-09-04（8/8 返回 200）
+
+   双语改造（2026-09-14）：为每个分类补 desc_en、为每个条目补
+   desc_en（保留原中文 desc 不删）；badge 改 badge + badge_en。
+   数据层采用并列双语字段，UI 统一走 UW_I18N.pick(obj, field)
+   取值（field_en → field → 空串）。
    ============================================================ */
 
 /* 图标词汇表：统一 24×24、stroke=currentColor、圆头圆角，保证视觉节奏一致 */
@@ -33,12 +38,14 @@ window.UW_NAV = {
       label: '学术日程',
       labelEn: 'Academics',
       desc: '学期节点 · 培养方案 · 开课查询',
+      desc_en: 'Term dates · degree plans · course listings',
       icon: 'calendar',
       items: [
         {
           name: 'UW Important Dates',
           zh: '重要日期',
           desc: '学期关键节点、缴费与退课截止日',
+          desc_en: 'Term milestones, fee & drop deadlines',
           url: 'https://uwaterloo.ca/important-dates',
           icon: 'calendar'
         },
@@ -46,6 +53,7 @@ window.UW_NAV = {
           name: 'Undergraduate Calendar',
           zh: '本科生日历',
           desc: '专业要求、课程规定与毕业条件',
+          desc_en: 'Program requirements, course rules & degree conditions',
           url: 'https://ugradcalendar.uwaterloo.ca/',
           icon: 'book'
         },
@@ -53,6 +61,7 @@ window.UW_NAV = {
           name: 'Schedule of Classes',
           zh: '开课一览',
           desc: '按学期与科目查开课、排时间冲突',
+          desc_en: 'Browse courses by term & subject, spot time conflicts',
           url: 'https://classes.uwaterloo.ca/under.html',
           icon: 'clock'
         }
@@ -63,20 +72,24 @@ window.UW_NAV = {
       label: '选课规划',
       labelEn: 'Planning',
       desc: '课程口碑 · 作业拆解',
+      desc_en: 'Course reviews · assignment breakdowns',
       icon: 'layers',
       items: [
         {
           name: 'UW Flow',
           zh: '课程点评',
           desc: '课程与教授评分，选课前必看',
+          desc_en: 'Course & prof ratings — must-read before enrolling',
           url: 'https://uwflow.com/',
           icon: 'star',
-          badge: '热门'
+          badge: '热门',
+          badge_en: 'Popular'
         },
         {
           name: 'UW Assignment Planner',
           zh: '作业规划器',
           desc: '按截止日期把论文与报告拆成步骤',
+          desc_en: 'Break essays & reports into steps by deadline',
           url: 'https://uwaterloo.ca/writing-and-communication-centre/online-resources/assignment-planner',
           icon: 'checklist'
         }
@@ -87,12 +100,14 @@ window.UW_NAV = {
       label: '学生系统',
       labelEn: 'Systems',
       desc: '选课缴费 · Co-op 求职',
+      desc_en: 'Enrollment & fees · Co-op job search',
       icon: 'user',
       items: [
         {
           name: 'Quest',
           zh: '教务系统',
           desc: '选课、缴费、成绩与个人课表',
+          desc_en: 'Enroll, pay, grades & your personal schedule',
           url: 'https://quest.pecs.uwaterloo.ca',
           icon: 'user'
         },
@@ -101,6 +116,7 @@ window.UW_NAV = {
           zh: 'Co-op 求职',
           desc: '岗位浏览与申请、面试安排',
           url: 'https://uwaterloo.ca/co-operative-education/waterlooworks-student-help/apply-jobs',
+          desc_en: 'Browse & apply to jobs, schedule interviews',
           icon: 'briefcase'
         }
       ]
@@ -110,12 +126,14 @@ window.UW_NAV = {
       label: '校园资源',
       labelEn: 'Campus',
       desc: '工坊 · 设施 · 制作空间',
+      desc_en: 'Shops · facilities · maker spaces',
       icon: 'wrench',
       items: [
         {
           name: 'Engineering Student Shops',
           zh: '工程学生车间',
           desc: '工坊设备、安全培训与预约',
+          desc_en: 'Shop equipment, safety training & booking',
           url: 'https://uwaterloo.ca/engineering-student-shops/',
           icon: 'wrench'
         }

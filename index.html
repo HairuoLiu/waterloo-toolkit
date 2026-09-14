@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="en" data-lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>滑铁卢大学工具箱 · UW Toolkit</title>
+  <title data-i18n="home.title">UW Toolkit · lightweight tools for Waterloo students</title>
   <link rel="stylesheet" href="assets/style.css" />
   <link rel="stylesheet" href="assets/nav.css" />
+  <link rel="stylesheet" href="assets/i18n.css" />
+  <script src="assets/i18n.js"></script>
+  <script src="assets/i18n/home.js"></script>
+  <script src="assets/i18n/nav.js"></script>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="./">🎓 滑铁卢大学工具箱</a>
+    <a class="brand" href="./" data-i18n="home.brand">🎓 UW Toolkit</a>
     <div class="top-actions">
-      <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit" target="_blank" rel="noopener" aria-label="在 GitHub 查看源码" title="在 GitHub 查看源码">
+      <a class="icon-btn" href="https://github.com/HairuoLiu/waterloo-toolkit" target="_blank" rel="noopener" data-i18n-attr="aria-label:home.github;title:home.github">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 .5C5.7.5.5 5.7.5 12c0 5.1 3.3 9.4 7.9 10.9.6.1.8-.3.8-.6v-2c-3.2.7-3.9-1.4-3.9-1.4-.5-1.3-1.3-1.7-1.3-1.7-1.1-.7.1-.7.1-.7 1.2.1 1.8 1.2 1.8 1.2 1 1.8 2.7 1.3 3.4 1 .1-.8.4-1.3.7-1.6-2.6-.3-5.3-1.3-5.3-5.7 0-1.3.5-2.3 1.2-3.1-.1-.3-.5-1.5.1-3.1 0 0 1-.3 3.3 1.2a11.5 11.5 0 0 1 6 0C17 4.7 18 5 18 5c.6 1.6.2 2.8.1 3.1.8.8 1.2 1.8 1.2 3.1 0 4.4-2.7 5.4-5.3 5.7.4.4.8 1.1.8 2.2v3.3c0 .3.2.7.8.6 4.6-1.5 7.9-5.8 7.9-10.9C23.5 5.7 18.3.5 12 .5z"/></svg>
       </a>
-      <button class="icon-btn" id="share-btn" aria-label="分享此页面" title="分享此页面">
+      <button class="icon-btn" id="share-btn" data-i18n-attr="aria-label:home.share.btn;title:home.share.btn">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.6" y1="13.5" x2="15.4" y2="17.5"/><line x1="15.4" y1="6.5" x2="8.6" y2="10.5"/></svg>
       </button>
     </div>
@@ -22,19 +26,25 @@
 
   <main class="wrap">
     <section class="hero">
-      <h1>滑铁卢大学 · 小工具集合</h1>
-      <p class="sub">面向滑铁卢大学学生(以研究生为主)的轻量工具，无后端、免登录，开源可改。</p>
+      <h1 data-i18n="home.hero.title">UW Toolkit · small tools for Waterloo</h1>
+      <p class="sub" data-i18n="home.hero.sub">Lightweight tools for University of Waterloo students (mostly grads). No backend, no login, open-source and editable.</p>
     </section>
 
     <section>
       <div id="app-grid" class="grid">
-        <p class="muted">加载中…</p>
+        <p class="muted" data-i18n="home.loading">Loading…</p>
       </div>
     </section>
 
     <footer class="foot">
-      <p>每个工具都是一个独立子页面，点击卡片进入。命名规范与封面制作见仓库内
-        <a href="README.md">README.md</a>（含 <a href="STRUCTURE.md">STRUCTURE.md</a>）。</p>
+      <p>
+        <span data-i18n="home.footer.lead">Each tool is an independent subpage. Click a card to enter.</span>
+        <span data-i18n="home.footer.note"> See the repo’s</span>
+        <a href="README.md">README.md</a>
+        <span data-i18n="home.footer.and"> and</span>
+        <a href="STRUCTURE.md">STRUCTURE.md</a>
+        <span data-i18n="home.footer.tail"> for naming rules and cover art.</span>
+      </p>
     </footer>
   </main>
 
@@ -43,50 +53,73 @@
   <script src="assets/nav.js"></script>
 
   <script>
+    /* 卡片渲染：从 apps/manifest.json 取数，按当前语言渲染；切换语言时重渲染 */
+    var __apps = null;
+    function catOf(a) {
+      var en = (window.UW_I18N && UW_I18N.get && UW_I18N.get() === 'en');
+      return en ? (a.category_en || a.category) : (a.category || a.category_en);
+    }
+    function renderCards(apps) {
+      var grid = document.getElementById('app-grid');
+      if (!grid) return;
+      grid.innerHTML = '';
+      if (!apps || !apps.length) {
+        grid.innerHTML = '<p class="muted">' + (window.UW_I18N && UW_I18N.t ? UW_I18N.t('home.empty', 'No tools yet — add one following STRUCTURE.md.') : 'No tools yet.') + '</p>';
+        return;
+      }
+      // featured 置顶（其余保持原顺序）
+      apps = apps.slice().sort(function (a, b) { return (b.featured ? 1 : 0) - (a.featured ? 1 : 0); });
+      apps.forEach(function (a) {
+        var card = document.createElement('a');
+        card.href = a.path;
+        var title = UW_I18N.pick(a, 'title');
+        var desc = UW_I18N.pick(a, 'desc');
+        if (a.featured) {
+          card.className = 'app-card featured';
+          card.innerHTML =
+            '<div class="feat-inner">' +
+              '<div class="feat-icon">' + (a.icon || '🧭') + '</div>' +
+              '<div class="feat-text">' +
+                '<span class="feat-tag">' + UW_I18N.t('home.featured.tag', 'Must-read for new students') + '</span>' +
+                '<h3>' + title + '</h3>' +
+                '<p>' + desc + '</p>' +
+                '<span class="feat-cta">' + UW_I18N.t('home.featured.cta', 'Open the Wiki →') + '</span>' +
+              '</div>' +
+            '</div>';
+        } else {
+          card.className = 'app-card';
+          var cover = a.cover
+            ? '<img class="cover" src="' + a.cover + '" alt="' + title + '" loading="lazy" />'
+            : '<div class="icon">' + (a.icon || '🔧') + '</div>';
+          var tag = catOf(a);
+          card.innerHTML =
+            cover +
+            '<h3>' + title + '</h3>' +
+            '<p>' + desc + '</p>' +
+            (tag ? '<span class="tag">' + tag + '</span>' : '');
+        }
+        grid.appendChild(card);
+      });
+    }
+
     fetch('apps/manifest.json')
       .then(function (r) { return r.json(); })
       .then(function (apps) {
-        var grid = document.getElementById('app-grid');
-        grid.innerHTML = '';
-        if (!apps.length) {
-          grid.innerHTML = '<p class="muted">还没有子工具，欢迎按 STRUCTURE.md 添加。</p>';
-          return;
-        }
-        // featured 置顶（其余保持原顺序）
-        apps = apps.slice().sort(function (a, b) { return (b.featured ? 1 : 0) - (a.featured ? 1 : 0); });
-        apps.forEach(function (a) {
-          var card = document.createElement('a');
-          card.href = a.path;
-          if (a.featured) {
-            card.className = 'app-card featured';
-            card.innerHTML =
-              '<div class="feat-inner">' +
-                '<div class="feat-icon">' + (a.icon || '🧭') + '</div>' +
-                '<div class="feat-text">' +
-                  '<span class="feat-tag">新生必读 · 本工具箱最重要的项目</span>' +
-                  '<h3>' + (a.title_zh || a.title_en || a.id) + '</h3>' +
-                  '<p>' + (a.desc_zh || a.desc_en || '') + '</p>' +
-                  '<span class="feat-cta">进入 Wiki →</span>' +
-                '</div>' +
-              '</div>';
-          } else {
-            card.className = 'app-card';
-            var cover = a.cover
-              ? '<img class="cover" src="' + a.cover + '" alt="' + (a.title_zh || a.id) + ' 封面" loading="lazy" />'
-              : '<div class="icon">' + (a.icon || '🔧') + '</div>';
-            card.innerHTML =
-              cover +
-              '<h3>' + (a.title_zh || a.title_en || a.id) + '</h3>' +
-              '<p>' + (a.desc_zh || a.desc_en || '') + '</p>' +
-              (a.category ? '<span class="tag">' + a.category + '</span>' : '');
-          }
-          grid.appendChild(card);
-        });
+        __apps = apps;
+        renderCards(apps);
       })
       .catch(function (e) {
-        document.getElementById('app-grid').innerHTML =
-          '<p class="muted">清单加载失败（本地直接打开时请用本地服务器预览）。' + e + '</p>';
+        var grid = document.getElementById('app-grid');
+        if (grid) grid.innerHTML =
+          '<p class="muted">' + (window.UW_I18N && UW_I18N.t ? UW_I18N.t('home.fail', 'Failed to load the list.') : 'Failed.') + ' ' + e + '</p>';
       });
+
+    if (window.UW_I18N && UW_I18N.onChange) {
+      UW_I18N.onChange(function () {
+        if (__apps) renderCards(__apps);
+        UW_I18N.apply(document);
+      });
+    }
   </script>
 
   <div class="toast" id="toast" hidden></div>
@@ -105,11 +138,18 @@
         document.body.removeChild(ta); return Promise.resolve();
       }
       if (sb) sb.addEventListener('click', function () {
-        var d = { title: '滑铁卢大学工具箱', text: '滑铁卢大学工具箱 · UW Toolkit', url: location.href };
+        var title = (window.UW_I18N && UW_I18N.t) ? UW_I18N.t('home.share.title', 'UW Toolkit') : 'UW Toolkit';
+        var d = { title: title, text: title, url: location.href };
         if (navigator.share) { navigator.share(d).catch(function () {}); }
-        else { copy(location.href).then(function () { toast('链接已复制，去分享吧'); }); }
+        else { copy(location.href).then(function () { toast((window.UW_I18N && UW_I18N.t) ? UW_I18N.t('home.share.copied', 'Link copied.') : 'Copied.'); }); }
       });
     })();
+  </script>
+
+  <script>
+    /* 框架挂载语言切换按钮并应用静态词典（data-i18n / data-i18n-attr） */
+    if (window.UW_I18N && UW_I18N.mountToggle) UW_I18N.mountToggle();
+    if (window.UW_I18N && UW_I18N.apply) UW_I18N.apply(document);
   </script>
 </body>
 </html>
