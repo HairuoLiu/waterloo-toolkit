@@ -53,12 +53,16 @@ window.UW_EVENTS = [
     "term_zh": "秋季 2026",
     "start": "2026-09-07",     // ISO 日期
     "end": "",                 // 跨天事件填结束日期，留空=单日
-    "action": "全校停课、办公室关闭，享受假期吧～",  // 中文行动建议
+    "action": "全校停课、办公室关闭，享受假期吧～",  // 中文行动建议（无后缀=中文）
+    "action_en": "No classes and offices closed; enjoy the holiday.",
     "desc_en": "No classes and offices closed.",
     "academicYear": 2026       // ★ 学年分片的依据
   }
 ];
 ```
+
+**双语取值约定（`app.js` 的 `lpick`）**：`字段_当前语言` → `无后缀原字段` → `字段_另一语言`。
+「无后缀原字段」必须排在「另一语言」之前 —— 本数据集存在「原字段=中文 + `*_en`=英文」的字段（如 `action` / `action_en`），顺序颠倒会导致**中文模式反而显示英文**。
 
 **关键函数**（`app.js`）
 

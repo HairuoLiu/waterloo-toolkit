@@ -1,5 +1,6 @@
 // 滑铁卢大学研究生重要日期（按学年分组，仅含 2026 秋季及以后入学学年）。
 // 来源: uwaterloo.ca/important-dates/graduate
+// Bilingual: action_zh (original) + action_en added during i18n pass. Facts/dates/codes/URLs unchanged.
 window.UW_EVENTS = [
   {
     "title_en": "Labour Day",
@@ -13,7 +14,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "全校停课、办公室关闭，享受假期吧～",
     "desc_en": "No classes and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Campus closed, offices shut — enjoy the holiday~"
   },
   {
     "title_en": "Grad Orientation Week (in-person)",
@@ -27,7 +29,8 @@ window.UW_EVENTS = [
     "end": "2026-09-10",
     "action": "滑铁卢大学 9 月入学新生研究生「线下新生入学指导」周（9/7–9/10），由新生过渡组织(New Student Transition)统一举办。含研究生迎新会、欢迎与服务博览会、宿舍晚间社交等。面向所有 9 月入学的新生研究生，需提前在线注册；具体项目迎新请联系各自项目协调员。注册/咨询：gradready@uwaterloo.ca。",
     "desc_en": "In-person graduate orientation week for September-entry graduate students, organized by New Student Transition. Register in advance.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "In-person graduate orientation week (Sept 7–10) for September-entry grad students, run by New Student Transition. Includes the grad orientation, Welcome & Services Fair, and residence evening social. Open to all September-entry grad students; register online in advance. For program-specific orientation, contact your program coordinator. Register / inquire: gradready@uwaterloo.ca."
   },
   {
     "title_en": "Graduate Orientation",
@@ -41,7 +44,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天（周二）是 2026 研究生迎新会！与研究生同学交流、探索校园、了解学校的服务与支持，是开学前必参加的活动。⚠️ 务必提前在线注册：即使无法参加迎新与服务博览会，也请注册以便现场签到并发放手环（签到 14:00–14:45）。当天所有活动（含晚间宿舍社交）均需佩戴手环。具体日程发至邮箱，亦可查 uwaterloo.ca/welcome-warriors/events/graduate-orientation。联系 gradready@uwaterloo.ca。",
     "desc_en": "Graduate Orientation on Sept 8 (Tue). Mandatory registration; wristband required for all day's events including the evening social.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today (Tue) is the 2026 Graduate Orientation! Meet fellow grad students, explore campus, and learn about university services and support — a must-attend before classes. ⚠️ Register online in advance: even if you skip the Fair, register so you can check in and get your wristband (check-in 14:00–14:45). All events that day (incl. the evening social) require the wristband. The schedule is emailed; see also uwaterloo.ca/welcome-warriors/events/graduate-orientation. Contact gradready@uwaterloo.ca."
   },
   {
     "title_en": "Welcome & Services Fair",
@@ -55,7 +59,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "迎新前一日（周一）14:00–15:00 的「欢迎与服务博览会」，提前到校熟悉环境与各类支持服务。属迎新注册中标注「需注册」的活动之一，即使不参加也建议注册以便现场签到。",
     "desc_en": "Welcome & Services Fair, Mon Sept 7 2:00–3:00 PM. Part of the grad orientation registration.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "The Welcome & Services Fair, Mon 14:00–15:00 the day before orientation — come early to get familiar with campus and support services. It is marked 'register' in orientation sign-up; even if you don't attend, register so you can check in on site."
   },
   {
     "title_en": "Indigenous Student Session",
@@ -69,7 +74,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "周一 13:30–16:30 由原住民关系办公室(Office of Indigenous Relations)为即将入学的原住民研究生/本科生举办的额外迎新会（在研究生迎新会前一天）。如符合资格，请在注册表中同时报名此次迎新会。",
     "desc_en": "Indigenous Student Session, Mon Sept 7 1:30–4:30 PM, by the Office of Indigenous Relations. Register via the same form.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Mon 13:30–16:30: an extra session by the Office of Indigenous Relations for incoming Indigenous grad/undergrad students (the day before Grad Orientation). If eligible, sign up for this session in the same registration form."
   },
   {
     "title_en": "Welcome to the University",
@@ -83,7 +89,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "周二 15:00–15:30 的「欢迎来到大学」主旨环节，了解学校概览、资源与支持体系，迎新当天不可错过。",
     "desc_en": "Welcome to the University, Tue Sept 8 3:00–3:30 PM.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Tue 15:00–15:30: the 'Welcome to the University' keynote — an overview of the university, its resources and support systems. Don't miss it on orientation day."
   },
   {
     "title_en": "Grad Residence Evening Social",
@@ -97,7 +104,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "周二 17:30–21:00 研究生宿舍晚间社交活动，结识同学、融入社群的好机会。⚠️ 需佩戴迎新手环方可参加，记得先完成 14:00–14:45 的现场签到注册再领手环。",
     "desc_en": "Grad Residence Evening Social, Tue Sept 8 5:30–9:00 PM. Wristband required.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Tue 17:30–21:00: Grad Residence Evening Social — a great chance to meet peers and join the community. ⚠️ Wristband required; complete on-site check-in registration 14:00–14:45 first to get one."
   },
   {
     "title_en": "Grad Funding Session",
@@ -111,7 +119,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "周二 15:45–16:20 研究生经费来源讲座，了解奖学金、助教(TA)/助研(RA)等资助渠道与申请方式，对自费/带奖新生都值得一听。",
     "desc_en": "Grad Funding session, Tue Sept 8 3:45–4:20 PM.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Tue 15:45–16:20: Grad Funding session — learn about scholarships, TA/RA funding and how to apply. Worth it for both self-funded and funded students."
   },
   {
     "title_en": "Human Library & Speed Networking",
@@ -125,7 +134,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "周二下午的互动环节：真人图书馆 #1（15:45–16:20）、#2（16:35–17:10）与快速人脉拓展（16:35–17:10）。通过真实故事与学长学姐交流、快速拓展人脉，建议提前在注册表选好场次。",
     "desc_en": "Human Library #1/#2 and Speed Networking, Tue Sept 8 afternoon. Select sessions in the registration form.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Tue afternoon interactive sessions: Human Library #1 (15:45–16:20), #2 (16:35–17:10) and Speed Networking (16:35–17:10). Swap real stories with senior students and expand your network fast — pick your sessions in the registration form ahead of time."
   },
   {
     "title_en": "Co-operative work term begins",
@@ -139,7 +149,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "Co-op 实习学期开始，实习的同学按雇主安排入职报到（具体日期以雇主/个人情况为准）。",
     "desc_en": "Actual dates may vary depending on employer or student requirements.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Co-op work term begins; interns report to their employer per the employer's schedule (exact dates depend on employer/individual circumstances)."
   },
   {
     "title_en": "Classes begin",
@@ -153,7 +164,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "新学期开课啦！确认课表、上课地点和第一周作业，调好状态开学冲。",
     "desc_en": "Laurier may have a different schedule - visit their website for applicable start dates.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Classes begin! Confirm your timetable, classrooms and Week-1 assignments, and get into the right headspace for the term."
   },
   {
     "title_en": "Not Fees Arranged (NFA) holds applied",
@@ -167,7 +179,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天起未完成缴费安排的账户会被加上 NFA 冻结，影响后续选课等操作，尽快把费用处理好。",
     "desc_en": "Not Fees Arranged (NFA) holds are applied to student accounts which are not yet Fees Arranged for the term. Undergraduate students: Find out more about how this hold will impact your course registration process for future terms.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "From today, accounts without Fees Arranged get an NFA hold, which affects course enrolment and other operations — settle your fees as soon as possible."
   },
   {
     "title_en": "Tuition and fee refund deadline - 100%",
@@ -181,7 +194,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是全额(100%)退费的最后一天：若打算退课/退学期，今天前操作可拿回全部费用。",
     "desc_en": "Deadline to receive 100% of charges removed for withdrawing from the term, completing degree requirements, or dropping a course. See Student Financial Services website .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day for a 100% refund: if you plan to drop a course or withdraw from the term, act before today to get all charges removed."
   },
   {
     "title_en": "Class drop with grade of Withdrawn, no credit granted (WD)",
@@ -195,7 +209,8 @@ window.UW_EVENTS = [
     "end": "2026-11-24",
     "action": "进入\"退课记 WD\"阶段：此后退课会在成绩单标记 Withdrawn(不计学分)。如要退课请权衡后尽早决定。",
     "desc_en": "During this period, graduate students can continue to drop classes in Quest but a grade of Withdrawn, no credit granted (WD) will be applied and the class will remain on the transcript. Note that WD is not an academic penalty. Outside of this period, students with special circumstances can petition to drop or add a class using a course drop add form (Graduate Studies forms website).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Now in the \"WD drop\" period: dropping a course after this marks it Withdrawn (no credit) on your transcript. If you're considering a drop, weigh it and decide soon."
   },
   {
     "title_en": "Last day to select an examination centre or submit a proctor for online course final examinations",
@@ -209,7 +224,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "重要截止：如你有线上课程期末考，今天前必须在系统选好考试中心或提交监考人(proctor)，错过会影响考试！",
     "desc_en": "View details about final examination arrangements for online courses on The Centre website. Deadline is 3 p.m. ET on date listed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Important deadline: if you have an online course final exam, you must pick an exam centre or submit a proctor in the system by today — missing it affects your exam!"
   },
   {
     "title_en": "Final examination schedule released",
@@ -223,7 +239,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "期末考试时间表出来啦！登录 Quest 查好每门考试的时间、地点，早做规划。",
     "desc_en": "Visit the Final Examination Schedule website (authentication required) on or after this date to view the term's final examination schedule.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "The final exam schedule is out! Log into Quest to check each exam's time and location, and plan ahead."
   },
   {
     "title_en": "Reading Week",
@@ -237,7 +254,8 @@ window.UW_EVENTS = [
     "end": "2026-10-18",
     "action": "本周无课！正是赶论文、补作业、复习或好好喘口气的黄金时间，给自己排个计划。",
     "desc_en": "All classes cancelled; offices closed on the weekends and the holiday Monday. Undergraduate students: View the Undergraduate Studies Academic Calendar for more details. Graduate students: View the Graduate Studies Academic Calendar for more details.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "No classes this week! A golden window to catch up on papers, homework and revision, or just breathe — make yourself a plan."
   },
   {
     "title_en": "Thanksgiving Day",
@@ -251,7 +269,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "感恩节假期，全校放假，记得休息、也别忘了跟家人朋友道声谢～",
     "desc_en": "All classes cancelled and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Thanksgiving Day holiday — campus closed. Rest up, and don't forget to thank family and friends~"
   },
   {
     "title_en": "Tuition and fee refund deadline - 50%",
@@ -265,7 +284,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是 50% 退费的最后一天：若要退课/退学期，今天前操作还能退回一半费用，之后不退。",
     "desc_en": "Deadline to receive 50% of charges for tuition, co-op fee, and student services fees removed for withdrawing from the term, completing degree requirements, or dropping a course. All other charges remain on student accounts. See Student Financial Services website .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day for a 50% refund: if you drop a course or withdraw from the term before today, you still get half the charges back; after this, no refund."
   },
   {
     "title_en": "Convocation - fall 2026",
@@ -279,7 +299,8 @@ window.UW_EVENTS = [
     "end": "2026-10-24",
     "action": "秋季毕业典礼！毕业生留意典礼时间地点、着装与来宾安排，约上亲友一起见证～",
     "desc_en": "Visit the Convocation website for details.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Fall Convocation! Graduates: note the ceremony time, location, dress code and guest arrangements; bring family and friends to celebrate~"
   },
   {
     "title_en": "Last day to arrange tuition and fees",
@@ -293,7 +314,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "最后期限：今天前必须完成学费缴清或办理\"Fees Arranged\"，否则可能被冻结/退课，务必今天搞定。",
     "desc_en": "Refer to tuition and fees deadlines . Late fees apply, see Student Financial Services for details. Visit the Finance website for instructions on submitting a Promissory Note .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Final deadline: you must pay tuition in full or become \"Fees Arranged\" by today, or you may be held/dropped — get it done today."
   },
   {
     "title_en": "Class enrolment period",
@@ -307,7 +329,8 @@ window.UW_EVENTS = [
     "end": "2027-01-31",
     "action": "选课期开放！登录 Quest 尽早选好课/调整课表；注意：未办理缴费(Fees Arranged)的同学第3周结束会被系统退课。",
     "desc_en": "During this period, graduate students can enrol themselves in classes using Quest , and can also drop classes in Quest. Graduate students who are not fee arranged and have enrolled in classes will have their classes dropped at the end of the third week of classes (end of class enrolment period).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Class enrolment opens! Log into Quest to pick or adjust your courses early. Note: students who are not Fees Arranged will have their classes dropped at the end of Week 3."
   },
   {
     "title_en": "Classes end",
@@ -321,7 +344,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是本学期最后一天上课，收尾好各科笔记和作业，准备进入复习/考试阶段。",
     "desc_en": "Laurier may have a different schedule - visit their website for applicable end dates.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day of classes this term — wrap up your notes and assignments and get ready for review/exams."
   },
   {
     "title_en": "Pre-examination study days",
@@ -335,7 +359,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "考前复习日，无课。安心复习，制定好各科的备考计划。",
     "desc_en": "There are one or two study days each term, between the end of the Formal Lecture Period and the beginning of the Final Examination Period. No classes are to be held during study days, except where classes are rescheduled as the result of a campus-wide emergency closure.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Pre-exam study day, no classes. Review calmly and plan your prep for each course."
   },
   {
     "title_en": "Final Examination Period",
@@ -349,7 +374,8 @@ window.UW_EVENTS = [
     "end": "2026-12-23",
     "action": "进入期末考试期，随时核对你的考试安排，合理规划复习节奏。",
     "desc_en": "The Final Examination Period begins on the first date listed, and ends with an emergency day. Students are expected to be available to write their final examination(s) for the entirety of the Final Examination Period, including the scheduled emergency days.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Final Examination Period begins — keep checking your exam schedule and plan your revision pace."
   },
   {
     "title_en": "In-person final examination days for online courses",
@@ -363,7 +389,8 @@ window.UW_EVENTS = [
     "end": "2026-12-12",
     "action": "线上课程的线下期末考试日，如你有线上课程，确认考点与到场安排。",
     "desc_en": "Fall 2026 term dates; not all dates may be used.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "In-person final exam days for online courses — if you have an online course, confirm your exam centre and arrival arrangements."
   },
   {
     "title_en": "Final examinations on Sunday",
@@ -377,7 +404,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "注意：本周日也安排了期末考试，别以为周末就没考试，务必确认自己是否有场次。",
     "desc_en": "Final examinations can be held on this day for the fall 2026 term.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Note: a final exam is also scheduled this Sunday — don't assume weekends are exam-free; confirm whether you have a sitting."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -391,7 +419,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Tuition and fees due",
@@ -405,7 +434,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "缴费大限！今天前必须缴清学费或完成\"Fees Arranged\"。跨境汇款要留 3-5 个工作日到账，别卡点。",
     "desc_en": "Pay in full or become \"Fees Arranged\" ; payments must be made in sufficient time to arrive on the student account on or before the due date. Notes: A Fees Arranged Extension fee applies after this date. Review Student Financial Services details about tuition due dates , including what happens if changes are made to the student account or fees are posted after this date.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Fee deadline! Pay tuition in full or become \"Fees Arranged\" by today. Cross-border transfers need 3–5 business days to arrive — don't cut it close."
   },
   {
     "title_en": "Opt out of optional/voluntary fees deadline",
@@ -419,7 +449,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天前如想退订可选/自愿费用(如某些保险、社团费)，需在 Quest 里操作 opt-out，过期不候。",
     "desc_en": "See how to opt out of optional or voluntary fees in Quest .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "If you want to opt out of optional/voluntary fees (e.g. some insurance, club fees), do it in Quest by today — no extensions."
   },
   {
     "title_en": "Fees Arranged Extension fees begin",
@@ -433,7 +464,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "从今天起，未按时缴费/办理费用安排会开始产生延期附加费，尽快处理避免多花钱。",
     "desc_en": "See Student Financial Services website for Fees Arranged Extension fee amounts by date (via the current academic year's schedule of due dates).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "From today, late or unarranged fees start incurring extension charges — handle it soon to avoid paying more."
   },
   {
     "title_en": "In-person final examination days for online courses",
@@ -447,7 +479,8 @@ window.UW_EVENTS = [
     "end": "2026-12-19",
     "action": "线上课程的线下期末考试日，如你有线上课程，确认考点与到场安排。",
     "desc_en": "Fall 2026 term dates; not all dates may be used.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "In-person final exam days for online courses — if you have an online course, confirm your exam centre and arrival arrangements."
   },
   {
     "title_en": "Final examination emergency days",
@@ -461,7 +494,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "应急预留日：若学校因故关闭，考试会顺延到这些日子，保持关注官方通知。",
     "desc_en": "Dates reserved to hold final examinations in the event the University is closed during the fall 2026 Final Examination Period: Examinations will be rescheduled on the next available day, including Sunday, on which examinations have not been scheduled.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Emergency reserve days: if the university closes for any reason, exams shift to these dates — watch official notices."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -475,7 +509,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Co-operative work term ends",
@@ -489,7 +524,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "Co-op 实习学期结束，实习的同学做好工作交接与实习报告收尾。",
     "desc_en": "Actual dates may vary depending on employer or student requirements.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Co-op work term ends — interns, wrap up your handover and final report."
   },
   {
     "title_en": "Final examination emergency days",
@@ -503,7 +539,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "应急预留日：若学校因故关闭，考试会顺延到这些日子，保持关注官方通知。",
     "desc_en": "Dates reserved to hold final examinations in the event the University is closed during the fall 2026 Final Examination Period: Examinations will be rescheduled on the next available day, including Sunday, on which examinations have not been scheduled.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Emergency reserve days: if the university closes for any reason, exams shift to these dates — watch official notices."
   },
   {
     "title_en": "Grades begin to appear in Quest",
@@ -517,7 +554,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "成绩陆续出分啦！登录 Quest 查看本学期成绩（注意当天不一定全部出齐）。",
     "desc_en": "Registered students can view their unofficial term grades in Quest. Note: Not all grades will be available on this date; instructors submit grades until the grades due deadline published in the Undergraduate Studies Academic Calendar.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Grades are rolling out! Log into Quest to view this term's grades (note they may not all appear on the same day)."
   },
   {
     "title_en": "University holiday closure",
@@ -531,7 +569,8 @@ window.UW_EVENTS = [
     "end": "2026-12-31",
     "action": "学校进入假期闭校，办公室关闭，注意此期间事务无法办理，提前安排好。",
     "desc_en": "No classes and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "The university is on holiday closure — offices are closed. Note that business can't be handled during this period; plan ahead."
   },
   {
     "title_en": "Apply for Graduation",
@@ -545,7 +584,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "毕业申请截止！符合毕业条件的同学，今天前务必在 Quest 提交毕业申请，错过要等下一轮。",
     "desc_en": "Deadline for graduate students to apply for graduation in Quest for spring ceremony (degree completion in fall term) .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Graduation application deadline! Eligible students must submit their graduation application in Quest by today; miss it and you wait for the next round."
   },
   {
     "title_en": "University holiday closure",
@@ -559,7 +599,8 @@ window.UW_EVENTS = [
     "end": "2027-01-03",
     "action": "学校进入假期闭校，办公室关闭，注意此期间事务无法办理，提前安排好。",
     "desc_en": "No classes and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "The university is on holiday closure — offices are closed. Note that business can't be handled during this period; plan ahead."
   },
   {
     "title_en": "Classes begin",
@@ -573,7 +614,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "新学期开课啦！确认课表、上课地点和第一周作业，调好状态开学冲。",
     "desc_en": "Laurier may have a different schedule - visit their website for applicable start dates.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Classes begin! Confirm your timetable, classrooms and Week-1 assignments, and get into the right headspace for the term."
   },
   {
     "title_en": "Co-operative work term begins",
@@ -587,7 +629,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "Co-op 实习学期开始，实习的同学按雇主安排入职报到（具体日期以雇主/个人情况为准）。",
     "desc_en": "Actual dates may vary depending on employer or student requirements.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Co-op work term begins; interns report to their employer per the employer's schedule (exact dates depend on employer/individual circumstances)."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -601,7 +644,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -615,7 +659,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Not Fees Arranged (NFA) holds applied",
@@ -629,7 +674,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天起未完成缴费安排的账户会被加上 NFA 冻结，影响后续选课等操作，尽快把费用处理好。",
     "desc_en": "Not Fees Arranged (NFA) holds are applied to student accounts which are not yet Fees Arranged for the term. Undergraduate students: Find out more about how this hold will impact your course registration process for future terms.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "From today, accounts without Fees Arranged get an NFA hold, which affects course enrolment and other operations — settle your fees as soon as possible."
   },
   {
     "title_en": "Tuition and fee refund deadline - 100%",
@@ -643,7 +689,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是全额(100%)退费的最后一天：若打算退课/退学期，今天前操作可拿回全部费用。",
     "desc_en": "Deadline to receive 100% of charges removed for withdrawing from the term, completing degree requirements, or dropping a course. See Student Financial Services website .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day for a 100% refund: if you plan to drop a course or withdraw from the term, act before today to get all charges removed."
   },
   {
     "title_en": "Last day to arrange tuition and fees",
@@ -657,7 +704,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "最后期限：今天前必须完成学费缴清或办理\"Fees Arranged\"，否则可能被冻结/退课，务必今天搞定。",
     "desc_en": "Refer to tuition and fees deadlines . Late fees apply, see Student Financial Services for details. Visit the Finance website for instructions on submitting a Promissory Note .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Final deadline: you must pay tuition in full or become \"Fees Arranged\" by today, or you may be held/dropped — get it done today."
   },
   {
     "title_en": "Class drop with grade of Withdrawn, no credit granted (WD)",
@@ -671,7 +719,8 @@ window.UW_EVENTS = [
     "end": "2027-03-28",
     "action": "进入\"退课记 WD\"阶段：此后退课会在成绩单标记 Withdrawn(不计学分)。如要退课请权衡后尽早决定。",
     "desc_en": "During this period, graduate students can continue to drop classes in Quest but a grade of Withdrawn, no credit granted (WD) will be applied and the class will remain on the transcript. Note that WD is not an academic penalty. Outside of this period, students with special circumstances can petition to drop or add a class using a course drop add form (Graduate Studies forms website).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Now in the \"WD drop\" period: dropping a course after this marks it Withdrawn (no credit) on your transcript. If you're considering a drop, weigh it and decide soon."
   },
   {
     "title_en": "Last day to select an examination centre or submit a proctor for online course final examinations",
@@ -685,7 +734,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "重要截止：如你有线上课程期末考，今天前必须在系统选好考试中心或提交监考人(proctor)，错过会影响考试！",
     "desc_en": "View details about final examination arrangements for online courses on The Centre website. Deadline is 3 p.m. ET on date listed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Important deadline: if you have an online course final exam, you must pick an exam centre or submit a proctor in the system by today — missing it affects your exam!"
   },
   {
     "title_en": "Final examination schedule released",
@@ -699,7 +749,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "期末考试时间表出来啦！登录 Quest 查好每门考试的时间、地点，早做规划。",
     "desc_en": "Visit the Final Examination Schedule website (authentication required) on or after this date to view the term's final examination schedule.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "The final exam schedule is out! Log into Quest to check each exam's time and location, and plan ahead."
   },
   {
     "title_en": "Reading Week",
@@ -713,7 +764,8 @@ window.UW_EVENTS = [
     "end": "2027-02-21",
     "action": "本周无课！正是赶论文、补作业、复习或好好喘口气的黄金时间，给自己排个计划。",
     "desc_en": "All classes cancelled; offices closed on the weekends and the holiday Monday. Undergraduate students: View the Undergraduate Studies Academic Calendar for more details. Graduate students: View the Graduate Studies Academic Calendar for more details.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "No classes this week! A golden window to catch up on papers, homework and revision, or just breathe — make yourself a plan."
   },
   {
     "title_en": "Family Day",
@@ -727,7 +779,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "家庭日假期，全校放假，陪陪家人朋友吧～",
     "desc_en": "All classes cancelled and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Family Day holiday — campus closed; spend time with family and friends~"
   },
   {
     "title_en": "Tuition and fee refund deadline - 50%",
@@ -741,7 +794,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是 50% 退费的最后一天：若要退课/退学期，今天前操作还能退回一半费用，之后不退。",
     "desc_en": "Deadline to receive 50% of charges for tuition, co-op fee, and student services fees removed for withdrawing from the term, completing degree requirements, or dropping a course. All other charges remain on student accounts. See Student Financial Services website .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day for a 50% refund: if you drop a course or withdraw from the term before today, you still get half the charges back; after this, no refund."
   },
   {
     "title_en": "Good Friday",
@@ -755,7 +809,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "公共假期，全校放假休息。",
     "desc_en": "All classes cancelled and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Public holiday — campus closed, enjoy the break."
   },
   {
     "title_en": "Class enrolment period",
@@ -769,7 +824,8 @@ window.UW_EVENTS = [
     "end": "2027-05-30",
     "action": "选课期开放！登录 Quest 尽早选好课/调整课表；注意：未办理缴费(Fees Arranged)的同学第3周结束会被系统退课。",
     "desc_en": "During this period, graduate students can enrol themselves in classes using Quest , and can also drop classes in Quest. Graduate students who are not fee arranged and have enrolled in classes will have their classes dropped at the end of the third week of classes (end of class enrolment period).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Class enrolment opens! Log into Quest to pick or adjust your courses early. Note: students who are not Fees Arranged will have their classes dropped at the end of Week 3."
   },
   {
     "title_en": "Classes end",
@@ -783,7 +839,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是本学期最后一天上课，收尾好各科笔记和作业，准备进入复习/考试阶段。",
     "desc_en": "Laurier may have a different schedule - visit their website for applicable end dates.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day of classes this term — wrap up your notes and assignments and get ready for review/exams."
   },
   {
     "title_en": "Make-up day for Good Friday",
@@ -797,7 +854,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天补耶稣受难日缺的课，按对应课表上课。",
     "desc_en": "The loss of a Friday class on March 26 will be made up by following a Friday schedule on Monday, April 12.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today makes up the class lost on Good Friday — follow the corresponding schedule."
   },
   {
     "title_en": "Pre-examination study days",
@@ -811,7 +869,8 @@ window.UW_EVENTS = [
     "end": "2027-04-14",
     "action": "考前复习日，无课。安心复习，制定好各科的备考计划。",
     "desc_en": "There are one or two study days each term, between the end of the Formal Lecture Period and the beginning of the Final Examination Period. No classes are to be held during study days, except where classes are rescheduled as the result of a campus-wide emergency closure.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Pre-exam study day, no classes. Review calmly and plan your prep for each course."
   },
   {
     "title_en": "Final Examination Period",
@@ -825,7 +884,8 @@ window.UW_EVENTS = [
     "end": "2027-04-30",
     "action": "进入期末考试期，随时核对你的考试安排，合理规划复习节奏。",
     "desc_en": "The Final Examination Period begins on the first date listed, and ends with an emergency day. Students are expected to be available to write their final examination(s) for the entirety of the Final Examination Period, including the scheduled emergency days.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Final Examination Period begins — keep checking your exam schedule and plan your revision pace."
   },
   {
     "title_en": "In-person final examination days for online courses",
@@ -839,7 +899,8 @@ window.UW_EVENTS = [
     "end": "2027-04-17",
     "action": "线上课程的线下期末考试日，如你有线上课程，确认考点与到场安排。",
     "desc_en": "Winter 2027 term dates; not all dates may be used.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "In-person final exam days for online courses — if you have an online course, confirm your exam centre and arrival arrangements."
   },
   {
     "title_en": "Final examination emergency days",
@@ -853,7 +914,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "应急预留日：若学校因故关闭，考试会顺延到这些日子，保持关注官方通知。",
     "desc_en": "Dates reserved to hold final examinations in the event the University is closed during the winter 2027 Final Examination Period: Examinations will be rescheduled on the next available day, including Sunday, on which examinations have not been scheduled.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Emergency reserve days: if the university closes for any reason, exams shift to these dates — watch official notices."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -867,7 +929,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "In-person final examination days for online courses",
@@ -881,7 +944,8 @@ window.UW_EVENTS = [
     "end": "2027-04-24",
     "action": "线上课程的线下期末考试日，如你有线上课程，确认考点与到场安排。",
     "desc_en": "Winter 2027 term dates; not all dates may be used.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "In-person final exam days for online courses — if you have an online course, confirm your exam centre and arrival arrangements."
   },
   {
     "title_en": "Final examination emergency days",
@@ -895,7 +959,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "应急预留日：若学校因故关闭，考试会顺延到这些日子，保持关注官方通知。",
     "desc_en": "Dates reserved to hold final examinations in the event the University is closed during the winter 2027 Final Examination Period: Examinations will be rescheduled on the next available day, including Sunday, on which examinations have not been scheduled.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Emergency reserve days: if the university closes for any reason, exams shift to these dates — watch official notices."
   },
   {
     "title_en": "Tuition and fees due",
@@ -909,7 +974,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "缴费大限！今天前必须缴清学费或完成\"Fees Arranged\"。跨境汇款要留 3-5 个工作日到账，别卡点。",
     "desc_en": "Pay in full or become \"Fees Arranged\" ; payments must be made in sufficient time to arrive on the student account on or before the due date. Notes: A Fees Arranged Extension fee applies after this date. Review Student Financial Services details about tuition due dates , including what happens if changes are made to the student account or fees are posted after this date.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Fee deadline! Pay tuition in full or become \"Fees Arranged\" by today. Cross-border transfers need 3–5 business days to arrive — don't cut it close."
   },
   {
     "title_en": "Opt out of optional/voluntary fees deadline",
@@ -923,7 +989,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天前如想退订可选/自愿费用(如某些保险、社团费)，需在 Quest 里操作 opt-out，过期不候。",
     "desc_en": "See how to opt out of optional or voluntary fees in Quest .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "If you want to opt out of optional/voluntary fees (e.g. some insurance, club fees), do it in Quest by today — no extensions."
   },
   {
     "title_en": "Fees Arranged Extension fees begin",
@@ -937,7 +1004,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "从今天起，未按时缴费/办理费用安排会开始产生延期附加费，尽快处理避免多花钱。",
     "desc_en": "See Student Financial Services website for Fees Arranged Extension fee amounts by date (via the current academic year's schedule of due dates).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "From today, late or unarranged fees start incurring extension charges — handle it soon to avoid paying more."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -951,7 +1019,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Apply for Graduation",
@@ -965,7 +1034,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "毕业申请截止！符合毕业条件的同学，今天前务必在 Quest 提交毕业申请，错过要等下一轮。",
     "desc_en": "Deadline for graduate students to apply for graduation in Quest for spring ceremony (degree completion in winter term) .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Graduation application deadline! Eligible students must submit their graduation application in Quest by today; miss it and you wait for the next round."
   },
   {
     "title_en": "Co-operative work term ends",
@@ -979,7 +1049,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "Co-op 实习学期结束，实习的同学做好工作交接与实习报告收尾。",
     "desc_en": "Actual dates may vary depending on employer or student requirements.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Co-op work term ends — interns, wrap up your handover and final report."
   },
   {
     "title_en": "Final examination emergency days",
@@ -993,7 +1064,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "应急预留日：若学校因故关闭，考试会顺延到这些日子，保持关注官方通知。",
     "desc_en": "Dates reserved to hold final examinations in the event the University is closed during the winter 2027 Final Examination Period: Examinations will be rescheduled on the next available day, including Sunday, on which examinations have not been scheduled.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Emergency reserve days: if the university closes for any reason, exams shift to these dates — watch official notices."
   },
   {
     "title_en": "Grades begin to appear in Quest",
@@ -1007,7 +1079,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "成绩陆续出分啦！登录 Quest 查看本学期成绩（注意当天不一定全部出齐）。",
     "desc_en": "Registered students can view their unofficial term grades in Quest. Note: Not all grades will be available on this date; instructors submit grades until the grades due deadline published in the Undergraduate Studies Academic Calendar.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Grades are rolling out! Log into Quest to view this term's grades (note they may not all appear on the same day)."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -1021,7 +1094,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -1035,7 +1109,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Classes begin",
@@ -1049,7 +1124,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "新学期开课啦！确认课表、上课地点和第一周作业，调好状态开学冲。",
     "desc_en": "Laurier may have a different schedule - visit their website for applicable start dates.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Classes begin! Confirm your timetable, classrooms and Week-1 assignments, and get into the right headspace for the term."
   },
   {
     "title_en": "Co-operative work term begins",
@@ -1063,7 +1139,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "Co-op 实习学期开始，实习的同学按雇主安排入职报到（具体日期以雇主/个人情况为准）。",
     "desc_en": "Actual dates may vary depending on employer or student requirements.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Co-op work term begins; interns report to their employer per the employer's schedule (exact dates depend on employer/individual circumstances)."
   },
   {
     "title_en": "Victoria Day",
@@ -1077,7 +1154,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "公共假期，全校放假休息。",
     "desc_en": "All classes cancelled and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Public holiday — campus closed, enjoy the break."
   },
   {
     "title_en": "Not Fees Arranged (NFA) holds applied",
@@ -1091,7 +1169,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天起未完成缴费安排的账户会被加上 NFA 冻结，影响后续选课等操作，尽快把费用处理好。",
     "desc_en": "Not Fees Arranged (NFA) holds are applied to student accounts which are not yet Fees Arranged for the term. Undergraduate students: Find out more about how this hold will impact your course registration process for future terms.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "From today, accounts without Fees Arranged get an NFA hold, which affects course enrolment and other operations — settle your fees as soon as possible."
   },
   {
     "title_en": "Tuition and fee refund deadline - 100%",
@@ -1105,7 +1184,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是全额(100%)退费的最后一天：若打算退课/退学期，今天前操作可拿回全部费用。",
     "desc_en": "Deadline to receive 100% of charges removed for withdrawing from the term, completing degree requirements, or dropping a course. See Student Financial Services website .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day for a 100% refund: if you plan to drop a course or withdraw from the term, act before today to get all charges removed."
   },
   {
     "title_en": "Class drop with grade of Withdrawn, no credit granted (WD)",
@@ -1119,7 +1199,8 @@ window.UW_EVENTS = [
     "end": "2027-07-18",
     "action": "进入\"退课记 WD\"阶段：此后退课会在成绩单标记 Withdrawn(不计学分)。如要退课请权衡后尽早决定。",
     "desc_en": "During this period, graduate students can continue to drop classes in Quest but a grade of Withdrawn, no credit granted (WD) will be applied and the class will remain on the transcript. Note that WD is not an academic penalty. Outside of this period, students with special circumstances can petition to drop or add a class using a course drop add form (Graduate Studies forms website).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Now in the \"WD drop\" period: dropping a course after this marks it Withdrawn (no credit) on your transcript. If you're considering a drop, weigh it and decide soon."
   },
   {
     "title_en": "Last day to select an examination centre or submit a proctor for online course final examinations",
@@ -1133,7 +1214,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "重要截止：如你有线上课程期末考，今天前必须在系统选好考试中心或提交监考人(proctor)，错过会影响考试！",
     "desc_en": "View details about final examination arrangements for online courses on The Centre website. Deadline is 3 p.m. ET on date listed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Important deadline: if you have an online course final exam, you must pick an exam centre or submit a proctor in the system by today — missing it affects your exam!"
   },
   {
     "title_en": "Final examination schedule released",
@@ -1147,7 +1229,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "期末考试时间表出来啦！登录 Quest 查好每门考试的时间、地点，早做规划。",
     "desc_en": "Visit the Final Examination Schedule website (authentication required) on or after this date to view the term's final examination schedule.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "The final exam schedule is out! Log into Quest to check each exam's time and location, and plan ahead."
   },
   {
     "title_en": "Convocation - spring 2027",
@@ -1161,7 +1244,8 @@ window.UW_EVENTS = [
     "end": "2027-06-19",
     "action": "春季毕业典礼！毕业生留意典礼时间地点、着装与来宾安排，约上亲友一起见证～",
     "desc_en": "Visit Convocation website for ceremony details.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Spring Convocation! Graduates: note the ceremony time, location, dress code and guest arrangements; bring family and friends to celebrate~"
   },
   {
     "title_en": "Tuition and fee refund deadline - 50%",
@@ -1175,7 +1259,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是 50% 退费的最后一天：若要退课/退学期，今天前操作还能退回一半费用，之后不退。",
     "desc_en": "Deadline to receive 50% of charges for tuition, co-op fee, and student services fees removed for withdrawing from the term, completing degree requirements, or dropping a course. All other charges remain on student accounts. See Student Financial Services website .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day for a 50% refund: if you drop a course or withdraw from the term before today, you still get half the charges back; after this, no refund."
   },
   {
     "title_en": "Last day to arrange tuition and fees",
@@ -1189,7 +1274,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "最后期限：今天前必须完成学费缴清或办理\"Fees Arranged\"，否则可能被冻结/退课，务必今天搞定。",
     "desc_en": "Refer to tuition and fees deadlines . Late fees apply, see Student Financial Services for details. Visit the Finance website for instructions on submitting a Promissory Note .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Final deadline: you must pay tuition in full or become \"Fees Arranged\" by today, or you may be held/dropped — get it done today."
   },
   {
     "title_en": "Canada Day",
@@ -1203,7 +1289,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "加拿大国庆假期，全校放假休息～",
     "desc_en": "All classes cancelled and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Canada Day holiday — campus closed, enjoy the break~"
   },
   {
     "title_en": "Additional day",
@@ -1217,7 +1304,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是学校安排的额外假日，放松一下～",
     "desc_en": "All classes cancelled and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is an additional holiday scheduled by the university — relax~"
   },
   {
     "title_en": "Civic Holiday",
@@ -1231,7 +1319,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "全校停课、办公室关闭，今天好好休息一天～",
     "desc_en": "All classes cancelled and offices closed.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Campus closed, offices shut — enjoy a proper day off~"
   },
   {
     "title_en": "Make-up day for Victoria Day",
@@ -1245,7 +1334,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天按【周一课表】上课（补维多利亚日缺的课），别走错教室～",
     "desc_en": "The loss of a Monday class on May 24 will be made up by following a Monday schedule on Tuesday, August 3.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today follows the Monday schedule (making up the class lost on Victoria Day) — don't go to the wrong room~"
   },
   {
     "title_en": "Make-up day for Additional day",
@@ -1259,7 +1349,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天补额外假日缺的课，按对应课表上课。",
     "desc_en": "The loss of a Friday class on July 2 will be made up by following a Friday schedule on Wednesday, August 4.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today makes up the class lost on the Additional day — follow the corresponding schedule."
   },
   {
     "title_en": "Classes end",
@@ -1273,7 +1364,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是本学期最后一天上课，收尾好各科笔记和作业，准备进入复习/考试阶段。",
     "desc_en": "Laurier may have a different schedule - visit their website for applicable end dates.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Last day of classes this term — wrap up your notes and assignments and get ready for review/exams."
   },
   {
     "title_en": "Make-up day for Canada Day",
@@ -1287,7 +1379,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天补加拿大日缺的课，按对应课表上课，留意你的课程安排。",
     "desc_en": "The loss of a Thursday class on July 1 will be made up on Thursday, August 5 (no change in schedule).",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today makes up the class lost on Canada Day — follow the corresponding schedule and check your course arrangements."
   },
   {
     "title_en": "Pre-examination study days",
@@ -1301,7 +1394,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "考前复习日，无课。安心复习，制定好各科的备考计划。",
     "desc_en": "There are one or two study days each term, between the end of the Formal Lecture Period and the beginning of the Final Examination Period. No classes are to be held during study days, except where classes are rescheduled as the result of a campus-wide emergency closure.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Pre-exam study day, no classes. Review calmly and plan your prep for each course."
   },
   {
     "title_en": "Final Examination Period",
@@ -1315,7 +1409,8 @@ window.UW_EVENTS = [
     "end": "2027-08-21",
     "action": "进入期末考试期，随时核对你的考试安排，合理规划复习节奏。",
     "desc_en": "The Final Examination Period begins on the first date listed, and ends with an emergency day. Students are expected to be available to write their final examination(s) for the entirety of the Final Examination Period, including the scheduled emergency days.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Final Examination Period begins — keep checking your exam schedule and plan your revision pace."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -1329,7 +1424,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "In-person final examination days for online courses",
@@ -1343,7 +1439,8 @@ window.UW_EVENTS = [
     "end": "2027-08-14",
     "action": "线上课程的线下期末考试日，如你有线上课程，确认考点与到场安排。",
     "desc_en": "Spring 2027 term dates; not all dates may be used.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "In-person final exam days for online courses — if you have an online course, confirm your exam centre and arrival arrangements."
   },
   {
     "title_en": "Final examination emergency days",
@@ -1357,7 +1454,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "应急预留日：若学校因故关闭，考试会顺延到这些日子，保持关注官方通知。",
     "desc_en": "Dates reserved to hold final examinations in the event the University is closed during the spring 2027 Final Examination Period: Examinations will be rescheduled on the next available day, including Sunday, on which examinations have not been scheduled.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Emergency reserve days: if the university closes for any reason, exams shift to these dates — watch official notices."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -1371,7 +1469,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Co-operative work term ends",
@@ -1385,7 +1484,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "Co-op 实习学期结束，实习的同学做好工作交接与实习报告收尾。",
     "desc_en": "Actual dates may vary depending on employer or student requirements.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Co-op work term ends — interns, wrap up your handover and final report."
   },
   {
     "title_en": "In-person final examination days for online courses",
@@ -1399,7 +1499,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "线上课程的线下期末考试日，如你有线上课程，确认考点与到场安排。",
     "desc_en": "Spring 2027 term dates; not all dates may be used.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "In-person final exam days for online courses — if you have an online course, confirm your exam centre and arrival arrangements."
   },
   {
     "title_en": "Final examination emergency days",
@@ -1413,7 +1514,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "应急预留日：若学校因故关闭，考试会顺延到这些日子，保持关注官方通知。",
     "desc_en": "Dates reserved to hold final examinations in the event the University is closed during the spring 2027 Final Examination Period: Examinations will be rescheduled on the next available day, including Sunday, on which examinations have not been scheduled.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Emergency reserve days: if the university closes for any reason, exams shift to these dates — watch official notices."
   },
   {
     "title_en": "Grades begin to appear in Quest",
@@ -1427,7 +1529,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "成绩陆续出分啦！登录 Quest 查看本学期成绩（注意当天不一定全部出齐）。",
     "desc_en": "Registered students can view their unofficial term grades in Quest. Note: Not all grades will be available on this date; instructors submit grades until the grades due deadline published in the Undergraduate Studies Academic Calendar.",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Grades are rolling out! Log into Quest to view this term's grades (note they may not all appear on the same day)."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -1441,7 +1544,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Final examination make-up sessions",
@@ -1455,7 +1559,8 @@ window.UW_EVENTS = [
     "end": "",
     "action": "今天是期末补考/顺延场次，如与你相关请确认时间地点。",
     "desc_en": "Each term, the Office of the Registrar provides instructors with several dates and times during the Final Examination Period, or shortly thereafter, at which they can register a student to write their deferred final examination. The registration process to attend will only occur after the student and the instructor have mutually agreed on the date and time. Any student who arrives to a make-up final examination session who is not registered to write at that session will not be permitted to write and will be directed to contact their instructor. Final examination make-up sessions are only available at the University of Waterloo campus",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Today is a deferred/make-up final exam sitting — if it applies to you, confirm the time and location."
   },
   {
     "title_en": "Apply for Graduation",
@@ -1469,6 +1574,7 @@ window.UW_EVENTS = [
     "end": "",
     "action": "毕业申请截止！符合毕业条件的同学，今天前务必在 Quest 提交毕业申请，错过要等下一轮。",
     "desc_en": "Deadline for graduate students to apply for graduation in Quest for fall ceremony (degree completion in spring term) .",
-    "academicYear": 2026
+    "academicYear": 2026,
+    "action_en": "Graduation application deadline! Eligible students must submit their graduation application in Quest by today; miss it and you wait for the next round."
   }
 ];

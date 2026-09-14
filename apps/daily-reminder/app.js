@@ -1,14 +1,54 @@
-// 滑铁卢大学研究生每日提醒 · 网页版逻辑
+// 滑铁卢大学研究生每日提醒 · 网页版逻辑（i18n 版）
 // 复刻 daily_reminder.py 的 pick_focus + build_message；新增日历视图 + 学年切换
 // 学年定义：Fall(Y) + Winter(Y+1) + Spring(Y+1) 构成 Y–Y+1 学年
 // 每个学年独立：独立的日历、列表、今日提醒；月份导航锁定在该学年内（9月~次年8月）
+// 双语：UI 串走 UW_I18N.t；事件字段走 lpick(obj, base)（base_zh / base_en）
 (function () {
   'use strict';
 
-  var WD = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'];
+  // ---- i18n helpers ----
+  function T(key, fallback) {
+    if (window.UW_I18N && UW_I18N.t) return UW_I18N.t(key, fallback);
+    return (fallback != null) ? fallback : key;
+  }
+  function curLang() {
+    return (window.UW_I18N && UW_I18N.get) ? UW_I18N.get() : 'en';
+  }
+  // parallel bilingual field picker: base_zh / base_en（也兼容 base / base_en）
+  // 顺序必须是「当前语言 → 无后缀原字段 → 另一语言」：本数据集存在
+  // 「原字段=中文 + *_en=英文」的字段（如 action / action_en），
+  // 若先跳到另一语言，中文模式会错误显示英文。
+  function lpick(o, base) {
+    var lang = curLang();
+    var a = o[base + '_' + lang];
+    if (a != null && a !== '') return a;
+    if (o[base] != null && o[base] !== '') return o[base];
+    var b = o[base + (lang === 'en' ? '_zh' : '_en')];
+    if (b != null && b !== '') return b;
+    return '';
+  }
+  function fmt(s) {
+    var parts = Array.prototype.slice.call(arguments, 1);
+    var i = 0;
+    return String(s).replace(/%[sd]/g, function () {
+      return (i < parts.length) ? parts[i++] : '';
+    });
+  }
+  var MON_EN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+  function wdName(idx) { return T('dr.dow.' + idx); }
+  function md(d) {
+    if (curLang() === 'en') return MON_EN[d.getMonth()] + ' ' + d.getDate();
+    return (d.getMonth() + 1) + '月' + d.getDate() + '日';
+  }
+
   var CAT_RANK = { '缴费': 9, '毕业': 9, '退费': 8, '退课': 8, '选课': 7,
     '考试': 6, '上课': 6, '成绩': 5, 'Co-op': 4, '补课': 3,
     '迎新': 5, '假期': 2, '其他': 1 };
+  var CAT_EN = { '全部': 'All', '假期': 'Holiday', '迎新': 'Orientation', '缴费': 'Payment', '毕业': 'Graduation',
+    '退费': 'Refund', '退课': 'Course Drop', '选课': 'Course Selection', '考试': 'Exam',
+    '上课': 'Classes', '成绩': 'Grades', 'Co-op': 'Co-op', '补课': 'Make-up Class', '其他': 'Other' };
+  // 类别标签按当前语言取：英文视图走 CAT_EN，中文视图用数据里的中文原值
+  function catLabel(c) { return curLang() === 'en' ? (CAT_EN[c] || c) : c; }
   var ACTIONABLE_PERIOD = { '选课': 1, '退课': 1 };
 
   // 类别配色（与样式统一，用于日历 chip / 跨天底色 / 详情左边框）
@@ -19,7 +59,6 @@
   };
 
   function parseISO(s) { return s ? new Date(s + 'T00:00:00') : null; }
-  function md(d) { return (d.getMonth() + 1) + '月' + d.getDate() + '日'; }
   function dayDiff(a, b) { return Math.round((a - b) / 86400000); }
   function weight(e) { return CAT_RANK[e.category] || 1; }
   function hexToRgba(hex, a) {
@@ -101,48 +140,48 @@
 
   function buildMessage(events, today) {
     var lines = [];
-    lines.push('📅 ' + md(today) + ' ' + WD[today.getDay()] + ' · 滑铁卢研究生日程提醒');
-    lines.push('（' + currentYear + '–' + (currentYear + 1) + ' 学年）');
+    lines.push('📅 ' + md(today) + ' ' + wdName(today.getDay()) + ' · ' + T('dr.msg.head'));
+    lines.push('（' + currentYear + '–' + (currentYear + 1) + ' ' + T('dr.year.suffix') + '）');
     lines.push('');
 
     var pf = pickFocus(events, today);
     var focus = pf[0], kind = pf[1];
 
-    lines.push('☀️ 今日一件事');
+    lines.push('☀️ ' + T('dr.msg.onething'));
     if (!focus) {
-      lines.push('本学年暂时没有临近的硬性节点，安心学习、照顾好自己就好～');
+      lines.push(T('dr.msg.none'));
     } else if (kind === 'today' || kind === 'holiday') {
-      lines.push(focus.emoji + ' 【' + focus.title_zh + '】');
-      lines.push(focus.action);
+      lines.push(focus.emoji + ' 【' + lpick(focus, 'title') + '】');
+      lines.push(lpick(focus, 'action'));
     } else if (kind === 'deadline') {
       var d = dayDiff(focus._start, today);
-      var when = d === 0 ? '就是今天！' : (d === 1 ? '就在明天！' : ('还有 ' + d + ' 天（' + md(focus._start) + '）'));
-      lines.push(focus.emoji + ' 距【' + focus.title_zh + '】' + when);
-      lines.push('提前准备：' + focus.action);
+      var when = d === 0 ? T('dr.msg.d.today') : (d === 1 ? T('dr.msg.d.tomorrow') : fmt(T('dr.msg.d.days'), d, md(focus._start)));
+      lines.push(focus.emoji + ' ' + T('dr.msg.nearest') + lpick(focus, 'title') + ' ' + when);
+      lines.push(T('dr.msg.prep') + lpick(focus, 'action'));
     } else if (kind === 'ongoing') {
       var de = dayDiff(focus._end, today);
-      var endtxt = de === 0 ? '今天最后一天' : ('还有 ' + de + ' 天（' + md(focus._end) + '截止）');
-      lines.push(focus.emoji + ' 【' + focus.title_zh + '】进行中 · ' + endtxt);
-      lines.push(focus.action);
+      var endtxt = de === 0 ? T('dr.msg.o.today') : fmt(T('dr.msg.o.days'), de, md(focus._end));
+      lines.push(focus.emoji + ' 【' + lpick(focus, 'title') + '】' + T('dr.msg.ongoing_tag') + ' · ' + endtxt);
+      lines.push(lpick(focus, 'action'));
     } else if (kind === 'upcoming') {
       var du = dayDiff(focus._start, today);
-      lines.push(focus.emoji + ' 最近的节点：' + md(focus._start) + '（还有 ' + du + ' 天）【' + focus.title_zh + '】');
-      lines.push(focus.action);
+      lines.push(focus.emoji + ' ' + T('dr.msg.nearest') + md(focus._start) + '（' + fmt(T('dr.msg.days'), du) + '）【' + lpick(focus, 'title') + '】');
+      lines.push(lpick(focus, 'action'));
     }
 
     var todays = events.filter(function (e) { return isOngoing(e, today); });
     var seen = {}, todaysU = [];
     todays.sort(function (a, b) { return b.priority - a.priority; });
     todays.forEach(function (e) {
-      if (seen[e.title_zh]) return;
-      seen[e.title_zh] = 1; todaysU.push(e);
+      if (seen[lpick(e, 'title')]) return;
+      seen[lpick(e, 'title')] = 1; todaysU.push(e);
     });
     if (todaysU.length) {
       lines.push('');
-      lines.push('🔔 今日节点');
+      lines.push('🔔 ' + T('dr.msg.todaynodes'));
       todaysU.forEach(function (e) {
-        var tag = (e._end && e._start.getTime() !== today.getTime()) ? '（进行中）' : '';
-        lines.push('· ' + e.emoji + ' ' + e.title_zh + tag);
+        var tag = (e._end && e._start.getTime() !== today.getTime()) ? T('dr.msg.ongoing_tag') : '';
+        lines.push('· ' + e.emoji + ' ' + lpick(e, 'title') + tag);
       });
     }
 
@@ -151,23 +190,23 @@
     up.sort(function (a, b) { return a._start - b._start || b.priority - a.priority; });
     var seen2 = {}, upU = [];
     up.forEach(function (e) {
-      var k = e.title_zh + e.start;
+      var k = lpick(e, 'title') + e.start;
       if (seen2[k]) return;
       seen2[k] = 1; upU.push(e);
     });
     if (upU.length) {
       lines.push('');
-      lines.push('⏳ 临近提醒（未来 3 周）');
+      lines.push('⏳ ' + T('dr.msg.upcoming'));
       upU.slice(0, 6).forEach(function (e) {
         var d2 = dayDiff(e._start, today);
-        var when = d2 === 1 ? '明天' : ('还有' + d2 + '天');
-        lines.push('· ' + e.emoji + ' ' + md(e._start) + '（' + when + '）' + e.title_zh);
+        var when = d2 === 1 ? T('dr.range.tomorrow') : fmt(T('dr.msg.days'), d2);
+        lines.push('· ' + e.emoji + ' ' + md(e._start) + '（' + when + '）' + lpick(e, 'title'));
       });
     }
 
     lines.push('');
     lines.push('———');
-    lines.push('数据来源：University of Waterloo 研究生重要日期');
+    lines.push(T('dr.msg.source'));
     return lines.join('\n');
   }
 
@@ -177,26 +216,26 @@
     if (range === 'today') return buildMessage(ACTIVE, now);
     var w = rangeWindow(range);
     var items = eventsInRange(w[0], w[1], currentCat);
-    var label = range === 'week' ? '本周' : '本月';
+    var label = range === 'week' ? T('dr.remind.week') : T('dr.remind.month');
     var lines2 = [];
-    lines2.push('📅 滑铁卢研究生重要日期 · ' + label + '提醒');
-    lines2.push('（' + currentYear + '–' + (currentYear + 1) + ' 学年）');
+    lines2.push(fmt(T('dr.range.head'), label));
+    lines2.push('（' + currentYear + '–' + (currentYear + 1) + ' ' + T('dr.year.suffix') + '）');
     lines2.push('');
     if (!items.length) {
-      lines2.push(label + '暂时没有重要日期，享受当下吧～');
+      lines2.push(fmt(T('dr.range.empty'), label));
     } else {
-      lines2.push(label + '共 ' + items.length + ' 个重要节点：');
+      lines2.push(fmt(T('dr.range.count'), label, items.length));
       items.forEach(function (e) {
         var d = dayDiff(e._start, now);
-        var tag = d > 0 ? ('还有 ' + d + ' 天') : (e._end && e._end > now ? '进行中' : '就是今天');
-        var dow = WD[e._start.getDay()];
+        var tag = d > 0 ? fmt(T('dr.tag.soon'), d) : (e._end && e._end > now ? T('dr.tag.ongoing') : T('dr.tag.today'));
+        var dow = wdName(e._start.getDay());
         lines2.push('· ' + md(e._start) + ' ' + dow + ' ' + (e.emoji ? e.emoji + ' ' : '') +
-          e.title_zh + '（' + tag + '）');
+          lpick(e, 'title') + '（' + tag + '）');
       });
     }
     lines2.push('');
     lines2.push('———');
-    lines2.push('数据来源：University of Waterloo 研究生重要日期');
+    lines2.push(T('dr.msg.source'));
     return lines2.join('\n');
   }
 
@@ -222,8 +261,8 @@
   function copyRange(range) {
     var txt = buildRangeSummary(range);
     copyText(txt).then(function () {
-      var label = range === 'today' ? '今日' : range === 'week' ? '本周' : '本月';
-      showToast('已复制' + label + '文案，去发给同学吧');
+      var label = range === 'today' ? T('dr.remind.today') : range === 'week' ? T('dr.remind.week') : T('dr.remind.month');
+      showToast(fmt(T('dr.toast.copied'), label));
     });
   }
 
@@ -235,6 +274,8 @@
   var curYear, curMonth;
   var todayStr;
   var hubRange = 'week';           // 顶部提醒中心当前选中的范围
+  var lastDetailDs = null;
+  var detailOpen = false;
 
   function presentYears() {
     var ys = [];
@@ -253,7 +294,6 @@
     return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
-  // 默认月份：今天在该学年内则停在今天；否则停在该学年 9 月（学年起点）
   // 默认月份：始终停在“今天所在月份”，让今日高亮可见；
   // 学年之前的月份 prev 会被禁用（见 updateCalNav），不会越界到无数据区域。
   function setDefaultMonth() {
@@ -278,13 +318,6 @@
     document.getElementById('cal-next').disabled = atMax;
   }
 
-  function renderReminder(dateStr) {
-    var today = parseISO(dateStr);
-    var msg = buildMessage(ACTIVE, today);
-    document.getElementById('reminder-text').textContent = msg;
-    return msg;
-  }
-
   function renderTable(filterCat) {
     var rows = ACTIVE.slice().sort(function (a, b) { return a._start - b._start; });
     if (filterCat && filterCat !== '全部') {
@@ -296,19 +329,22 @@
       var tr = document.createElement('tr');
       var dateTxt = md(e._start) + (e._end ? ' – ' + md(e._end) : '');
       tr.innerHTML = '<td>' + dateTxt + '</td>' +
-        '<td>' + e.emoji + ' ' + e.title_zh + '</td>' +
-        '<td><span class="cat cat-' + e.category + '">' + e.category + '</span></td>' +
-        '<td>' + (e.term_zh || '') + '</td>' +
-        '<td class="act">' + e.action + '</td>';
+        '<td>' + (e.emoji ? e.emoji + ' ' : '') + lpick(e, 'title') + '</td>' +
+        '<td><span class="cat cat-' + e.category + '">' + catLabel(e.category) + '</span></td>' +
+        '<td>' + lpick(e, 'term') + '</td>' +
+        '<td class="act">' + lpick(e, 'action') + '</td>';
       tbody.appendChild(tr);
     });
-    document.getElementById('table-count').textContent = rows.length;
+    document.getElementById('table-count').textContent = fmt(T('dr.table.count'), rows.length);
   }
 
   // ---------- 日历 ----------
   function renderCalendar() {
     var year = curYear, month = curMonth;
-    document.getElementById('cal-title').textContent = year + '年' + (month + 1) + '月';
+    var title;
+    if (curLang() === 'en') title = MON_EN[month] + ' ' + year;
+    else title = year + '年' + (month + 1) + '月';
+    document.getElementById('cal-title').textContent = title;
 
     var first = new Date(year, month, 1);
     var startDow = first.getDay();            // 0 = 周日
@@ -343,15 +379,15 @@
         var chip = document.createElement('div');
         chip.className = 'cal-chip';
         chip.style.borderLeftColor = CAT_COLOR[e.category] || '#888';
-        chip.textContent = (e.emoji ? e.emoji + ' ' : '') + e.title_zh;
-        chip.title = e.title_en || e.title_zh;
+        chip.textContent = (e.emoji ? e.emoji + ' ' : '') + lpick(e, 'title');
+        chip.title = lpick(e, 'title');
         chip.addEventListener('click', function (ev) { ev.stopPropagation(); openDetail(ds); });
         cell.appendChild(chip);
       });
       if (starts.length > max) {
         var more = document.createElement('div');
         more.className = 'cal-more';
-        more.textContent = '+' + (starts.length - max) + ' 更多';
+        more.textContent = '+' + (starts.length - max) + ' ' + T('dr.cal.more');
         more.addEventListener('click', function (ev) { ev.stopPropagation(); openDetail(ds); });
         cell.appendChild(more);
       }
@@ -364,39 +400,39 @@
   }
 
   function showDetail(ds) {
+    lastDetailDs = ds;
     var dt = parseISO(ds);
     var acts = eventsOnDay(dt, currentCat)
       .sort(function (a, b) { return b.priority - a.priority || a._start - b._start; });
     var box = document.getElementById('cal-detail');
     if (!acts.length) {
-      box.innerHTML = '<div class="cal-detail-empty">🗓️ ' + md(dt) + ' ' + WD[dt.getDay()] +
-        ' · 这一天没有记录的重要日期。</div>';
+      box.innerHTML = fmt(T('dr.detail.empty'), md(dt), wdName(dt.getDay()));
       return;
     }
-    var html = '<div class="cal-detail-head">📌 ' + md(dt) + ' ' + WD[dt.getDay()] + ' · 共 ' + acts.length + ' 项</div>';
-    html += '<div class="cal-detail-list">';
+    var html = fmt(T('dr.detail.head'), md(dt), wdName(dt.getDay()), acts.length);
     acts.forEach(function (e) {
       var c = CAT_COLOR[e.category] || '#888';
       var rangeEnd = e._end && e._start.getTime() !== e._end.getTime();
       var daterange = md(e._start) + (rangeEnd ? ' – ' + md(e._end) : '');
-      var en = e.title_en ? '<div class="en">' + e.title_en + '</div>' : '';
-      var act = e.action ? '<div class="act">💡 ' + e.action + '</div>' : '';
+      var act = lpick(e, 'action') ? '<div class="act">💡 ' + lpick(e, 'action') + '</div>' : '';
       html += '<div class="cal-detail-item" style="border-left:4px solid ' + c + '; background:' + hexToRgba(c, 0.06) + '">' +
-        '<div class="zh">' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + '</div>' + en +
-        '<div class="meta"><span class="cat cat-' + e.category + '">' + e.category + '</span>' +
+        '<div class="zh">' + (e.emoji ? e.emoji + ' ' : '') + lpick(e, 'title') + '</div>' +
+        '<div class="meta"><span class="cat cat-' + e.category + '">' + catLabel(e.category) + '</span>' +
         '<span class="date">' + daterange + '</span>' +
-        (e.term_zh ? '<span class="term">' + e.term_zh + '</span>' : '') + '</div>' + act + '</div>';
+        (lpick(e, 'term') ? '<span class="term">' + lpick(e, 'term') + '</span>' : '') + '</div>' + act + '</div>';
     });
-    html += '</div>';
     box.innerHTML = html;
   }
 
   function openDetail(ds) {
+    lastDetailDs = ds;
+    detailOpen = true;
     showDetail(ds);
     document.getElementById('detail-backdrop').classList.add('open');
     document.body.style.overflow = 'hidden';
   }
   function closeDetail() {
+    detailOpen = false;
     document.getElementById('detail-backdrop').classList.remove('open');
     document.body.style.overflow = '';
   }
@@ -432,37 +468,36 @@
     hubRange = range;
     var w = rangeWindow(range);
     var items = eventsInRange(w[0], w[1], currentCat);
-    var label = range === 'today' ? '今日' : range === 'week' ? '本周' : '本月';
+    var label = range === 'today' ? T('dr.remind.today') : range === 'week' ? T('dr.remind.week') : T('dr.remind.month');
     var hint = document.getElementById('remind-hint');
     var copyBtn = document.getElementById('remind-copy');
-    if (copyBtn) copyBtn.textContent = '📋 复制' + label + '文案';
+    if (copyBtn) copyBtn.textContent = T('dr.copy.' + range);
 
     if (!items.length) {
-      // 范围内无事件：严格只显示本范围的状态，不跨范围借“最近节点”
-      hint.innerHTML = '<div class="rh-empty">' + label + '暂无重要日期。</div>';
+      hint.innerHTML = '<div class="rh-empty">' + fmt(T('dr.hub.empty'), label) + '</div>';
       return;
     }
 
-    var head = '<div class="rh-head">' + label + '共 <b>' + items.length + '</b> 个节点</div>';
+    var head = fmt(T('dr.hub.head'), label, items.length);
     var list = '<ul class="rh-list">';
     var now = new Date(); now.setHours(0, 0, 0, 0);
     items.slice(0, 8).forEach(function (e) {
       var d = dayDiff(e._start, now);
       var tag, cls;
-      if (e._end && e._start <= now && now <= e._end) { tag = '进行中'; cls = 'ongoing'; }
-      else if (d === 0) { tag = '今天'; cls = 'today'; }
-      else if (d === 1) { tag = '明天'; cls = 'soon'; }
-      else if (d > 0) { tag = '还有 ' + d + ' 天'; cls = 'soon'; }
+      if (e._end && e._start <= now && now <= e._end) { tag = T('dr.tag.ongoing'); cls = 'ongoing'; }
+      else if (d === 0) { tag = T('dr.tag.today'); cls = 'today'; }
+      else if (d === 1) { tag = T('dr.range.tomorrow'); cls = 'soon'; }
+      else if (d > 0) { tag = fmt(T('dr.tag.soon'), d); cls = 'soon'; }
       else { tag = md(e._start); cls = ''; }
       list += '<li class="rh-item"><span class="rh-dot" style="background:' +
         (CAT_COLOR[e.category] || '#888') + '"></span>' +
-        '<span class="rh-title">' + (e.emoji ? e.emoji + ' ' : '') + e.title_zh + '</span>' +
+        '<span class="rh-title">' + (e.emoji ? e.emoji + ' ' : '') + lpick(e, 'title') + '</span>' +
         '<span class="rh-date">' + md(e._start) + (e._end ? '–' + md(e._end) : '') + '</span>' +
         '<span class="rh-tag ' + cls + '">' + tag + '</span></li>';
     });
     list += '</ul>';
     if (items.length > 8) {
-      list += '<div class="rh-more">还有 ' + (items.length - 8) + ' 个，点上方“复制”查看完整清单</div>';
+      list += '<div class="rh-more">' + fmt(T('dr.hub.more'), items.length - 8) + '</div>';
     }
     hint.innerHTML = head + list;
   }
@@ -479,7 +514,7 @@
       var b = document.createElement('button');
       b.className = 'cat-pop-item' + (c === currentCat ? ' active' : '');
       var dot = '<span class="dot" style="background:' + (CAT_COLOR[c] || '#888') + '"></span>';
-      b.innerHTML = dot + '<span>' + c + '</span>';
+      b.innerHTML = dot + '<span>' + catLabel(c) + '</span>';
       b.addEventListener('click', function () {
         currentCat = c;
         Array.prototype.forEach.call(list.querySelectorAll('.cat-pop-item'), function (x) { x.classList.remove('active'); });
@@ -497,6 +532,17 @@
   function openCatPop() { var p = document.getElementById('cat-pop'); if (p) p.hidden = false; }
   function closeCatPop() { var p = document.getElementById('cat-pop'); if (p) p.hidden = true; }
 
+  // 语言切换时重渲染（保持功能不变）
+  function relocalize() {
+    var yb = document.getElementById('year-badge');
+    if (yb) yb.textContent = currentYear + '–' + (currentYear + 1) + ' ' + T('dr.year.suffix');
+    renderCatSidebar();
+    renderCalendar();
+    renderTable(currentCat);
+    renderRemindHub(hubRange);
+    if (detailOpen && lastDetailDs) showDetail(lastDetailDs);
+  }
+
   function init() {
     todayStr = fmtDateInput(new Date());
 
@@ -506,7 +552,7 @@
     currentYear = (ys.indexOf(ty) >= 0) ? ty : ys[0];
 
     var yb = document.getElementById('year-badge');
-    if (yb) yb.textContent = currentYear + '–' + (currentYear + 1) + ' 学年';
+    if (yb) yb.textContent = currentYear + '–' + (currentYear + 1) + ' ' + T('dr.year.suffix');
 
     refreshActive();
     setDefaultMonth();
@@ -528,9 +574,9 @@
     // 分享
     var shareBtn = document.getElementById('share-btn');
     if (shareBtn) shareBtn.addEventListener('click', function () {
-      var data = { title: '滑铁卢研究生重要日期', text: '滑铁卢研究生重要日期日历', url: location.href };
+      var data = { title: T('dr.brand'), text: T('dr.brand'), url: location.href };
       if (navigator.share) { navigator.share(data).catch(function () {}); }
-      else { copyText(location.href).then(function () { showToast('链接已复制，去分享吧'); }); }
+      else { copyText(location.href).then(function () { showToast(T('dr.toast.share')); }); }
     });
 
     // 类别浮动筛选
@@ -588,6 +634,8 @@
     document.getElementById('cal-this').addEventListener('click', function () {
       setDefaultMonth(); renderCalendar();
     });
+
+    if (window.UW_I18N && UW_I18N.onChange) UW_I18N.onChange(relocalize);
   }
 
   if (document.readyState !== 'loading') init();
